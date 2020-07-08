@@ -5,3 +5,18 @@ variable "aws_account_id" {
 variable "environment" {
   type = string
 }
+
+variable "stage" {
+  type = string
+  default = "staging"
+}
+
+variable "api_rate_limit" {
+  type    = number
+  default = 10000
+}
+
+variable "api_burst_limit" {
+  type    = number
+  default = 5000
+}
