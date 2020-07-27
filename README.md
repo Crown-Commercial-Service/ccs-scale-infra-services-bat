@@ -40,3 +40,14 @@ Replace the id with the one from `docker ps` above
 bundle exec rails db:seed
 ```
 
+5. Add initial user to trusted domains
+```
+#Add domain to scae_trusted_email_domain table
+Scale::TrustedEmailDomain.create(name:'example.com')
+#Get first user
+user = Spree.user_class.first
+#change state to active using update_columm  method to stop the after save callback running. i.e sending emails etc
+user.update_column(:state, 'active')
+#Confirm the update has worked.
+user.reload! (edited) 
+```
