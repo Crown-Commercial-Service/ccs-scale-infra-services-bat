@@ -36,6 +36,10 @@ data "aws_ssm_parameter" "lb_public_arn" {
   name = "${lower(var.environment)}-lb-public-arn"
 }
 
+data "aws_ssm_parameter" "lb_public_alb_arn" {
+  name = "${lower(var.environment)}-lb-public-alb-arn"
+}
+
 data "aws_ssm_parameter" "lb_private_arn" {
   name = "${lower(var.environment)}-lb-private-arn"
 }
@@ -44,6 +48,21 @@ data "aws_ssm_parameter" "lb_private_dns" {
   name = "${lower(var.environment)}-lb-private-dns"
 }
 
+data "aws_ssm_parameter" "cloudfront_id" {
+  name = "${lower(var.environment)}-cloudfront-id"
+}
+
+data "aws_ssm_parameter" "lb_public_alb_listner_arn" {
+  name = "${lower(var.environment)}-lb-public-alb-listner-arn"
+}
+
+data "aws_ssm_parameter" "rollbar_access_token" {
+  name = "/bat/${lower(var.environment)}-rollbar-access-token"
+}
+
+data "aws_ssm_parameter" "secret_key_base" {
+  name = "/bat/${lower(var.environment)}-secret-key-base"
+}
 
 ######################################
 # Temporary solution - logs
@@ -318,12 +337,24 @@ module "api" {
 # Spree Service
 ######################################
 
+/*
+module "cloudfront_spree" {
+  source      = "../..cloudfront"
+  environment = var.environment
+  #lb_public_dns     = data.aws_ssm_parameter.lb_public_dns.value
+  lb_public_alb_dns = data.aws_ssm_parameter.lb_public_alb_dns.value
+  name              = "spree-service"
+  description       = "Spree Service"
+}
+*/
+
 module "spree" {
   source                 = "../../services/spree"
   environment            = var.environment
   vpc_id                 = data.aws_ssm_parameter.vpc_id.value
   ecs_cluster_id         = module.ecs.ecs_cluster_id
   lb_public_arn          = data.aws_ssm_parameter.lb_public_arn.value
+  lb_public_alb_arn      = data.aws_ssm_parameter.lb_public_alb_arn.value
   private_app_subnet_ids = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
   app_port               = "4567"
@@ -334,26 +365,27 @@ module "spree" {
   db_host                = module.postgres.db_host
   db_username            = module.postgres.db_username
   db_password            = "testing123"
-  secret_key_base        = "todo-a"
-  rollbar_env            = "todo"
-  rollbar_access_token   = "todo"
+  secret_key_base        = data.aws_ssm_parameter.secret_key_base.value
+  rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username     = "scaleadmin"
   basicauth_password     = "!tempPassword357"
   redis_url              = module.memcached.redis_url
   elasticsearch_url      = module.elasticsearch.elasticsearch_url
   memcached_endpoint     = module.memcached.memcached_endpoint
-  //sidekiq_username      = ""
-  //sidekiq_password      = ""
-  buyer_ui_url = "SCALE-EU2-SBX4-NLB-EXTERNAL-be555c18a567cdc7.elb.eu-west-2.amazonaws.com:8080"
-  //sendgrid_username     = ""
-  //sendgrid_password     = ""
-  app_domain            = "SCALE-EU2-SBX4-NLB-EXTERNAL-be555c18a567cdc7.elb.eu-west-2.amazonaws.com:8081"
-  aws_access_key        = ""
-  aws_secret_access_key = ""
-  s3_region             = "eu-west-2"
-  s3_bucket_name        = module.s3.s3_static_bucket_name
-  security_groups       = [aws_security_group.spree.id]
-  env_file              = module.s3.env_file_spree
+  #sidekiq_username      = ""
+  #sidekiq_password      = ""
+  #buyer_ui_url = "SCALE-EU2-SBX4-NLB-EXTERNAL-be555c18a567cdc7.elb.eu-west-2.amazonaws.com:8080"
+  #sendgrid_username     = ""
+  #sendgrid_password     = ""
+  app_domain                = "SCALE-EU2-SBX4-NLB-EXTERNAL-be555c18a567cdc7.elb.eu-west-2.amazonaws.com:8081"
+  aws_access_key            = ""
+  aws_secret_access_key     = ""
+  s3_region                 = "eu-west-2"
+  s3_bucket_name            = module.s3.s3_static_bucket_name
+  security_groups           = [aws_security_group.spree.id]
+  env_file                  = module.s3.env_file_spree
+  cloudfront_id             = data.aws_ssm_parameter.cloudfront_id.value
+  lb_public_alb_listner_arn = data.aws_ssm_parameter.lb_public_alb_listner_arn.value
 }
 
 ######################################
@@ -376,19 +408,18 @@ module "sidekiq" {
   db_host                = module.postgres.db_host
   db_username            = module.postgres.db_username
   db_password            = "testing123"
-  secret_key_base        = "todo-a"
-  rollbar_env            = "todo"
-  rollbar_access_token   = "todo"
+  secret_key_base        = data.aws_ssm_parameter.secret_key_base.value
+  rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username     = "scaleadmin"
   basicauth_password     = "!tempPassword357"
   redis_url              = module.memcached.redis_url
   elasticsearch_url      = module.elasticsearch.elasticsearch_url
   memcached_endpoint     = module.memcached.memcached_endpoint
-  //sidekiq_username      = ""
-  //sidekiq_password      = ""
-  buyer_ui_url = "SCALE-EU2-SBX4-NLB-EXTERNAL-be555c18a567cdc7.elb.eu-west-2.amazonaws.com:8080"
-  //sendgrid_username     = ""
-  //sendgrid_password     = ""
+  #sidekiq_username      = ""
+  #sidekiq_password      = ""
+  #buyer_ui_url = "SCALE-EU2-SBX4-NLB-EXTERNAL-be555c18a567cdc7.elb.eu-west-2.amazonaws.com:8080"
+  #sendgrid_username     = ""
+  #sendgrid_password     = ""
   app_domain            = "SCALE-EU2-SBX4-NLB-EXTERNAL-be555c18a567cdc7.elb.eu-west-2.amazonaws.com:8081"
   aws_access_key        = ""
   aws_secret_access_key = ""
@@ -402,26 +433,40 @@ module "sidekiq" {
 # Client/Buyer UI Service
 ######################################
 
+/*
+module "cloudfront_client" {
+  source      = "../..cloudfront"
+  environment = var.environment
+  #lb_public_dns     = data.aws_ssm_parameter.lb_public_dns.value
+  lb_public_alb_dns = data.aws_ssm_parameter.lb_public_alb_dns.value
+  name              = "spree-client"
+  description       = "Spree Client"
+}
+*/
+
 module "client" {
-  source                = "../../services/client"
-  environment           = var.environment
-  vpc_id                = data.aws_ssm_parameter.vpc_id.value
-  ecs_cluster_id        = module.ecs.ecs_cluster_id
-  lb_public_arn         = data.aws_ssm_parameter.lb_public_arn.value
-  public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  execution_role_arn    = aws_iam_role.ecs_task_execution_role.arn
-  client_app_port       = "8080" //8080
-  client_app_host       = "0.0.0.0"
-  client_cpu            = 256
-  client_memory         = 512
-  aws_region            = "eu-west-2"
-  spree_api_host        = "SCALE-EU2-SBX4-NLB-EXTERNAL-be555c18a567cdc7.elb.eu-west-2.amazonaws.com:4567"
-  rollbar_access_token  = "todo"
-  basicauth_username    = "scaleadmin"
-  basicauth_password    = "!tempPassword357"
-  client_session_secret = "sessionSecret"
-  security_groups       = [aws_security_group.client.id]
-  env_file              = module.s3.env_file_client
+  source                    = "../../services/client"
+  environment               = var.environment
+  vpc_id                    = data.aws_ssm_parameter.vpc_id.value
+  ecs_cluster_id            = module.ecs.ecs_cluster_id
+  lb_public_arn             = data.aws_ssm_parameter.lb_public_arn.value
+  lb_public_alb_arn         = data.aws_ssm_parameter.lb_public_alb_arn.value
+  public_web_subnet_ids     = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+  execution_role_arn        = aws_iam_role.ecs_task_execution_role.arn
+  client_app_port           = "8080" //8080
+  client_app_host           = "0.0.0.0"
+  client_cpu                = 256
+  client_memory             = 512
+  aws_region                = "eu-west-2"
+  spree_api_host            = "SCALE-EU2-SBX4-NLB-EXTERNAL-be555c18a567cdc7.elb.eu-west-2.amazonaws.com:4567"
+  rollbar_access_token      = data.aws_ssm_parameter.rollbar_access_token.value
+  basicauth_username        = "scaleadmin"
+  basicauth_password        = "!tempPassword357"
+  client_session_secret     = "sessionSecret"
+  security_groups           = [aws_security_group.client.id]
+  env_file                  = module.s3.env_file_client
+  cloudfront_id             = data.aws_ssm_parameter.cloudfront_id.value
+  lb_public_alb_listner_arn = data.aws_ssm_parameter.lb_public_alb_listner_arn.value
 }
 
 /*

@@ -23,7 +23,6 @@ data "template_file" "app_sidekiq" {
     secret_key_base            = var.secret_key_base
     basicauth_username         = var.basicauth_username
     basicauth_password         = var.basicauth_password
-    rollbar_env                = var.rollbar_env
     rollbar_spree_access_token = var.rollbar_access_token
     env_file                   = var.env_file
     redis_url                  = var.redis_url

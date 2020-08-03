@@ -11,6 +11,19 @@ This repository contains a complete set of configuration files and code to provi
 
 TODO
 
+### Pre install steps
+
+1. Create IAM user called `spree-user` with policy (`app-policy`) allowing full access to S3 (TODO: this needs to be reviewed/tied down)
+  - Add AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY valies to `spree.env`
+
+2. Create SSM Params
+```
+  /bat/sbx4-rollbar-access-token
+	/bat/sbx4-secret-key-base
+```
+
+
+
 ### Post install steps
 When first building on a clean environment - the database will not be populated. To populate the database you need to connect to the docker container running in the relevant ECS/EC2 instance and execute a command
 

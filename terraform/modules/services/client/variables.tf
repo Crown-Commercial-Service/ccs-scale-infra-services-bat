@@ -15,17 +15,13 @@ variable "lb_public_arn" {
   type = string
 }
 
-//variable "lb_private_arn" {
-//  type = string
-//}
+variable "lb_public_alb_arn" {
+  type = string
+}
 
 variable "public_web_subnet_ids" {
   type = list(string)
 }
-
-//variable "private_app_subnet_ids" {
-//  type = list(string)
-//}
 
 variable "client_app_port" {
   type = string
@@ -79,24 +75,10 @@ variable "env_file" {
   type = string
 }
 
-/*
-variable "scale_rest_api_id" {
+variable "cloudfront_id" {
   type = string
 }
 
-variable "scale_rest_api_execution_arn" {
+variable "lb_public_alb_listner_arn" {
   type = string
 }
-
-variable "parent_resource_id" {
-  type = string
-}
-
-variable "vpc_link_id" {
-  type = string
-}
-
-variable "lb_private_dns" {
-  type = string
-}
-*/

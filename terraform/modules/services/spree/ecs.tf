@@ -9,13 +9,25 @@ module "globals" {
 resource "aws_lb_target_group" "target_group_4567" {
   name        = "SCALE-EU2-${upper(var.environment)}-VPC-BaTSpree"
   port        = 4567
-  protocol    = "TCP"
+  #protocol    = "TCP"
+  protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
 
   stickiness {
     type    = "lb_cookie"
     enabled = false
+  }
+
+  # Required for ALB operating over HTTP
+  health_check {
+    healthy_threshold   = "3"
+    interval            = "30"
+    protocol            = "HTTP"
+    matcher             = "200"
+    timeout             = "3"
+    unhealthy_threshold = "2"
+    path                = "/healthcheck"
   }
 
   tags = {
@@ -26,20 +38,92 @@ resource "aws_lb_target_group" "target_group_4567" {
   }
 }
 
+/*
 resource "aws_lb_listener" "port_8081" {
-  load_balancer_arn = var.lb_public_arn
+  #load_balancer_arn = var.lb_public_arn
+  load_balancer_arn = var.lb_public_alb_arn
   port              = "8081"
-  protocol          = "TCP"
+  #protocol          = "TCP"
+  protocol          = "HTTP"
   # ssl_policy        = "ELBSecurityPolicy-2016-08"
   # certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group_4567.arn
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/html"
+      message_body = "<html><body>Unauthorised</body></html>"
+      status_code  = "403"
+    }
   }
 }
 
+resource "aws_lb_listener_rule" "authenticate_cloudfront" {
+  listener_arn = aws_lb_listener.port_8081.arn
+  priority     = 1
 
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group_4567.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = "CloudFrontID"
+      values           = [var.cloudfront_id]
+    }
+  }
+}
+*/
+
+resource "aws_lb_listener_rule" "authenticate_and_forwrd" {
+  listener_arn = var.lb_public_alb_listner_arn
+  priority     = 2
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group_4567.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = "CloudFrontID"
+      values           = [var.cloudfront_id]
+    }
+  }
+
+  condition {
+    path_pattern {
+      #values = ["/marketplace-platform/admin/*"]
+      values = ["/admin/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "authenticate_and_forwrd_assets" {
+  listener_arn = var.lb_public_alb_listner_arn
+  priority     = 4
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group_4567.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = "CloudFrontID"
+      values           = [var.cloudfront_id]
+    }
+  }
+
+  condition {
+    path_pattern {
+      #values = ["/marketplace-platform/admin/*"]
+      values = ["/assets/spree/*"]
+    }
+  }
+}
 
 # https://github.com/hashicorp/terraform/issues/19601
 data "template_file" "app_client" {
@@ -60,7 +144,6 @@ data "template_file" "app_client" {
     secret_key_base            = var.secret_key_base
     basicauth_username         = var.basicauth_username
     basicauth_password         = var.basicauth_password
-    #rollbar_env                = var.rollbar_env
     rollbar_spree_access_token = var.rollbar_access_token
     env_file                   = var.env_file
     redis_url                  = var.redis_url

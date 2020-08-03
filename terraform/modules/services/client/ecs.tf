@@ -14,13 +14,24 @@ module "globals" {
 resource "aws_lb_target_group" "target_group_8080" {
   name        = "SCALE-EU2-${upper(var.environment)}-VPC-BaTClient"
   port        = 8080
-  protocol    = "TCP"
+  protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
 
   stickiness {
     type    = "lb_cookie"
     enabled = false
+  }
+
+  # Required for ALB operating over HTTP
+  health_check {
+    healthy_threshold   = "3"
+    interval            = "30"
+    protocol            = "HTTP"
+    matcher             = "200"
+    timeout             = "3"
+    unhealthy_threshold = "2"
+    path                = "/healthcheck"
   }
 
   tags = {
@@ -31,19 +42,67 @@ resource "aws_lb_target_group" "target_group_8080" {
   }
 }
 
+/*
 resource "aws_lb_listener" "port_8080" {
-  load_balancer_arn = var.lb_public_arn
+  #load_balancer_arn = var.lb_public_arn
+  load_balancer_arn = var.lb_public_alb_arn
   port              = "8080"
-  protocol          = "TCP"
+  #protocol          = "TCP"
+  protocol          = "HTTP"
   # ssl_policy        = "ELBSecurityPolicy-2016-08"
   # certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group_8080.arn
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/html"
+      message_body = "<html><body>Unauthorised</body></html>"
+      status_code  = "403"
+    }
   }
 }
 
+resource "aws_lb_listener_rule" "authenticate_cloudfront" {
+  listener_arn = aws_lb_listener.port_8080.arn
+  priority     = 1
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group_8080.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = "CloudFrontID"
+      values           = [var.cloudfront_id]
+    }
+  }
+}
+*/
+
+resource "aws_lb_listener_rule" "authenticate_and_forwrd" {
+  listener_arn = var.lb_public_alb_listner_arn
+  priority     = 3
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group_8080.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = "CloudFrontID"
+      values           = [var.cloudfront_id]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/marketplace-platform/*"]
+    }
+  }
+}
 
 # https://github.com/hashicorp/terraform/issues/19601
 data "template_file" "app_client" {

@@ -58,10 +58,6 @@ variable "secret_key_base" {
   type = string
 }
 
-variable "rollbar_env" {
-  type = string
-}
-
 variable "rollbar_access_token" {
   type = string
 }
@@ -89,26 +85,6 @@ variable "elasticsearch_url" {
 variable "memcached_endpoint" {
   type = string
 }
-
-#variable "sidekiq_username" {
-#  type = string
-#}
-
-#variable "sidekiq_password" {
-#  type = string
-#}
-
-variable "buyer_ui_url" {
-  type = string
-}
-
-#variable "sendgrid_username" {
-#  type = string
-#}
-
-#variable "sendgrid_password" {
-#  type = string
-#}
 
 variable "app_domain" {
   type = string

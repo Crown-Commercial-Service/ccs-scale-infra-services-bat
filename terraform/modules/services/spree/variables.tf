@@ -18,6 +18,10 @@ variable "lb_public_arn" {
   type = string
 }
 
+variable "lb_public_alb_arn" {
+  type = string
+}
+
 variable "private_app_subnet_ids" {
   type = list(string)
 }
@@ -58,10 +62,6 @@ variable "secret_key_base" {
   type = string
 }
 
-variable "rollbar_env" {
-  type = string
-}
-
 variable "rollbar_access_token" {
   type = string
 }
@@ -90,26 +90,6 @@ variable "memcached_endpoint" {
   type = string
 }
 
-#variable "sidekiq_username" {
-#  type = string
-#}
-
-#variable "sidekiq_password" {
-#  type = string
-#}
-
-variable "buyer_ui_url" {
-  type = string
-}
-
-#variable "sendgrid_username" {
-#  type = string
-#}
-
-#variable "sendgrid_password" {
-#  type = string
-#}
-
 variable "app_domain" {
   type = string
 }
@@ -132,4 +112,12 @@ variable "s3_bucket_name" {
 
 variable "security_groups" {
   type = list(string)
+}
+
+variable "cloudfront_id" {
+  type = string
+}
+
+variable "lb_public_alb_listner_arn" {
+  type = string
 }
