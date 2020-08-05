@@ -14,10 +14,6 @@ variable "ecs_cluster_id" {
   type = string
 }
 
-variable "lb_public_arn" {
-  type = string
-}
-
 variable "private_app_subnet_ids" {
   type = list(string)
 }

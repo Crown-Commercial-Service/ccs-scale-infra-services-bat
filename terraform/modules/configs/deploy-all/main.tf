@@ -32,13 +32,13 @@ data "aws_ssm_parameter" "vpc_link_id" {
   name = "${lower(var.environment)}-vpc-link-id"
 }
 
-data "aws_ssm_parameter" "lb_public_arn" {
-  name = "${lower(var.environment)}-lb-public-arn"
-}
+#data "aws_ssm_parameter" "lb_public_arn" {
+#  name = "${lower(var.environment)}-lb-public-arn"
+#}
 
-data "aws_ssm_parameter" "lb_public_alb_arn" {
-  name = "${lower(var.environment)}-lb-public-alb-arn"
-}
+#data "aws_ssm_parameter" "lb_public_alb_arn" {
+#  name = "${lower(var.environment)}-lb-public-alb-arn"
+#}
 
 data "aws_ssm_parameter" "lb_private_arn" {
   name = "${lower(var.environment)}-lb-private-arn"
@@ -52,14 +52,16 @@ data "aws_ssm_parameter" "cloudfront_id" {
   name = "${lower(var.environment)}-cloudfront-id"
 }
 
-data "aws_ssm_parameter" "lb_public_alb_listner_arn" {
-  name = "${lower(var.environment)}-lb-public-alb-listner-arn"
-}
+#data "aws_ssm_parameter" "lb_public_alb_listner_arn" {
+#  name = "${lower(var.environment)}-lb-public-alb-listner-arn"
+#}
 
+# Needs to be added manually to SSM Parameter Store
 data "aws_ssm_parameter" "rollbar_access_token" {
   name = "/bat/${lower(var.environment)}-rollbar-access-token"
 }
 
+# Needs to be added manually to SSM Parameter Store
 data "aws_ssm_parameter" "secret_key_base" {
   name = "/bat/${lower(var.environment)}-secret-key-base"
 }
@@ -326,35 +328,34 @@ module "ecs" {
   security_group_ids    = [aws_security_group.client.id]
 }
 
-/*
-module "api" {
-  source      = "../../api"
-  environment = var.environment
+module "load_balancer_spree" {
+  source                = "../../load-balancer"
+  environment           = var.environment
+  vpc_id                = data.aws_ssm_parameter.vpc_id.value
+  lb_suffix             = "spree"
+  public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
 }
-*/
+
+module "load_balancer_client" {
+  source                = "../../load-balancer"
+  environment           = var.environment
+  vpc_id                = data.aws_ssm_parameter.vpc_id.value
+  lb_suffix             = "client"
+  public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+}
 
 ######################################
 # Spree Service
 ######################################
 
-/*
-module "cloudfront_spree" {
-  source      = "../..cloudfront"
-  environment = var.environment
-  #lb_public_dns     = data.aws_ssm_parameter.lb_public_dns.value
-  lb_public_alb_dns = data.aws_ssm_parameter.lb_public_alb_dns.value
-  name              = "spree-service"
-  description       = "Spree Service"
-}
-*/
-
 module "spree" {
-  source                 = "../../services/spree"
-  environment            = var.environment
-  vpc_id                 = data.aws_ssm_parameter.vpc_id.value
-  ecs_cluster_id         = module.ecs.ecs_cluster_id
-  lb_public_arn          = data.aws_ssm_parameter.lb_public_arn.value
-  lb_public_alb_arn      = data.aws_ssm_parameter.lb_public_alb_arn.value
+  source         = "../../services/spree"
+  environment    = var.environment
+  vpc_id         = data.aws_ssm_parameter.vpc_id.value
+  ecs_cluster_id = module.ecs.ecs_cluster_id
+  #lb_public_arn          = data.aws_ssm_parameter.lb_public_arn.value
+  #lb_public_alb_arn      = data.aws_ssm_parameter.lb_public_alb_arn.value
+  lb_public_alb_arn      = module.load_balancer_spree.lb_public_alb_arn
   private_app_subnet_ids = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
   app_port               = "4567"
@@ -385,7 +386,7 @@ module "spree" {
   security_groups           = [aws_security_group.spree.id]
   env_file                  = module.s3.env_file_spree
   cloudfront_id             = data.aws_ssm_parameter.cloudfront_id.value
-  lb_public_alb_listner_arn = data.aws_ssm_parameter.lb_public_alb_listner_arn.value
+  #lb_public_alb_listner_arn = data.aws_ssm_parameter.lb_public_alb_listner_arn.value
 }
 
 ######################################
@@ -397,7 +398,7 @@ module "sidekiq" {
   environment            = var.environment
   vpc_id                 = data.aws_ssm_parameter.vpc_id.value
   ecs_cluster_id         = module.ecs.ecs_cluster_id
-  lb_public_arn          = data.aws_ssm_parameter.lb_public_arn.value
+  #lb_public_arn          = data.aws_ssm_parameter.lb_public_arn.value
   private_app_subnet_ids = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
   app_port               = "4567"
@@ -433,24 +434,14 @@ module "sidekiq" {
 # Client/Buyer UI Service
 ######################################
 
-/*
-module "cloudfront_client" {
-  source      = "../..cloudfront"
-  environment = var.environment
-  #lb_public_dns     = data.aws_ssm_parameter.lb_public_dns.value
-  lb_public_alb_dns = data.aws_ssm_parameter.lb_public_alb_dns.value
-  name              = "spree-client"
-  description       = "Spree Client"
-}
-*/
-
 module "client" {
-  source                    = "../../services/client"
-  environment               = var.environment
-  vpc_id                    = data.aws_ssm_parameter.vpc_id.value
-  ecs_cluster_id            = module.ecs.ecs_cluster_id
-  lb_public_arn             = data.aws_ssm_parameter.lb_public_arn.value
-  lb_public_alb_arn         = data.aws_ssm_parameter.lb_public_alb_arn.value
+  source         = "../../services/client"
+  environment    = var.environment
+  vpc_id         = data.aws_ssm_parameter.vpc_id.value
+  ecs_cluster_id = module.ecs.ecs_cluster_id
+  #lb_public_arn             = data.aws_ssm_parameter.lb_public_arn.value
+  #lb_public_alb_arn         = data.aws_ssm_parameter.lb_public_alb_arn.value
+  lb_public_alb_arn         = module.load_balancer_client.lb_public_alb_arn
   public_web_subnet_ids     = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
   execution_role_arn        = aws_iam_role.ecs_task_execution_role.arn
   client_app_port           = "8080" //8080
@@ -466,19 +457,5 @@ module "client" {
   security_groups           = [aws_security_group.client.id]
   env_file                  = module.s3.env_file_client
   cloudfront_id             = data.aws_ssm_parameter.cloudfront_id.value
-  lb_public_alb_listner_arn = data.aws_ssm_parameter.lb_public_alb_listner_arn.value
+  #lb_public_alb_listner_arn = data.aws_ssm_parameter.lb_public_alb_listner_arn.value
 }
-
-/*
-module "api-deployment" {
-  source            = "../../services/api-deployment"
-  environment       = var.environment
-  scale_rest_api_id = module.api.scale_rest_api_id
-  api_rate_limit    = var.api_rate_limit
-  api_burst_limit   = var.api_burst_limit
-
-  // Simulate depends_on:
-  client_api_gateway_integration = module.client.client_api_gateway_integration
-  //guided_match_api_gateway_integration  = module.guided-match.guided_match_api_gateway_integration
-}
-*/

@@ -42,74 +42,26 @@ resource "aws_lb_target_group" "target_group_8080" {
   }
 }
 
-/*
-resource "aws_lb_listener" "port_8080" {
-  #load_balancer_arn = var.lb_public_arn
+resource "aws_lb_listener" "port_80" {
   load_balancer_arn = var.lb_public_alb_arn
-  port              = "8080"
-  #protocol          = "TCP"
+  port              = "80"
   protocol          = "HTTP"
   # ssl_policy        = "ELBSecurityPolicy-2016-08"
   # certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
 
   default_action {
-    type = "fixed-response"
-
-    fixed_response {
-      content_type = "text/html"
-      message_body = "<html><body>Unauthorised</body></html>"
-      status_code  = "403"
-    }
-  }
-}
-
-resource "aws_lb_listener_rule" "authenticate_cloudfront" {
-  listener_arn = aws_lb_listener.port_8080.arn
-  priority     = 1
-
-  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group_8080.arn
   }
-
-  condition {
-    http_header {
-      http_header_name = "CloudFrontID"
-      values           = [var.cloudfront_id]
-    }
-  }
 }
-*/
 
-resource "aws_lb_listener_rule" "authenticate_and_forwrd" {
-  listener_arn = var.lb_public_alb_listner_arn
-  priority     = 3
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group_8080.arn
-  }
-
-  condition {
-    http_header {
-      http_header_name = "CloudFrontID"
-      values           = [var.cloudfront_id]
-    }
-  }
-
-  condition {
-    path_pattern {
-      values = ["/marketplace-platform/*"]
-    }
-  }
-}
 
 # https://github.com/hashicorp/terraform/issues/19601
 data "template_file" "app_client" {
   template = file("${path.module}/client.json.tpl")
 
   vars = {
-    app_image             = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:latest"
+    app_image = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:latest"
     //app_image             = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/agreements-service:hello-world-test-1"
     app_port              = var.client_app_port
     fargate_cpu           = var.client_cpu
@@ -157,6 +109,6 @@ resource "aws_ecs_service" "client" {
 }
 
 resource "aws_cloudwatch_log_group" "ecs" {
-  name       = "/ecs/service/scale/bat-buyer-ui"
+  name              = "/ecs/service/scale/bat-buyer-ui"
   retention_in_days = 7
 }

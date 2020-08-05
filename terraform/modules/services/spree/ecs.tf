@@ -38,90 +38,17 @@ resource "aws_lb_target_group" "target_group_4567" {
   }
 }
 
-/*
-resource "aws_lb_listener" "port_8081" {
-  #load_balancer_arn = var.lb_public_arn
+
+resource "aws_lb_listener" "port_80" {
   load_balancer_arn = var.lb_public_alb_arn
-  port              = "8081"
-  #protocol          = "TCP"
+  port              = "80"
   protocol          = "HTTP"
   # ssl_policy        = "ELBSecurityPolicy-2016-08"
   # certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
 
   default_action {
-    type = "fixed-response"
-
-    fixed_response {
-      content_type = "text/html"
-      message_body = "<html><body>Unauthorised</body></html>"
-      status_code  = "403"
-    }
-  }
-}
-
-resource "aws_lb_listener_rule" "authenticate_cloudfront" {
-  listener_arn = aws_lb_listener.port_8081.arn
-  priority     = 1
-
-  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group_4567.arn
-  }
-
-  condition {
-    http_header {
-      http_header_name = "CloudFrontID"
-      values           = [var.cloudfront_id]
-    }
-  }
-}
-*/
-
-resource "aws_lb_listener_rule" "authenticate_and_forwrd" {
-  listener_arn = var.lb_public_alb_listner_arn
-  priority     = 2
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group_4567.arn
-  }
-
-  condition {
-    http_header {
-      http_header_name = "CloudFrontID"
-      values           = [var.cloudfront_id]
-    }
-  }
-
-  condition {
-    path_pattern {
-      #values = ["/marketplace-platform/admin/*"]
-      values = ["/admin/*"]
-    }
-  }
-}
-
-resource "aws_lb_listener_rule" "authenticate_and_forwrd_assets" {
-  listener_arn = var.lb_public_alb_listner_arn
-  priority     = 4
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group_4567.arn
-  }
-
-  condition {
-    http_header {
-      http_header_name = "CloudFrontID"
-      values           = [var.cloudfront_id]
-    }
-  }
-
-  condition {
-    path_pattern {
-      #values = ["/marketplace-platform/admin/*"]
-      values = ["/assets/spree/*"]
-    }
   }
 }
 
