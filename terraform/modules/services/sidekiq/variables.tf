@@ -74,34 +74,6 @@ variable "redis_url" {
   type = string
 }
 
-variable "elasticsearch_url" {
-  type = string
-}
-
-variable "memcached_endpoint" {
-  type = string
-}
-
-variable "app_domain" {
-  type = string
-}
-
-variable "aws_access_key" {
-  type = string
-}
-
-variable "aws_secret_access_key" {
-  type = string
-}
-
-variable "s3_region" {
-  type = string
-}
-
-variable "s3_bucket_name" {
-  type = string
-}
-
 variable "security_groups" {
   type = list(string)
 }

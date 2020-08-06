@@ -1,3 +1,7 @@
+variable "environment" {
+  type = string
+}
+
 variable "public_web_subnet_ids" {
   type = list(string)
 }

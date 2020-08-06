@@ -18,8 +18,12 @@ TODO
 
 2. Create SSM Params
 ```
-  /bat/sbx4-rollbar-access-token
-	/bat/sbx4-secret-key-base
+  /bat/{env}-rollbar-access-token
+	/bat/{env}-secret-key-base
+  /bat/{env}-basic-auth-username
+  /bat/{env}-basic-auth-password
+  /bat/{env}-db-password
+  /bat/{env}-session-cookie-secret
 ```
 
 3. Create `client.env` environment file
@@ -46,12 +50,12 @@ S3_BUCKET_NAME=spree-${lower(var.environment)}-${lower(var.stage)}
 ELASTICSEARCH_URL={URL_FOR_ELASTIC_SEARCH_PROVISIONED_IN_THESE_SCRIPTS}
 ```
 
-NOTE/TODO: For steps 3 & 4 you have to provision the everything first to get the values to put into these files, so you then have to redploy the ECS Services - can we move these to environment variables rather than files (need to check with Sparks about this)
+NOTE/TODO: For steps 3 & 4 you have to provision the everything first to get the values to put into these files, so you then have to redploy the ECS Services - can we move these to environment variables rather than files (need to check with Sparks about this). There is also some duplication between env variables and file - is this necessary?
 
 ### Post install steps
 When first building on a clean environment - the database will not be populated. To populate the database you need to connect to the docker container running in the relevant ECS/EC2 instance and execute a command
 
-1. Check in ECS to find the correct EC2 instance for the `spree-app-task`
+1. Check in ECS to find the correct EC2 instance for the `spree-app-task` (look at `EC2 instance id` property on the ECS service)
 
 2. SSH to that instance
 
@@ -79,7 +83,10 @@ bundle exec rails db:seed
 
 5. Add initial user to trusted domains
 ```
-#Add domain to scae_trusted_email_domain table
+
+bundle exec rails console
+
+#Add domain to scale_trusted_email_domain table
 Scale::TrustedEmailDomain.create(name:'example.com')
 #Get first user
 user = Spree.user_class.first

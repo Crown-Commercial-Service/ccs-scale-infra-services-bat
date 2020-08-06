@@ -14,10 +14,6 @@ variable "ecs_cluster_id" {
   type = string
 }
 
-#variable "lb_public_arn" {
-#  type = string
-#}
-
 variable "lb_public_alb_arn" {
   type = string
 }
@@ -82,31 +78,7 @@ variable "redis_url" {
   type = string
 }
 
-variable "elasticsearch_url" {
-  type = string
-}
-
 variable "memcached_endpoint" {
-  type = string
-}
-
-variable "app_domain" {
-  type = string
-}
-
-variable "aws_access_key" {
-  type = string
-}
-
-variable "aws_secret_access_key" {
-  type = string
-}
-
-variable "s3_region" {
-  type = string
-}
-
-variable "s3_bucket_name" {
   type = string
 }
 
@@ -117,7 +89,3 @@ variable "security_groups" {
 variable "cloudfront_id" {
   type = string
 }
-
-#variable "lb_public_alb_listner_arn" {
-#  type = string
-#}

@@ -19,7 +19,7 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   user_data                   = data.template_file.user_data.rendered
   instance_type               = "t2.large"
   associate_public_ip_address = true
-  key_name                    = "test"
+  key_name                    = "${lower(var.environment)}-spree-key"
   security_groups             = var.security_group_ids
 }
 
