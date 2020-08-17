@@ -16,7 +16,9 @@ TODO
 1. Create IAM user called `spree-user` with policy (`app-policy`) allowing full access to S3 (TODO: this needs to be reviewed/tied down)
   - Add AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY valies to `spree.env`
 
-2. Create SSM Params
+2. Create an key pair instance called `{env}-spree-key'`
+
+3. Create SSM Params
 ```
   /bat/{env}-rollbar-access-token
 	/bat/{env}-secret-key-base
@@ -26,14 +28,18 @@ TODO
   /bat/{env}-session-cookie-secret
 ```
 
-3. Create `client.env` environment file
+4. Run `terraform apply`
+ - It will provision everything, but not ECS - as key is missing - but will have enough to complete step 5 now
+ - (this is just hack to work around this cyclic dependency - need a better solution)
+
+5. Create `client.env` environment file
 
 ```
 SPREE_API_HOST=http://{DOMAIN_NAME_OF_SPREE_SERVICE_LOAD_BALANCER}
 SESSION_COOKIE_SECRET={RANDOM_STRING? NOT SURE}
 ```
 
-4. Create `spree.env` environment file
+6. Create `spree.env` environment file
 
 ```
 SIDEKIQ_USERNAME={}
@@ -49,6 +55,11 @@ S3_REGION=eu-west-2
 S3_BUCKET_NAME=spree-${lower(var.environment)}-${lower(var.stage)}
 ELASTICSEARCH_URL={URL_FOR_ELASTIC_SEARCH_PROVISIONED_IN_THESE_SCRIPTS}
 ```
+
+7. Update the services
+ - simple hack for this is to change the docker image to some random id - run `terraform apply`
+ - then switch it to 'latest' again and rerun `terraform apply`
+ - this whole part of the process needs review
 
 NOTE/TODO: For steps 3 & 4 you have to provision the everything first to get the values to put into these files, so you then have to redploy the ECS Services - can we move these to environment variables rather than files (need to check with Sparks about this). There is also some duplication between env variables and file - is this necessary?
 
@@ -68,7 +79,7 @@ Replace the ip with the one from Step 1 above
 ```
  docker ps
 ```
-Find the instance `spree-service-staging`
+Find the instance with IMAGE containing `spree-service-staging` and NAME containing `ecs-spree-app-task`
 
 ```
 docker exec -it f0098e874593 /bin/bash
@@ -93,5 +104,5 @@ user = Spree.user_class.first
 #change state to active using update_columm  method to stop the after save callback running. i.e sending emails etc
 user.update_column(:state, 'active')
 #Confirm the update has worked.
-user.reload! (edited) 
+user.reload
 ```
