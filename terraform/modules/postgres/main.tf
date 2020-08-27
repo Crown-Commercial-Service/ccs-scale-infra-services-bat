@@ -22,5 +22,7 @@ resource "aws_db_instance" "rds-app-prod" {
   parameter_group_name        = "default.postgres12"
   multi_az                    = "false"
   vpc_security_group_ids      = var.security_group_ids
-  skip_final_snapshot         = true
+  skip_final_snapshot         = false
+  final_snapshot_identifier   = "final-snaphot-appstaging-${uuid()}"
+  snapshot_identifier         = "snapshot-prior-to-destroy-and-recreate-27082020"
 }
