@@ -116,11 +116,11 @@ resource "aws_security_group_rule" "spree-allow-ssh" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 resource "aws_security_group_rule" "spree-allow-http" {
-  type = "ingress"
-  //from_port         = 80
-  //to_port           = 80
-  from_port         = 8081
-  to_port           = 8081
+  type      = "ingress"
+  from_port = 80
+  to_port   = 80
+  # from_port         = 8081
+  # to_port           = 8081
   protocol          = "tcp"
   security_group_id = aws_security_group.spree.id
   cidr_blocks       = ["0.0.0.0/0"]
@@ -266,6 +266,13 @@ resource "aws_security_group" "es" {
 
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 ######################################
@@ -368,6 +375,7 @@ module "spree" {
   vpc_id                 = data.aws_ssm_parameter.vpc_id.value
   ecs_cluster_id         = module.ecs.ecs_cluster_id
   lb_public_alb_arn      = module.load_balancer_spree.lb_public_alb_arn
+  lb_private_nlb_arn     = data.aws_ssm_parameter.lb_private_arn.value
   private_app_subnet_ids = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
   app_port               = "4567"
@@ -434,7 +442,8 @@ module "client" {
   client_cpu            = 256
   client_memory         = 512
   aws_region            = "eu-west-2"
-  spree_api_host        = module.load_balancer_spree.lb_public_alb_dns
+  # spree_api_host        = module.load_balancer_spree.lb_public_alb_dns
+  spree_api_host        = data.aws_ssm_parameter.lb_private_dns.value
   rollbar_access_token  = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username    = data.aws_ssm_parameter.basic_auth_username.value
   basicauth_password    = data.aws_ssm_parameter.basic_auth_password.value

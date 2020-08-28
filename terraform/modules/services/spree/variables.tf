@@ -18,6 +18,10 @@ variable "lb_public_alb_arn" {
   type = string
 }
 
+variable "lb_private_nlb_arn" {
+  type = string
+}
+
 variable "private_app_subnet_ids" {
   type = list(string)
 }
