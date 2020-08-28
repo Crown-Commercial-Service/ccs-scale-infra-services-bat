@@ -7,8 +7,8 @@ module "globals" {
 # NLB target group & listener for traffic on port 4567
 #######################################################################
 resource "aws_lb_target_group" "target_group_4567" {
-  name        = "SCALE-EU2-${upper(var.environment)}-VPC-BaTSpree"
-  port        = 4567
+  name = "SCALE-EU2-${upper(var.environment)}-VPC-BaTSpree"
+  port = 4567
   #protocol    = "TCP"
   protocol    = "HTTP"
   target_type = "ip"
@@ -48,6 +48,43 @@ resource "aws_lb_listener" "port_80" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group_4567.arn
+  }
+}
+
+#######################################################################
+# NLB target group & listener for traffic on port 80 -> 4567 (Spree app)
+# through the internal NLB for connections from the client app
+#######################################################################
+resource "aws_lb_target_group" "target_group_4567_nlb" {
+  name        = "SCALE-EU2-${upper(var.environment)}-VPC-TG-SPREE-NLB"
+  port        = 4567
+  protocol    = "TCP"
+  target_type = "ip"
+  vpc_id      = var.vpc_id
+
+  stickiness {
+    type    = "lb_cookie"
+    enabled = false
+  }
+
+  tags = {
+    Project     = module.globals.project_name
+    Environment = upper(var.environment)
+    Cost_Code   = module.globals.project_cost_code
+    AppType     = "LOADBALANCER"
+  }
+}
+
+resource "aws_lb_listener" "port_80_internal" {
+  load_balancer_arn = var.lb_private_nlb_arn
+  port              = "80"
+  protocol          = "TCP"
+  # ssl_policy        = "ELBSecurityPolicy-2016-08"
+  # certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group_4567_nlb.arn
   }
 }
 
@@ -104,9 +141,15 @@ resource "aws_ecs_service" "spree" {
     container_name   = "spree-app-task"
     container_port   = var.app_port
   }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.target_group_4567_nlb.arn
+    container_name   = "spree-app-task"
+    container_port   = var.app_port
+  }
 }
 
 resource "aws_cloudwatch_log_group" "ecs" {
-  name      = "/ecs/service/scale/spree"
+  name              = "/ecs/service/scale/spree"
   retention_in_days = 7
 }
