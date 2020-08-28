@@ -92,7 +92,13 @@ Replace the id with the one from `docker ps` above
 bundle exec rails db:seed
 ```
 
-5. Add initial user to trusted domains
+5. Reindex Elastic search
+
+```
+bundle exec rails searchkick:reindex:all
+```
+
+6. Add initial user to trusted domains
 ```
 
 bundle exec rails console
