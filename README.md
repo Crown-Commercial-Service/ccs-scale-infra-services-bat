@@ -26,6 +26,8 @@ TODO
   /bat/{env}-basic-auth-password
   /bat/{env}-db-password
   /bat/{env}-session-cookie-secret
+  /bat/{env}-products-import-bucket
+  /bat/{env}-rollbar-env
 ```
 
 4. Run `terraform apply`

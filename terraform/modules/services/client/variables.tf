@@ -63,6 +63,10 @@ variable "client_session_secret" {
   type = string
 }
 
+variable "rollbar_env" {
+  type = string
+}
+
 variable "execution_role_arn" {
   type = string
 }
