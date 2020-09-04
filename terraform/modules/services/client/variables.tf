@@ -67,6 +67,10 @@ variable "rollbar_env" {
   type = string
 }
 
+variable "spree_image_host" {
+  type = string
+}
+
 variable "execution_role_arn" {
   type = string
 }

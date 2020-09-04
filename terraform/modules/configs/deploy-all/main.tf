@@ -87,6 +87,9 @@ data "aws_ssm_parameter" "rollbar_env" {
   name = "/bat/${lower(var.environment)}-rollbar-env"
 }
 
+data "aws_ssm_parameter" "spree_image_host" {
+  name = "/bat/${lower(var.environment)}-spree-image-host"
+}
 ######################################
 # Temporary solution - logs
 # - copy/paste from original
@@ -464,4 +467,6 @@ module "client" {
   env_file              = module.s3.env_file_client
   cloudfront_id         = data.aws_ssm_parameter.cloudfront_id.value
   rollbar_env           = data.aws_ssm_parameter.rollbar_env.value
+  spree_image_host      = data.aws_ssm_parameter.spree_image_host.value
+
 }

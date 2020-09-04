@@ -51,6 +51,10 @@
       {
         "name": "ROLLBAR_ENV",
         "value": "${rollbar_env}"
+      },
+      {
+        "name": "SPREE_IMAGE_HOST",
+        "value": "${spree_image_host}"
       }
     ],
     "command": [

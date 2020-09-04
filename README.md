@@ -28,6 +28,7 @@ TODO
   /bat/{env}-session-cookie-secret
   /bat/{env}-products-import-bucket
   /bat/{env}-rollbar-env
+  /bat/{env}-spree-image-host
 ```
 
 4. Run `terraform apply`

@@ -7,7 +7,7 @@ data "template_file" "app_sidekiq" {
   template = file("${path.module}/sidekiq.json.tpl")
 
   vars = {
-    //app_image                  = "${aws_ecr_repository.spree.repository_url}:latest"
+    //app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/spree-service-staging:hello-world-test-4567"
     app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/spree-service-staging:latest"
     app_port                   = var.app_port
     fargate_cpu                = var.cpu
