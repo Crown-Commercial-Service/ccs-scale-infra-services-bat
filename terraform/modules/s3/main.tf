@@ -34,3 +34,8 @@ resource "aws_s3_bucket_object" "env-client" {
   key     = "client.env"
   acl     = "private"
 }
+
+resource "aws_s3_bucket" "product-import" {
+  bucket        = "spree-${lower(var.environment)}-products-import"
+  force_destroy = true
+}
