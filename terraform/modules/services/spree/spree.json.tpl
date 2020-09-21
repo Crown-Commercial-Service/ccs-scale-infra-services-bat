@@ -49,6 +49,10 @@
         "value": "${basicauth_password}"
       },
       {
+        "name": "BASICAUTH_ENABLED",
+        "value": "${basicauth_enabled}"
+      },
+      {
         "name": "ROLLBAR_ACCESS_TOKEN",
         "value": "${rollbar_spree_access_token}"
       },

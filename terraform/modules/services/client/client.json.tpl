@@ -41,6 +41,10 @@
         "value": "${basicauth_password}"
       },
       {
+        "name": "BASICAUTH_ENABLED",
+        "value": "${basicauth_enabled}"
+      },
+      {
         "name": "SPREE_API_HOST",
         "value": "http://${spree_api_host}"
       },

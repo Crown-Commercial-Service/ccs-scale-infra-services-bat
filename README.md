@@ -24,6 +24,7 @@ TODO
 	/bat/{env}-secret-key-base
   /bat/{env}-basic-auth-username
   /bat/{env}-basic-auth-password
+  /bar/{env}-basic-auth-enabled
   /bat/{env}-db-password
   /bat/{env}-session-cookie-secret
   /bat/{env}-products-import-bucket

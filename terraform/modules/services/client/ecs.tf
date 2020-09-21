@@ -73,6 +73,7 @@ data "template_file" "app_client" {
     rollbar_access_token  = var.rollbar_access_token
     basicauth_username    = var.basicauth_username
     basicauth_password    = var.basicauth_password
+    basicauth_enabled     = var.basicauth_enabled
     rollbar_env           = var.rollbar_env
     spree_image_host      = var.spree_image_host
     env_file              = var.env_file

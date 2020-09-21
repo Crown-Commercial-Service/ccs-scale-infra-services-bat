@@ -71,6 +71,10 @@ data "aws_ssm_parameter" "basic_auth_password" {
   name = "/bat/${lower(var.environment)}-basic-auth-password"
 }
 
+data "aws_ssm_parameter" "basic_auth_enabled" {
+  name = "/bat/${lower(var.environment)}-basic-auth-enabled"
+}
+
 data "aws_ssm_parameter" "db_password" {
   name = "/bat/${lower(var.environment)}-db-password"
 }
@@ -401,6 +405,7 @@ module "spree" {
   rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
   basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
+  basicauth_enabled     = data.aws_ssm_parameter.basic_auth_enabled.value
   products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
   rollbar_env            = data.aws_ssm_parameter.rollbar_env.value
   redis_url              = module.memcached.redis_url
@@ -433,6 +438,7 @@ module "sidekiq" {
   rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
   basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
+  basicauth_enabled     = data.aws_ssm_parameter.basic_auth_enabled.value
   products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
   rollbar_env            = data.aws_ssm_parameter.rollbar_env.value
   redis_url              = module.memcached.redis_url
@@ -462,6 +468,7 @@ module "client" {
   rollbar_access_token  = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username    = data.aws_ssm_parameter.basic_auth_username.value
   basicauth_password    = data.aws_ssm_parameter.basic_auth_password.value
+  basicauth_enabled     = data.aws_ssm_parameter.basic_auth_enabled.value
   client_session_secret = data.aws_ssm_parameter.client_session_secret.value
   security_groups       = [aws_security_group.client.id]
   env_file              = module.s3.env_file_client

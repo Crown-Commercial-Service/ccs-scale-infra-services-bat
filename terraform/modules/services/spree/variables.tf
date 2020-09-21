@@ -74,6 +74,10 @@ variable "basicauth_password" {
   type = string
 }
 
+variable "basicauth_enabled" {
+  type = string
+}
+
 variable "products_import_bucket" {
   type = string
 }
