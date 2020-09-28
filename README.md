@@ -24,8 +24,12 @@ TODO
 	/bat/{env}-secret-key-base
   /bat/{env}-basic-auth-username
   /bat/{env}-basic-auth-password
+  /bar/{env}-basic-auth-enabled
   /bat/{env}-db-password
   /bat/{env}-session-cookie-secret
+  /bat/{env}-products-import-bucket
+  /bat/{env}-rollbar-env
+  /bat/{env}-spree-image-host
 ```
 
 4. Run `terraform apply`
@@ -111,4 +115,59 @@ user = Spree.user_class.first
 user.update_column(:state, 'active')
 #Confirm the update has worked.
 user.reload
+```
+
+Seed Cnet data
+
+Manufacturers - all
+
+```
+::Cnet::Import::Manufacturers.call(path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/metamap/Distivoc.txt')
+```
+
+Categories - all
+
+```
+::Cnet::Import::Categories.call(path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/categorization/Cct_Categories.txt')
+```
+
+Products - 50k
+```
+::Cnet::Import::Products.call(path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/catalog/prod.txt', names_path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/components/stdnee.txt')
+
+```
+Product Documents - 50k
+```
+::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-sample-50k.txt', names_path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-sample-50k.txt')
+```
+
+Product Xmls - 50k
+```
+::Cnet::Import::ProductXmls.call(path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-sample-50k.txt', names_path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-sample-50k.txt')
+
+```
+Products Categories - 50k
+```
+::Cnet::Import::ProductCategories.call(path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/categorization/Cct_Products-sample-50k.txt')
+```
+
+Product Properties - 50k
+```
+::Cnet::Import::ProductProperties.call(path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/components/especee-sample-50k.txt', names_path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/components/evocee.txt')
+```
+
+Products Images - 50k - (Images is still being worked on, though. It works, we just limiting number of duplicated images or image placeholders)
+```
+::Cnet::Import::ProductImages.call(
+  path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-sample-50k.txt',
+  image_data_path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-sample-50k.txt',
+  attributes_path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta-sample-50k.txt',
+  attributes_dictionary_path_name: 'https://cnet-spree-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta_Value_Voc-sample-50k.txt'
+)
+```
+
+After importing CNET data you will need to reindex Elastic search again
+
+```
+bundle exec rails searchkick:reindex:all
 ```

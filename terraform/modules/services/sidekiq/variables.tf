@@ -66,6 +66,18 @@ variable "basicauth_password" {
   type = string
 }
 
+variable "basicauth_enabled" {
+  type = string
+}
+
+variable "products_import_bucket" {
+  type = string
+}
+
+variable "rollbar_env" {
+  type = string
+}
+
 variable "env_file" {
   type = string
 }

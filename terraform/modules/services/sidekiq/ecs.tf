@@ -7,7 +7,7 @@ data "template_file" "app_sidekiq" {
   template = file("${path.module}/sidekiq.json.tpl")
 
   vars = {
-    //app_image                  = "${aws_ecr_repository.spree.repository_url}:latest"
+    //app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/spree-service-staging:hello-world-test-4567"
     app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/spree-service-staging:latest"
     app_port                   = var.app_port
     fargate_cpu                = var.cpu
@@ -21,7 +21,10 @@ data "template_file" "app_sidekiq" {
     secret_key_base            = var.secret_key_base
     basicauth_username         = var.basicauth_username
     basicauth_password         = var.basicauth_password
+    basicauth_enabled          = var.basicauth_enabled
     rollbar_spree_access_token = var.rollbar_access_token
+    products_import_bucket     = var.products_import_bucket
+    rollbar_env                = var.rollbar_env
     env_file                   = var.env_file
     redis_url                  = var.redis_url
   }

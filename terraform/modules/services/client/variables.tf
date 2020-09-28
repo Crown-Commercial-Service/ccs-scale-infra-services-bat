@@ -59,7 +59,19 @@ variable "basicauth_password" {
   type = string
 }
 
+variable "basicauth_enabled" {
+  type = string
+}
+
 variable "client_session_secret" {
+  type = string
+}
+
+variable "rollbar_env" {
+  type = string
+}
+
+variable "spree_image_host" {
   type = string
 }
 

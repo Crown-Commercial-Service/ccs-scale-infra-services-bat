@@ -106,7 +106,10 @@ data "template_file" "app_client" {
     secret_key_base            = var.secret_key_base
     basicauth_username         = var.basicauth_username
     basicauth_password         = var.basicauth_password
+    basicauth_enabled          = var.basicauth_enabled
     rollbar_spree_access_token = var.rollbar_access_token
+    products_import_bucket     = var.products_import_bucket
+    rollbar_env                = var.rollbar_env
     env_file                   = var.env_file
     redis_url                  = var.redis_url
     memcached_endpoint         = var.memcached_endpoint
