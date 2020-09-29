@@ -13,14 +13,19 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
 }
 
 resource "aws_launch_configuration" "ecs-launch-configuration" {
-  name                        = "megapool"
-  image_id                    = "ami-005307409c5f6e76c"
+  name_prefix                 = "megapool-"
+  image_id                    = "ami-09f5dea513082ee2d"
   iam_instance_profile        = aws_iam_instance_profile.ecs_agent.name
   user_data                   = data.template_file.user_data.rendered
   instance_type               = "t2.large"
   associate_public_ip_address = true
   key_name                    = "${lower(var.environment)}-spree-key"
   security_groups             = var.security_group_ids
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
 }
 
 data "template_file" "user_data" {
