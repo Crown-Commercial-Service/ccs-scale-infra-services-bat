@@ -14,7 +14,7 @@ TODO
 ### Pre install steps
 
 1. Create IAM user called `spree-user` with policy (`app-policy`) allowing full access to S3 (TODO: this needs to be reviewed/tied down)
-  - Add AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY valies to `spree.env`
+  - Add AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values to `spree.env`
 
 2. Create an key pair instance called `{env}-spree-key'`
 
