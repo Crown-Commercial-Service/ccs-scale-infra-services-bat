@@ -5,11 +5,11 @@
 ### Overview
 This repository contains a complete set of configuration files and code to provision SCALE BAT services into the AWS cloud.  The infrastructure code is written in [Terraform](https://www.terraform.io/) and contains the following primary components:
 
-- TODO
-
 ### Prerequisites
 
-TODO
+The Spree database/es clusters must first be provisioned. This is done in project [ccs-scale-infra-db-bat](https://github.com/Crown-Commercial-Service/ccs-scale-infra-db-bat).
+
+Check the README file for details of how to create the database.
 
 ### Pre install steps
 
@@ -25,7 +25,6 @@ TODO
   /bat/{env}-basic-auth-username
   /bat/{env}-basic-auth-password
   /bar/{env}-basic-auth-enabled
-  /bat/{env}-db-password
   /bat/{env}-session-cookie-secret
   /bat/{env}-products-import-bucket
   /bat/{env}-rollbar-env
