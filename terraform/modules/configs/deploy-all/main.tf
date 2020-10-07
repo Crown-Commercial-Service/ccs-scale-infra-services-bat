@@ -12,6 +12,11 @@ provider "aws" {
   }
 }
 
+locals {
+  aws_region    = "eu-west-2"
+  spree_db_name = "spree"
+}
+
 data "aws_ssm_parameter" "vpc_id" {
   name = "${lower(var.environment)}-vpc-id"
 }
@@ -367,8 +372,8 @@ module "spree" {
   app_port               = "4567"
   cpu                    = 512
   memory                 = 2048
-  aws_region             = "eu-west-2"
-  db_name                = "spree"
+  aws_region             = local.aws_region
+  db_name                = local.spree_db_name
   db_host                = data.aws_ssm_parameter.spree_db_endpoint.value
   db_username            = data.aws_ssm_parameter.spree_db_username.value
   db_password            = data.aws_ssm_parameter.spree_db_password.value
@@ -376,7 +381,7 @@ module "spree" {
   rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
   basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled     = data.aws_ssm_parameter.basic_auth_enabled.value
+  basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
   products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
   rollbar_env            = data.aws_ssm_parameter.rollbar_env.value
   redis_url              = module.memcached.redis_url
@@ -400,8 +405,8 @@ module "sidekiq" {
   app_port               = "4567"
   cpu                    = 512
   memory                 = 2048
-  aws_region             = "eu-west-2"
-  db_name                = "spree"
+  aws_region             = local.aws_region
+  db_name                = local.spree_db_name
   db_host                = data.aws_ssm_parameter.spree_db_endpoint.value
   db_username            = data.aws_ssm_parameter.spree_db_username.value
   db_password            = data.aws_ssm_parameter.spree_db_password.value
@@ -409,7 +414,7 @@ module "sidekiq" {
   rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
   basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled     = data.aws_ssm_parameter.basic_auth_enabled.value
+  basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
   products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
   rollbar_env            = data.aws_ssm_parameter.rollbar_env.value
   redis_url              = module.memcached.redis_url
@@ -433,7 +438,7 @@ module "client" {
   client_app_host       = "0.0.0.0"
   client_cpu            = 256
   client_memory         = 512
-  aws_region            = "eu-west-2"
+  aws_region            = local.aws_region
   spree_api_host        = data.aws_ssm_parameter.lb_private_dns.value
   rollbar_access_token  = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username    = data.aws_ssm_parameter.basic_auth_username.value
