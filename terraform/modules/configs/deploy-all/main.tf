@@ -12,6 +12,11 @@ provider "aws" {
   }
 }
 
+locals {
+  aws_region    = "eu-west-2"
+  spree_db_name = "spree"
+}
+
 data "aws_ssm_parameter" "vpc_id" {
   name = "${lower(var.environment)}-vpc-id"
 }
@@ -32,14 +37,6 @@ data "aws_ssm_parameter" "vpc_link_id" {
   name = "${lower(var.environment)}-vpc-link-id"
 }
 
-#data "aws_ssm_parameter" "lb_public_arn" {
-#  name = "${lower(var.environment)}-lb-public-arn"
-#}
-
-#data "aws_ssm_parameter" "lb_public_alb_arn" {
-#  name = "${lower(var.environment)}-lb-public-alb-arn"
-#}
-
 data "aws_ssm_parameter" "lb_private_arn" {
   name = "${lower(var.environment)}-lb-private-arn"
 }
@@ -50,6 +47,10 @@ data "aws_ssm_parameter" "lb_private_dns" {
 
 data "aws_ssm_parameter" "cloudfront_id" {
   name = "${lower(var.environment)}-cloudfront-id"
+}
+
+data "aws_ssm_parameter" "spree_db_endpoint" {
+  name = "/bat/${lower(var.environment)}-spree-db-endpoint"
 }
 
 #######################################################
@@ -95,6 +96,16 @@ data "aws_ssm_parameter" "spree_image_host" {
   name = "/bat/${lower(var.environment)}-spree-image-host"
 }
 
+data "aws_ssm_parameter" "spree_db_username" {
+  name            = "/bat/${lower(var.environment)}-spree-db-app-username"
+  with_decryption = true
+}
+
+data "aws_ssm_parameter" "spree_db_password" {
+  name            = "/bat/${lower(var.environment)}-spree-db-app-password"
+  with_decryption = true
+}
+
 ######################################
 # CIDR ranges for whitelisting
 ######################################
@@ -138,7 +149,6 @@ resource "aws_cloudwatch_log_stream" "cb_log_stream" {
   name           = "cb-log-stream"
   log_group_name = aws_cloudwatch_log_group.cb_log_group.name
 }
-
 
 ######################################
 # Temporary solution - security groups
@@ -301,25 +311,6 @@ resource "aws_security_group" "memcached" {
   }
 }
 
-resource "aws_security_group" "es" {
-  name   = "elasticsearch"
-  vpc_id = data.aws_ssm_parameter.vpc_id.value
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
-  }
-
-  egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 ######################################
 # Temporary solution - roles
 # - copy/paste from original
@@ -363,28 +354,12 @@ module "s3" {
   environment = var.environment
 }
 
-module "elasticsearch" {
-  source                 = "../../elasticsearch"
-  vpc_id                 = data.aws_ssm_parameter.vpc_id.value
-  private_app_subnet_ids = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
-  security_group_ids     = [aws_security_group.es.id]
-}
-
 module "memcached" {
   source                       = "../../memcached"
   vpc_id                       = data.aws_ssm_parameter.vpc_id.value
   private_app_subnet_ids       = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   security_group_memcached_ids = [aws_security_group.memcached.id]
   security_group_redis_ids     = [aws_security_group.redis.id]
-}
-
-module "postgres" {
-  source                = "../../postgres"
-  stage                 = var.stage
-  vpc_id                = data.aws_ssm_parameter.vpc_id.value
-  db_password           = data.aws_ssm_parameter.db_password.value
-  private_db_subnet_ids = split(",", data.aws_ssm_parameter.private_db_subnet_ids.value)
-  security_group_ids    = [aws_security_group.rds.id]
 }
 
 module "ecs" {
@@ -426,11 +401,11 @@ module "spree" {
   app_port               = "4567"
   cpu                    = 512
   memory                 = 2048
-  aws_region             = "eu-west-2"
-  db_name                = module.postgres.db_name
-  db_host                = module.postgres.db_host
-  db_username            = module.postgres.db_username
-  db_password            = data.aws_ssm_parameter.db_password.value
+  aws_region             = local.aws_region
+  db_name                = local.spree_db_name
+  db_host                = data.aws_ssm_parameter.spree_db_endpoint.value
+  db_username            = data.aws_ssm_parameter.spree_db_username.value
+  db_password            = data.aws_ssm_parameter.spree_db_password.value
   secret_key_base        = data.aws_ssm_parameter.secret_key_base.value
   rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
@@ -459,11 +434,11 @@ module "sidekiq" {
   app_port               = "4567"
   cpu                    = 512
   memory                 = 2048
-  aws_region             = "eu-west-2"
-  db_name                = module.postgres.db_name
-  db_host                = module.postgres.db_host
-  db_username            = module.postgres.db_username
-  db_password            = data.aws_ssm_parameter.db_password.value
+  aws_region             = local.aws_region
+  db_name                = local.spree_db_name
+  db_host                = data.aws_ssm_parameter.spree_db_endpoint.value
+  db_username            = data.aws_ssm_parameter.spree_db_username.value
+  db_password            = data.aws_ssm_parameter.spree_db_password.value
   secret_key_base        = data.aws_ssm_parameter.secret_key_base.value
   rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
@@ -492,8 +467,7 @@ module "client" {
   client_app_host       = "0.0.0.0"
   client_cpu            = 256
   client_memory         = 512
-  aws_region            = "eu-west-2"
-  # spree_api_host        = module.load_balancer_spree.lb_public_alb_dns
+  aws_region            = local.aws_region
   spree_api_host        = data.aws_ssm_parameter.lb_private_dns.value
   rollbar_access_token  = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username    = data.aws_ssm_parameter.basic_auth_username.value
@@ -505,5 +479,4 @@ module "client" {
   cloudfront_id         = data.aws_ssm_parameter.cloudfront_id.value
   rollbar_env           = data.aws_ssm_parameter.rollbar_env.value
   spree_image_host      = data.aws_ssm_parameter.spree_image_host.value
-
 }
