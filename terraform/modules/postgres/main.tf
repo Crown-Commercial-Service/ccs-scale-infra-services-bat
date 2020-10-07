@@ -25,4 +25,5 @@ resource "aws_db_instance" "rds-app-prod" {
   skip_final_snapshot         = false
   final_snapshot_identifier   = "final-snaphot-appstaging-${uuid()}"
   snapshot_identifier         = "snapshot-prior-to-destroy-and-recreate-27082020"
+  # storage_encrypted           = true
 }

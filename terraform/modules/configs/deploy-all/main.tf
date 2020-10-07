@@ -94,6 +94,33 @@ data "aws_ssm_parameter" "rollbar_env" {
 data "aws_ssm_parameter" "spree_image_host" {
   name = "/bat/${lower(var.environment)}-spree-image-host"
 }
+
+######################################
+# CIDR ranges for whitelisting
+######################################
+data "aws_ssm_parameter" "cidr_blocks_allowed_external_ccs" {
+  name = "${lower(var.environment)}-cidr-blocks-allowed-external-ccs"
+}
+
+data "aws_ssm_parameter" "cidr_blocks_allowed_external_spark" {
+  name = "${lower(var.environment)}-cidr-blocks-allowed-external-spark"
+}
+
+data "aws_ssm_parameter" "cidr_blocks_allowed_external_cognizant" {
+  name = "${lower(var.environment)}-cidr-blocks-allowed-external-cognizant"
+}
+
+locals {
+  # Normalised CIDR blocks (accounting for 'none' i.e. "-" as value in SSM parameter)
+  cidr_blocks_allowed_external_ccs       = data.aws_ssm_parameter.cidr_blocks_allowed_external_ccs.value != "-" ? split(",", data.aws_ssm_parameter.cidr_blocks_allowed_external_ccs.value) : []
+  cidr_blocks_allowed_external_spark     = data.aws_ssm_parameter.cidr_blocks_allowed_external_spark.value != "-" ? split(",", data.aws_ssm_parameter.cidr_blocks_allowed_external_spark.value) : []
+  cidr_blocks_allowed_external_cognizant = data.aws_ssm_parameter.cidr_blocks_allowed_external_cognizant.value != "-" ? split(",", data.aws_ssm_parameter.cidr_blocks_allowed_external_cognizant.value) : []
+}
+
+data "aws_vpc" "scale" {
+  id = data.aws_ssm_parameter.vpc_id.value
+}
+
 ######################################
 # Temporary solution - logs
 # - copy/paste from original
@@ -128,17 +155,15 @@ resource "aws_security_group_rule" "spree-allow-ssh" {
   to_port           = 22
   protocol          = "tcp"
   security_group_id = aws_security_group.spree.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
 }
 resource "aws_security_group_rule" "spree-allow-http" {
-  type      = "ingress"
-  from_port = 80
-  to_port   = 80
-  # from_port         = 8081
-  # to_port           = 8081
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
   protocol          = "tcp"
   security_group_id = aws_security_group.spree.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block] # Load balancer only (from client)
 }
 resource "aws_security_group_rule" "spree-allow-https" {
   type              = "ingress"
@@ -146,23 +171,32 @@ resource "aws_security_group_rule" "spree-allow-https" {
   to_port           = 443
   protocol          = "tcp"
   security_group_id = aws_security_group.spree.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
 }
+
+resource "aws_security_group_rule" "spree-test" {
+  type              = "ingress"
+  from_port         = 4567
+  to_port           = 4567
+  protocol          = "tcp"
+  security_group_id = aws_security_group.spree.id
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
+}
+
+resource "aws_security_group_rule" "spree-es" {
+  type              = "ingress"
+  from_port         = 9200
+  to_port           = 9200
+  protocol          = "tcp"
+  security_group_id = aws_security_group.spree.id
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
+}
+
 resource "aws_security_group_rule" "spree-allow-outgoing" {
   type              = "egress"
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  security_group_id = aws_security_group.spree.id
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-resource "aws_security_group_rule" "spree-test" {
-  type = "ingress"
-  //from_port         = 80
-  //to_port           = 80
-  from_port         = 4567
-  to_port           = 4567
-  protocol          = "tcp"
   security_group_id = aws_security_group.spree.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
@@ -178,18 +212,17 @@ resource "aws_security_group_rule" "client-allow-ssh" {
   to_port           = 22
   protocol          = "tcp"
   security_group_id = aws_security_group.client.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
 }
-resource "aws_security_group_rule" "client-allow-http" {
-  type = "ingress"
-  //from_port         = 80
-  //to_port           = 80
+resource "aws_security_group_rule" "client-allow-http-internal" {
+  type              = "ingress"
   from_port         = 8080
   to_port           = 8080
   protocol          = "tcp"
   security_group_id = aws_security_group.client.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
 }
+
 resource "aws_security_group_rule" "client-allow-https" {
   type              = "ingress"
   from_port         = 443
@@ -218,17 +251,15 @@ resource "aws_security_group_rule" "rds-allow-psql" {
   to_port           = 5432
   protocol          = "tcp"
   security_group_id = aws_security_group.rds.id
-  #source_security_group_id = aws_security_group.spree.id
-  #temporarily modified to allow access via bastion host
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
 }
 resource "aws_security_group_rule" "rds-allow-outgoing" {
   type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
+  from_port         = 5432
+  to_port           = 5432
+  protocol          = "tcp"
   security_group_id = aws_security_group.rds.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
 }
 
 resource "aws_security_group" "redis" {
@@ -240,7 +271,7 @@ resource "aws_security_group" "redis" {
     protocol    = "tcp"
     from_port   = 6379
     to_port     = 6379
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [data.aws_vpc.scale.cidr_block]
   }
 
   egress {
@@ -259,7 +290,7 @@ resource "aws_security_group" "memcached" {
     protocol    = "tcp"
     from_port   = 11211
     to_port     = 11211
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [data.aws_vpc.scale.cidr_block]
   }
 
   egress {
@@ -275,11 +306,10 @@ resource "aws_security_group" "es" {
   vpc_id = data.aws_ssm_parameter.vpc_id.value
 
   ingress {
-    from_port = 443
-    to_port   = 443
-    protocol  = "tcp"
-
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
   }
 
   egress {
@@ -405,7 +435,7 @@ module "spree" {
   rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
   basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled     = data.aws_ssm_parameter.basic_auth_enabled.value
+  basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
   products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
   rollbar_env            = data.aws_ssm_parameter.rollbar_env.value
   redis_url              = module.memcached.redis_url
@@ -438,7 +468,7 @@ module "sidekiq" {
   rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
   basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled     = data.aws_ssm_parameter.basic_auth_enabled.value
+  basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
   products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
   rollbar_env            = data.aws_ssm_parameter.rollbar_env.value
   redis_url              = module.memcached.redis_url

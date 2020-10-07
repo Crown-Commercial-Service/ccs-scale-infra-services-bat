@@ -51,6 +51,30 @@ resource "aws_lb_listener" "port_80" {
   }
 }
 
+# TEMPORARY - REFACTOR - JUST MIMICS MANUAL CHANGES IN CONSOLE
+# Data sources for the ALB custom domain name and SSL certificate
+data "aws_ssm_parameter" "hosted_zone_name_alb" {
+  name = "${lower(var.environment)}-hosted-zone-name-alb"
+}
+
+data "aws_acm_certificate" "alb" {
+  domain   = data.aws_ssm_parameter.hosted_zone_name_alb.value
+  statuses = ["ISSUED"]
+}
+
+resource "aws_lb_listener" "port_443" {
+  load_balancer_arn = var.lb_public_alb_arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
+  certificate_arn   = data.aws_acm_certificate.alb.arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group_4567.arn
+  }
+}
+
 #######################################################################
 # NLB target group & listener for traffic on port 80 -> 4567 (Spree app)
 # through the internal NLB for connections from the client app
@@ -131,7 +155,6 @@ resource "aws_ecs_service" "spree" {
   name            = "spree-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.app_spree.arn
-  desired_count   = 1
   launch_type     = "EC2"
 
   network_configuration {

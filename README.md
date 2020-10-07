@@ -14,7 +14,7 @@ TODO
 ### Pre install steps
 
 1. Create IAM user called `spree-user` with policy (`app-policy`) allowing full access to S3 (TODO: this needs to be reviewed/tied down)
-  - Add AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY valies to `spree.env`
+  - Add AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values to `spree.env`
 
 2. Create an key pair instance called `{env}-spree-key'`
 
@@ -60,7 +60,9 @@ S3_BUCKET_NAME=spree-${lower(var.environment)}-${lower(var.stage)}
 ELASTICSEARCH_URL={URL_FOR_ELASTIC_SEARCH_PROVISIONED_IN_THESE_SCRIPTS}
 ```
 
-7. Update the services
+7. Upload `client.env` and `spree.env` to the provisioned S3 bucket `system-spree-[env]-staging`
+
+8. Update the services
  - simple hack for this is to change the docker image to some random id - run `terraform apply`
  - then switch it to 'latest' again and rerun `terraform apply`
  - this whole part of the process needs review
