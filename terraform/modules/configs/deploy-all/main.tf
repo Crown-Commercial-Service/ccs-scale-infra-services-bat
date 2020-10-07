@@ -163,7 +163,7 @@ resource "aws_security_group_rule" "spree-allow-http" {
   to_port           = 80
   protocol          = "tcp"
   security_group_id = aws_security_group.spree.id
-  cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block] # Load balancer only (from client)
 }
 resource "aws_security_group_rule" "spree-allow-https" {
   type              = "ingress"
@@ -171,8 +171,27 @@ resource "aws_security_group_rule" "spree-allow-https" {
   to_port           = 443
   protocol          = "tcp"
   security_group_id = aws_security_group.spree.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
 }
+
+resource "aws_security_group_rule" "spree-test" {
+  type              = "ingress"
+  from_port         = 4567
+  to_port           = 4567
+  protocol          = "tcp"
+  security_group_id = aws_security_group.spree.id
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
+}
+
+resource "aws_security_group_rule" "spree-es" {
+  type              = "ingress"
+  from_port         = 9200
+  to_port           = 9200
+  protocol          = "tcp"
+  security_group_id = aws_security_group.spree.id
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
+}
+
 resource "aws_security_group_rule" "spree-allow-outgoing" {
   type              = "egress"
   from_port         = 0
@@ -180,16 +199,6 @@ resource "aws_security_group_rule" "spree-allow-outgoing" {
   protocol          = "-1"
   security_group_id = aws_security_group.spree.id
   cidr_blocks       = ["0.0.0.0/0"]
-}
-resource "aws_security_group_rule" "spree-test" {
-  type = "ingress"
-  //from_port         = 80
-  //to_port           = 80
-  from_port         = 4567
-  to_port           = 4567
-  protocol          = "tcp"
-  security_group_id = aws_security_group.spree.id
-  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
 }
 
 resource "aws_security_group" "client" {
@@ -205,7 +214,7 @@ resource "aws_security_group_rule" "client-allow-ssh" {
   security_group_id = aws_security_group.client.id
   cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
 }
-resource "aws_security_group_rule" "client-allow-http" {
+resource "aws_security_group_rule" "client-allow-http-internal" {
   type              = "ingress"
   from_port         = 8080
   to_port           = 8080
@@ -213,6 +222,7 @@ resource "aws_security_group_rule" "client-allow-http" {
   security_group_id = aws_security_group.client.id
   cidr_blocks       = [data.aws_vpc.scale.cidr_block]
 }
+
 resource "aws_security_group_rule" "client-allow-https" {
   type              = "ingress"
   from_port         = 443

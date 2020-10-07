@@ -60,7 +60,9 @@ S3_BUCKET_NAME=spree-${lower(var.environment)}-${lower(var.stage)}
 ELASTICSEARCH_URL={URL_FOR_ELASTIC_SEARCH_PROVISIONED_IN_THESE_SCRIPTS}
 ```
 
-7. Update the services
+7. Upload `client.env` and `spree.env` to the provisioned S3 bucket `system-spree-[env]-staging`
+
+8. Update the services
  - simple hack for this is to change the docker image to some random id - run `terraform apply`
  - then switch it to 'latest' again and rerun `terraform apply`
  - this whole part of the process needs review

@@ -55,6 +55,30 @@ resource "aws_lb_listener" "port_80" {
   }
 }
 
+# TEMPORARY - REFACTOR - JUST MIMICS MANUAL CHANGES IN CONSOLE
+# Data sources for the ALB custom domain name and SSL certificate
+data "aws_ssm_parameter" "hosted_zone_name_alb" {
+  name = "${lower(var.environment)}-hosted-zone-name-alb"
+}
+
+data "aws_acm_certificate" "alb" {
+  domain   = data.aws_ssm_parameter.hosted_zone_name_alb.value
+  statuses = ["ISSUED"]
+}
+
+resource "aws_lb_listener" "port_443" {
+  load_balancer_arn = var.lb_public_alb_arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
+  certificate_arn   = data.aws_acm_certificate.alb.arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group_8080.arn
+  }
+}
+
 
 # https://github.com/hashicorp/terraform/issues/19601
 data "template_file" "app_client" {

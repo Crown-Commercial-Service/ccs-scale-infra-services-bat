@@ -24,5 +24,6 @@ resource "aws_db_instance" "rds-app-prod" {
   vpc_security_group_ids      = var.security_group_ids
   skip_final_snapshot         = false
   final_snapshot_identifier   = "final-snaphot-appstaging-${uuid()}"
-  snapshot_identifier         = "snapshot-prior-to-destroy-and-recreate-27082020"
+  snapshot_identifier         = "arn:aws:rds:eu-west-2:464702836434:snapshot:sbx1-old-version-snapshot-sbx2"
+  storage_encrypted           = true
 }
