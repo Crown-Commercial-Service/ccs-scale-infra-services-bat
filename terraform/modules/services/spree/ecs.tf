@@ -155,6 +155,7 @@ resource "aws_ecs_service" "spree" {
   name            = "spree-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.app_spree.arn
+  desired_count   = 1
   launch_type     = "EC2"
 
   network_configuration {
