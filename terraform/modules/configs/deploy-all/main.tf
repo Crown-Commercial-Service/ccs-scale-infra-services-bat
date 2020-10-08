@@ -76,10 +76,6 @@ data "aws_ssm_parameter" "basic_auth_enabled" {
   name = "/bat/${lower(var.environment)}-basic-auth-enabled"
 }
 
-data "aws_ssm_parameter" "db_password" {
-  name = "/bat/${lower(var.environment)}-db-password"
-}
-
 data "aws_ssm_parameter" "client_session_secret" {
   name = "/bat/${lower(var.environment)}-session-cookie-secret"
 }
