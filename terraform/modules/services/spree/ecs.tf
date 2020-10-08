@@ -168,10 +168,11 @@ resource "aws_ecs_service" "spree" {
     container_port   = var.app_port
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.target_group_4567_nlb.arn
-    container_name   = "spree-app-task"
-    container_port   = var.app_port
+  tags = {
+    Project     = module.globals.project_name
+    Environment = upper(var.environment)
+    Cost_Code   = module.globals.project_cost_code
+    AppType     = "ECS"
   }
 }
 

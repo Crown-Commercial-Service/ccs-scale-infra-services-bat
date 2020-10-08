@@ -17,6 +17,13 @@ resource "aws_elasticache_cluster" "memcached" {
   parameter_group_name = "default.memcached1.5"
   security_group_ids   = var.security_group_memcached_ids
   subnet_group_name    = aws_elasticache_subnet_group.ec.name
+
+  tags = {
+    Project     = module.globals.project_name
+    Environment = upper(var.environment)
+    Cost_Code   = module.globals.project_cost_code
+    AppType     = "MEMCACHED"
+  }
 }
 
 resource "aws_elasticache_cluster" "redis" {
@@ -28,4 +35,11 @@ resource "aws_elasticache_cluster" "redis" {
   engine_version       = "5.0.6"
   security_group_ids   = var.security_group_redis_ids
   subnet_group_name    = aws_elasticache_subnet_group.ec.name
+
+  tags = {
+    Project     = module.globals.project_name
+    Environment = upper(var.environment)
+    Cost_Code   = module.globals.project_cost_code
+    AppType     = "REDIS"
+  }
 }

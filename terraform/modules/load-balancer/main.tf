@@ -62,11 +62,6 @@ resource "aws_security_group" "public_alb_cf_global" {
     Environment = upper(var.environment)
     Cost_Code   = module.globals.project_cost_code
     AppType     = "ECS"
-
-    # Tags required by auto-update
-    Name       = "cloudfront_g"
-    AutoUpdate = true
-    Protocol   = "http"
   }
 }
 
@@ -105,10 +100,5 @@ resource "aws_security_group" "public_alb_cf_regional" {
     Environment = upper(var.environment)
     Cost_Code   = module.globals.project_cost_code
     AppType     = "ECS"
-
-    # Tags required by auto-update
-    Name       = "cloudfront_r"
-    AutoUpdate = true
-    Protocol   = "http"
   }
 }

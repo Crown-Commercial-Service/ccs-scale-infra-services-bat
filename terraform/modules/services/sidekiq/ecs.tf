@@ -52,6 +52,13 @@ resource "aws_ecs_service" "sidekiq" {
     security_groups = var.security_groups
     subnets         = var.private_app_subnet_ids
   }
+
+  tags = {
+    Project     = module.globals.project_name
+    Environment = upper(var.environment)
+    Cost_Code   = module.globals.project_cost_code
+    AppType     = "ECS"
+  }
 }
 
 resource "aws_cloudwatch_log_group" "ecs" {

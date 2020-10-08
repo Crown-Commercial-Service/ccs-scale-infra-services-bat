@@ -133,6 +133,13 @@ resource "aws_ecs_service" "client" {
     container_name   = "client-app-task"
     container_port   = 8080
   }
+
+  tags = {
+    Project     = module.globals.project_name
+    Environment = upper(var.environment)
+    Cost_Code   = module.globals.project_cost_code
+    AppType     = "ECS"
+  }
 }
 
 resource "aws_cloudwatch_log_group" "ecs" {

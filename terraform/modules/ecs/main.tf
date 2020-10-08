@@ -10,6 +10,13 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   desired_capacity = 3
   min_size         = 3
   max_size         = 3
+
+  tags = {
+    Project     = module.globals.project_name
+    Environment = upper(var.environment)
+    Cost_Code   = module.globals.project_cost_code
+    AppType     = "AUTOSCALINGGROUP"
+  }
 }
 
 resource "aws_launch_configuration" "ecs-launch-configuration" {
@@ -25,7 +32,6 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   lifecycle {
     create_before_destroy = true
   }
-
 }
 
 data "template_file" "user_data" {
