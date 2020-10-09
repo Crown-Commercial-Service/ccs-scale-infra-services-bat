@@ -50,7 +50,7 @@ data "template_file" "user_data" {
 
 # Define the role.
 resource "aws_iam_role" "ecs_agent" {
-  name               = "ecs-agent"
+  name               = "SCALE_ECS_BAT_Services_ECS_Agent"
   assume_role_policy = data.aws_iam_policy_document.ecs_agent.json
 }
 
@@ -73,6 +73,6 @@ resource "aws_iam_role_policy_attachment" "ecs_agent" {
 }
 
 resource "aws_iam_instance_profile" "ecs_agent" {
-  name = "ecs-agent"
+  name = aws_iam_role.ecs_agent.name
   role = aws_iam_role.ecs_agent.name
 }
