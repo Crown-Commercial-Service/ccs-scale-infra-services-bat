@@ -7,7 +7,7 @@ variable "environment" {
 }
 
 variable "stage" {
-  type = string
+  type    = string
   default = "staging"
 }
 
@@ -19,4 +19,14 @@ variable "api_rate_limit" {
 variable "api_burst_limit" {
   type    = number
   default = 5000
+}
+
+variable "ecr_image_id_spree" {
+  type    = string
+  default = "latest"
+}
+
+variable "ecr_image_id_client" {
+  type    = string
+  default = "latest"
 }

@@ -7,8 +7,7 @@ data "template_file" "app_sidekiq" {
   template = file("${path.module}/sidekiq.json.tpl")
 
   vars = {
-    //app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/spree-service-staging:hello-world-test-4567"
-    app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/spree-service-staging:latest"
+    app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/spree-service-staging:${var.ecr_image_id_spree}"
     app_port                   = var.app_port
     fargate_cpu                = var.cpu
     fargate_memory             = var.memory
@@ -27,6 +26,9 @@ data "template_file" "app_sidekiq" {
     rollbar_env                = var.rollbar_env
     env_file                   = var.env_file
     redis_url                  = var.redis_url
+    elasticsearch_url          = var.elasticsearch_url
+    buyer_ui_url               = var.buyer_ui_url
+    app_domain                 = var.app_domain
   }
 }
 

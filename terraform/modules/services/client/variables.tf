@@ -91,6 +91,6 @@ variable "cloudfront_id" {
   type = string
 }
 
-#variable "lb_public_alb_listner_arn" {
-# type = string
-#}
+variable "ecr_image_id_client" {
+  type = string
+}

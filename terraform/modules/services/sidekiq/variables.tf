@@ -89,3 +89,19 @@ variable "redis_url" {
 variable "security_groups" {
   type = list(string)
 }
+
+variable "elasticsearch_url" {
+  type = string
+}
+
+variable "buyer_ui_url" {
+  type = string
+}
+
+variable "ecr_image_id_spree" {
+  type = string
+}
+
+variable "app_domain" {
+  type = string
+}

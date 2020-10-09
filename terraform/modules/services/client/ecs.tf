@@ -89,8 +89,7 @@ data "template_file" "app_client" {
   template = file("${path.module}/client.json.tpl")
 
   vars = {
-    app_image = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:latest"
-    //app_image             = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/agreements-service:hello-world-test-1"
+    app_image = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:${var.ecr_image_id_client}"
     app_port              = var.client_app_port
     fargate_cpu           = var.client_cpu
     fargate_memory        = var.client_memory
@@ -103,7 +102,7 @@ data "template_file" "app_client" {
     basicauth_password    = var.basicauth_password
     basicauth_enabled     = var.basicauth_enabled
     rollbar_env           = var.rollbar_env
-    spree_image_host      = var.spree_image_host
+    spree_image_host      = "https://${var.spree_image_host}"
     env_file              = var.env_file
     client_session_secret = var.client_session_secret
   }

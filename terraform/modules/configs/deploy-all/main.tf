@@ -88,9 +88,9 @@ data "aws_ssm_parameter" "rollbar_env" {
   name = "/bat/${lower(var.environment)}-rollbar-env"
 }
 
-data "aws_ssm_parameter" "spree_image_host" {
-  name = "/bat/${lower(var.environment)}-spree-image-host"
-}
+#data "aws_ssm_parameter" "spree_image_host" {
+#  name = "/bat/${lower(var.environment)}-spree-image-host"
+#}
 
 data "aws_ssm_parameter" "spree_db_username" {
   name            = "/bat/${lower(var.environment)}-spree-db-app-username"
@@ -100,6 +100,10 @@ data "aws_ssm_parameter" "spree_db_username" {
 data "aws_ssm_parameter" "spree_db_password" {
   name            = "/bat/${lower(var.environment)}-spree-db-app-password"
   with_decryption = true
+}
+
+data "aws_ssm_parameter" "elasticsearch_url" {
+  name = "/bat/sbx1-elasticsearch-url"
 }
 
 ######################################
@@ -374,6 +378,7 @@ module "spree" {
   vpc_id                 = data.aws_ssm_parameter.vpc_id.value
   ecs_cluster_id         = module.ecs.ecs_cluster_id
   lb_public_alb_arn      = module.load_balancer_spree.lb_public_alb_arn
+  lb_public_alb_dns      = module.load_balancer_spree.lb_public_alb_dns
   lb_private_nlb_arn     = data.aws_ssm_parameter.lb_private_arn.value
   private_app_subnet_ids = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
@@ -397,6 +402,10 @@ module "spree" {
   security_groups        = [aws_security_group.spree.id]
   env_file               = module.s3.env_file_spree
   cloudfront_id          = data.aws_ssm_parameter.cloudfront_id.value
+  ecr_image_id_spree     = var.ecr_image_id_spree
+  elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
+  buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
+  app_domain             = module.load_balancer_spree.lb_public_alb_dns
 }
 
 ######################################
@@ -428,6 +437,10 @@ module "sidekiq" {
   redis_url              = module.memcached.redis_url
   security_groups        = [aws_security_group.spree.id]
   env_file               = module.s3.env_file_spree
+  ecr_image_id_spree     = var.ecr_image_id_spree
+  elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
+  buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
+  app_domain             = module.load_balancer_spree.lb_public_alb_dns
 }
 
 ######################################
@@ -457,5 +470,6 @@ module "client" {
   env_file              = module.s3.env_file_client
   cloudfront_id         = data.aws_ssm_parameter.cloudfront_id.value
   rollbar_env           = data.aws_ssm_parameter.rollbar_env.value
-  spree_image_host      = data.aws_ssm_parameter.spree_image_host.value
+  spree_image_host      = module.load_balancer_spree.lb_public_alb_dns
+  ecr_image_id_client   = var.ecr_image_id_client
 }
