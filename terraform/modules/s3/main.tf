@@ -3,6 +3,10 @@
 #
 # Buckets and initial objects
 ##########################################################
+module "globals" {
+  source = "../globals"
+}
+
 resource "aws_s3_bucket" "static" {
   bucket        = "spree-${lower(var.environment)}-${lower(var.stage)}"
   force_destroy = true

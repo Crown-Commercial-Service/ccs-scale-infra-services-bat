@@ -1,26 +1,32 @@
+##########################################################
+# ECS
+#
+# ECS shared resources
+##########################################################
+module "globals" {
+  source = "../globals"
+}
+
+locals{
+  cluster_name = "SCALE-EU2-${var.environment}-APP-ECS_BAT"
+}
+
 resource "aws_ecs_cluster" "main" {
-  name = "cb-cluster"
+  name = local.cluster_name
 }
 
 resource "aws_autoscaling_group" "ecs-autoscaling-group" {
-  name                 = "ecs-autoscaling-group"
+  name                 = "SCALE-EU2-${var.environment}-APP-ECS_BAT"
   vpc_zone_identifier  = var.public_web_subnet_ids
   launch_configuration = aws_launch_configuration.ecs-launch-configuration.name
 
   desired_capacity = 3
   min_size         = 3
   max_size         = 3
-
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "AUTOSCALINGGROUP"
-  }
 }
 
 resource "aws_launch_configuration" "ecs-launch-configuration" {
-  name_prefix                 = "megapool-"
+  name_prefix                 = "SCALE-EU2-${var.environment}-ASG-LC_BAT_"
   image_id                    = "ami-09f5dea513082ee2d"
   iam_instance_profile        = aws_iam_instance_profile.ecs_agent.name
   user_data                   = data.template_file.user_data.rendered
@@ -38,7 +44,7 @@ data "template_file" "user_data" {
   template = file("${path.module}/user_data.tpl")
 
   vars = {
-    cluster_name = "cb-cluster"
+    cluster_name = local.cluster_name
   }
 }
 

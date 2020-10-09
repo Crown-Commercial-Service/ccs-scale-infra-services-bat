@@ -326,7 +326,7 @@ data "aws_iam_policy_document" "ecs_task_execution_role" {
 }
 
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name               = "ECSTaskExecutionRole"
+  name               = "SCALE_ECS_BAT_Services_Task_Execution"
   assume_role_policy = data.aws_iam_policy_document.ecs_task_execution_role.json
 }
 
@@ -352,6 +352,7 @@ module "s3" {
 
 module "memcached" {
   source                       = "../../memcached"
+  environment                  = var.environment
   vpc_id                       = data.aws_ssm_parameter.vpc_id.value
   private_app_subnet_ids       = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   security_group_memcached_ids = [aws_security_group.memcached.id]

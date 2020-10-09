@@ -1,16 +1,19 @@
-
 ##########################################################
 # Caches
 #
 # Memcached & Redis
 ##########################################################
+module "globals" {
+  source = "../globals"
+}
+
 resource "aws_elasticache_subnet_group" "ec" {
   name       = "tf-test-cache-subnet"
   subnet_ids = var.private_app_subnet_ids
 }
 
 resource "aws_elasticache_cluster" "memcached" {
-  cluster_id           = "memcached-spree"
+  cluster_id           = "scale-eu2-ec-spree-memcached"
   engine               = "memcached"
   node_type            = "cache.t3.medium"
   num_cache_nodes      = 2
@@ -27,7 +30,7 @@ resource "aws_elasticache_cluster" "memcached" {
 }
 
 resource "aws_elasticache_cluster" "redis" {
-  cluster_id           = "redis-spree"
+  cluster_id           = "scale-eu2-ec-spree-redis"
   engine               = "redis"
   node_type            = "cache.t2.medium"
   num_cache_nodes      = 1
