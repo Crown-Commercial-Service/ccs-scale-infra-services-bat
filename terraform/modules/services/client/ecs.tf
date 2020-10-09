@@ -94,12 +94,12 @@ data "template_file" "app_client" {
     name                  = "client-app-task"
     api_host              = var.client_app_host
     spree_api_host        = var.spree_api_host
+    spree_image_host      = var.spree_image_host
     rollbar_access_token  = var.rollbar_access_token
     basicauth_username    = var.basicauth_username
     basicauth_password    = var.basicauth_password
     basicauth_enabled     = var.basicauth_enabled
     rollbar_env           = var.rollbar_env
-    spree_image_host      = "https://${var.spree_image_host}"
     env_file              = var.env_file
     client_session_secret = var.client_session_secret
   }

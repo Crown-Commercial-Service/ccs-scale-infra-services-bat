@@ -38,6 +38,7 @@ Check the README file for details of how to create the database.
 
 ```
 SESSION_COOKIE_SECRET={RANDOM_STRING? NOT SURE}
+DOCUMENTS_TERMS_AND_CONDITIONS_URL=https://purchasingplatform.crowncommercial.gov.uk/
 ```
 
 6. Create `spree.env` environment file
