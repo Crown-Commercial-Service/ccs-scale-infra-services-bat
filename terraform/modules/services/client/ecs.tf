@@ -5,7 +5,8 @@
 ##########################################################
 
 module "globals" {
-  source = "../../globals"
+  source      = "../../globals"
+  environment = var.environment
 }
 
 #######################################################################
@@ -34,12 +35,8 @@ resource "aws_lb_target_group" "target_group_8080" {
     path                = "/healthcheck"
   }
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "LOADBALANCER"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "LOADBALANCER" })
+
 }
 
 resource "aws_lb_listener" "port_80" {
@@ -89,7 +86,7 @@ data "template_file" "app_client" {
   template = file("${path.module}/client.json.tpl")
 
   vars = {
-    app_image = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:${var.ecr_image_id_client}"
+    app_image             = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:${var.ecr_image_id_client}"
     app_port              = var.client_app_port
     fargate_cpu           = var.client_cpu
     fargate_memory        = var.client_memory
@@ -139,12 +136,7 @@ resource "aws_ecs_service" "client" {
 
   # TODO: need to opt-in to new arn and resource id formats before can enable tags - need to understand this first
   # https://aws.amazon.com/blogs/compute/migrating-your-amazon-ecs-deployment-to-the-new-arn-and-resource-id-format-2/
-  #tags = {
-  #  Project     = module.globals.project_name
-  #  Environment = upper(var.environment)
-  #  Cost_Code   = module.globals.project_cost_code
-  #  AppType     = "ECS"
-  #}
+  #tags = merge(module.globals.project_resource_tags, {AppType = "ECS"})
 }
 
 resource "aws_cloudwatch_log_group" "ecs" {

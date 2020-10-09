@@ -6,7 +6,8 @@
 ##############################################################
 
 module "globals" {
-  source = "../globals"
+  source      = "../globals"
+  environment = var.environment
 }
 
 resource "aws_lb" "public_alb" {
@@ -17,12 +18,7 @@ resource "aws_lb" "public_alb" {
   security_groups    = [aws_security_group.public_alb_cf_global.id, aws_security_group.public_alb_cf_regional.id]
   #depends_on         = [aws_internet_gateway.scale]
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "LOADBALANCER"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "LOADBALANCER" })
 }
 
 resource "aws_security_group" "public_alb_cf_global" {
@@ -57,12 +53,7 @@ resource "aws_security_group" "public_alb_cf_global" {
     to_port     = 0
   }
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "ECS"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "ECS" })
 }
 
 resource "aws_security_group" "public_alb_cf_regional" {
@@ -95,10 +86,6 @@ resource "aws_security_group" "public_alb_cf_regional" {
     to_port     = 0
   }
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "ECS"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "ECS" })
+
 }

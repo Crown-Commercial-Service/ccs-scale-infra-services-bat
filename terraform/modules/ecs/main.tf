@@ -4,10 +4,11 @@
 # ECS shared resources
 ##########################################################
 module "globals" {
-  source = "../globals"
+  source      = "../globals"
+  environment = var.environment
 }
 
-locals{
+locals {
   cluster_name = "SCALE-EU2-${var.environment}-APP-ECS_BAT"
 }
 

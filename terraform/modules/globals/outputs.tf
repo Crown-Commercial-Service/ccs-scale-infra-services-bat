@@ -7,6 +7,10 @@ locals {
   }
 }
 
+variable "environment" {
+  type = string
+}
+
 output "env_accounts" {
   value = local.env_accounts
 }
@@ -23,10 +27,10 @@ output "allowed_cors_headers" {
   ]
 }
 
-output "project_name" {
-  value = "SCALE"
-}
-
-output "project_cost_code" {
-  value = "PR2-00001"
+output "project_resource_tags" {
+  value = {
+    Project     = "SCALE"
+    Environment = upper(var.environment)
+    Cost_Code   = "PR2-00001"
+  }
 }

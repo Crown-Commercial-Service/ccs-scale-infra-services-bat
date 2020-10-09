@@ -4,7 +4,8 @@
 # Memcached & Redis
 ##########################################################
 module "globals" {
-  source = "../globals"
+  source      = "../globals"
+  environment = var.environment
 }
 
 resource "aws_elasticache_subnet_group" "ec" {
@@ -21,12 +22,7 @@ resource "aws_elasticache_cluster" "memcached" {
   security_group_ids   = var.security_group_memcached_ids
   subnet_group_name    = aws_elasticache_subnet_group.ec.name
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "MEMCACHED"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "MEMCACHED" })
 }
 
 resource "aws_elasticache_cluster" "redis" {
@@ -39,10 +35,5 @@ resource "aws_elasticache_cluster" "redis" {
   security_group_ids   = var.security_group_redis_ids
   subnet_group_name    = aws_elasticache_subnet_group.ec.name
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "REDIS"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "REDIS" })
 }

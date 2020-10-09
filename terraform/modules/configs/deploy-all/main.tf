@@ -88,10 +88,6 @@ data "aws_ssm_parameter" "rollbar_env" {
   name = "/bat/${lower(var.environment)}-rollbar-env"
 }
 
-#data "aws_ssm_parameter" "spree_image_host" {
-#  name = "/bat/${lower(var.environment)}-spree-image-host"
-#}
-
 data "aws_ssm_parameter" "spree_db_username" {
   name            = "/bat/${lower(var.environment)}-spree-db-app-username"
   with_decryption = true
@@ -103,7 +99,7 @@ data "aws_ssm_parameter" "spree_db_password" {
 }
 
 data "aws_ssm_parameter" "elasticsearch_url" {
-  name = "/bat/sbx1-elasticsearch-url"
+  name = "/bat/${lower(var.environment)}-elasticsearch-url"
 }
 
 ######################################

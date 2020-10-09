@@ -1,6 +1,7 @@
 
 module "globals" {
-  source = "../../globals"
+  source      = "../../globals"
+  environment = var.environment
 }
 
 #######################################################################
@@ -30,12 +31,7 @@ resource "aws_lb_target_group" "target_group_4567" {
     path                = "/healthcheck"
   }
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "LOADBALANCER"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "LOADBALANCER" })
 }
 
 resource "aws_lb_listener" "port_80" {
@@ -95,12 +91,8 @@ resource "aws_lb_target_group" "target_group_4567_nlb" {
     enabled = false
   }
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "LOADBALANCER"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "LOADBALANCER" })
+
 }
 
 resource "aws_lb_listener" "port_80_internal" {
@@ -177,12 +169,7 @@ resource "aws_ecs_service" "spree" {
 
   # TODO: need to opt-in to new arn and resource id formats before can enable tags - need to understand this first
   # https://aws.amazon.com/blogs/compute/migrating-your-amazon-ecs-deployment-to-the-new-arn-and-resource-id-format-2/
-  #tags = {
-  #  Project     = module.globals.project_name
-  #  Environment = upper(var.environment)
-  #  Cost_Code   = module.globals.project_cost_code
-  #  AppType     = "ECS"
-  #}
+  #tags = merge(module.globals.project_resource_tags, {AppType = "ECS"})
 }
 
 resource "aws_cloudwatch_log_group" "ecs" {
