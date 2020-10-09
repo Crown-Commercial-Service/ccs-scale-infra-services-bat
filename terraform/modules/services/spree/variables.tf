@@ -18,6 +18,10 @@ variable "lb_public_alb_arn" {
   type = string
 }
 
+variable "lb_public_alb_dns" {
+  type = string
+}
+
 variable "lb_private_nlb_arn" {
   type = string
 }
@@ -103,5 +107,21 @@ variable "security_groups" {
 }
 
 variable "cloudfront_id" {
+  type = string
+}
+
+variable "elasticsearch_url" {
+  type = string
+}
+
+variable "buyer_ui_url" {
+  type = string
+}
+
+variable "ecr_image_id_spree" {
+  type = string
+}
+
+variable "app_domain" {
   type = string
 }

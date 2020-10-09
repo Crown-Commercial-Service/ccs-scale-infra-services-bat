@@ -28,7 +28,6 @@ Check the README file for details of how to create the database.
   /bat/{env}-session-cookie-secret
   /bat/{env}-products-import-bucket
   /bat/{env}-rollbar-env
-  /bat/{env}-spree-image-host
 ```
 
 4. Run `terraform apply`
@@ -38,7 +37,6 @@ Check the README file for details of how to create the database.
 5. Create `client.env` environment file
 
 ```
-SPREE_API_HOST=http://{DOMAIN_NAME_OF_SPREE_SERVICE_LOAD_BALANCER}
 SESSION_COOKIE_SECRET={RANDOM_STRING? NOT SURE}
 ```
 
@@ -47,16 +45,13 @@ SESSION_COOKIE_SECRET={RANDOM_STRING? NOT SURE}
 ```
 SIDEKIQ_USERNAME={}
 SIDEKIQ_PASSWORD={}
-BUYER_UI_URL=https://{DOMAIN_NAME_OF_CLIENT_LOAD_BALANCER}
 SENDGRID_USERNAME={}
 SENDGRID_PASSWORD={}
-APP_DOMAIN={DOMAIN_NAME_OF_SPREE_SERVICE_LOAD_BALANCER}
 AWS_REGION=eu-west-2
 AWS_ACCESS_KEY_ID={VALUE_FROM_IAM_USER_ABOVE}
 AWS_SECRET_ACCESS_KEY={VALUE_FROM_IAM_USER_ABOVE}
 S3_REGION=eu-west-2
 S3_BUCKET_NAME=spree-${lower(var.environment)}-${lower(var.stage)}
-ELASTICSEARCH_URL={URL_FOR_ELASTIC_SEARCH_PROVISIONED_IN_THESE_SCRIPTS}
 ```
 
 7. Upload `client.env` and `spree.env` to the provisioned S3 bucket `system-spree-[env]-staging`

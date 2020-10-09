@@ -67,6 +67,18 @@
       {
         "name": "ROLLBAR_ENV",
         "value": "${rollbar_env}"
+      },
+      {
+        "name": "ELASTICSEARCH_URL",
+        "value": "${elasticsearch_url}"
+      },
+      {
+        "name": "APP_DOMAIN",
+        "value": "${app_domain}"
+      },
+      {
+        "name": "BUYER_UI_URL",
+        "value": "${buyer_ui_url}"
       }
     ],
     "command": [

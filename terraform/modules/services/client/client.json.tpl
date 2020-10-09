@@ -59,6 +59,10 @@
       {
         "name": "SPREE_IMAGE_HOST",
         "value": "${spree_image_host}"
+      },
+      {
+        "name": "SPREE_API_HOST",
+        "value": "${spree_api_host}"
       }
     ],
     "command": [

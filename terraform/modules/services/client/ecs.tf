@@ -5,7 +5,8 @@
 ##########################################################
 
 module "globals" {
-  source = "../../globals"
+  source      = "../../globals"
+  environment = var.environment
 }
 
 #######################################################################
@@ -34,12 +35,8 @@ resource "aws_lb_target_group" "target_group_8080" {
     path                = "/healthcheck"
   }
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "LOADBALANCER"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "LOADBALANCER" })
+
 }
 
 resource "aws_lb_listener" "port_80" {
@@ -52,6 +49,10 @@ resource "aws_lb_listener" "port_80" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group_8080.arn
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -85,8 +86,7 @@ data "template_file" "app_client" {
   template = file("${path.module}/client.json.tpl")
 
   vars = {
-    app_image = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:latest"
-    //app_image             = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/agreements-service:hello-world-test-1"
+    app_image             = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:${var.ecr_image_id_client}"
     app_port              = var.client_app_port
     fargate_cpu           = var.client_cpu
     fargate_memory        = var.client_memory
@@ -99,7 +99,7 @@ data "template_file" "app_client" {
     basicauth_password    = var.basicauth_password
     basicauth_enabled     = var.basicauth_enabled
     rollbar_env           = var.rollbar_env
-    spree_image_host      = var.spree_image_host
+    spree_image_host      = "https://${var.spree_image_host}"
     env_file              = var.env_file
     client_session_secret = var.client_session_secret
   }
@@ -133,6 +133,10 @@ resource "aws_ecs_service" "client" {
     container_name   = "client-app-task"
     container_port   = 8080
   }
+
+  # TODO: need to opt-in to new arn and resource id formats before can enable tags - need to understand this first
+  # https://aws.amazon.com/blogs/compute/migrating-your-amazon-ecs-deployment-to-the-new-arn-and-resource-id-format-2/
+  #tags = merge(module.globals.project_resource_tags, {AppType = "ECS"})
 }
 
 resource "aws_cloudwatch_log_group" "ecs" {

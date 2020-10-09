@@ -1,6 +1,7 @@
 
 module "globals" {
-  source = "../../globals"
+  source      = "../../globals"
+  environment = var.environment
 }
 
 #######################################################################
@@ -30,12 +31,7 @@ resource "aws_lb_target_group" "target_group_4567" {
     path                = "/healthcheck"
   }
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "LOADBALANCER"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "LOADBALANCER" })
 }
 
 resource "aws_lb_listener" "port_80" {
@@ -48,6 +44,10 @@ resource "aws_lb_listener" "port_80" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group_4567.arn
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -91,12 +91,8 @@ resource "aws_lb_target_group" "target_group_4567_nlb" {
     enabled = false
   }
 
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "LOADBALANCER"
-  }
+  tags = merge(module.globals.project_resource_tags, { AppType = "LOADBALANCER" })
+
 }
 
 resource "aws_lb_listener" "port_80_internal" {
@@ -116,7 +112,7 @@ data "template_file" "app_client" {
   template = file("${path.module}/spree.json.tpl")
 
   vars = {
-    app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/spree-service-staging:latest"
+    app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/spree-service-staging:${var.ecr_image_id_spree}"
     app_port                   = var.app_port
     fargate_cpu                = var.cpu
     fargate_memory             = var.memory
@@ -136,6 +132,9 @@ data "template_file" "app_client" {
     env_file                   = var.env_file
     redis_url                  = var.redis_url
     memcached_endpoint         = var.memcached_endpoint
+    elasticsearch_url          = var.elasticsearch_url
+    buyer_ui_url               = var.buyer_ui_url
+    app_domain                 = var.app_domain
   }
 }
 
@@ -168,11 +167,9 @@ resource "aws_ecs_service" "spree" {
     container_port   = var.app_port
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.target_group_4567_nlb.arn
-    container_name   = "spree-app-task"
-    container_port   = var.app_port
-  }
+  # TODO: need to opt-in to new arn and resource id formats before can enable tags - need to understand this first
+  # https://aws.amazon.com/blogs/compute/migrating-your-amazon-ecs-deployment-to-the-new-arn-and-resource-id-format-2/
+  #tags = merge(module.globals.project_resource_tags, {AppType = "ECS"})
 }
 
 resource "aws_cloudwatch_log_group" "ecs" {
