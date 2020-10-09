@@ -37,7 +37,6 @@ Check the README file for details of how to create the database.
 5. Create `client.env` environment file
 
 ```
-#SPREE_API_HOST=http://{DOMAIN_NAME_OF_SPREE_SERVICE_LOAD_BALANCER}
 SESSION_COOKIE_SECRET={RANDOM_STRING? NOT SURE}
 ```
 
