@@ -46,7 +46,7 @@
       },
       {
         "name": "SPREE_API_HOST",
-        "value": "http://${spree_api_host}"
+        "value": "${spree_api_host}"
       },
       {
         "name": "SESSION_COOKIE_SECRET",

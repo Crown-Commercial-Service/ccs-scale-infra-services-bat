@@ -456,7 +456,6 @@ module "client" {
   client_cpu            = 256
   client_memory         = 512
   aws_region            = local.aws_region
-  spree_api_host        = data.aws_ssm_parameter.lb_private_dns.value
   rollbar_access_token  = data.aws_ssm_parameter.rollbar_access_token.value
   basicauth_username    = data.aws_ssm_parameter.basic_auth_username.value
   basicauth_password    = data.aws_ssm_parameter.basic_auth_password.value
@@ -466,6 +465,7 @@ module "client" {
   env_file              = module.s3.env_file_client
   cloudfront_id         = data.aws_ssm_parameter.cloudfront_id.value
   rollbar_env           = data.aws_ssm_parameter.rollbar_env.value
-  spree_image_host      = module.load_balancer_spree.lb_public_alb_dns
+  spree_api_host        = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
+  spree_image_host      = "https://${module.load_balancer_spree.lb_public_alb_dns}"
   ecr_image_id_client   = var.ecr_image_id_client
 }
