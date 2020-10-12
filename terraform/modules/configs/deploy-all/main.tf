@@ -84,10 +84,6 @@ data "aws_ssm_parameter" "products_import_bucket" {
   name = "/bat/${lower(var.environment)}-products-import-bucket"
 }
 
-data "aws_ssm_parameter" "rollbar_env" {
-  name = "/bat/${lower(var.environment)}-rollbar-env"
-}
-
 data "aws_ssm_parameter" "spree_db_username" {
   name            = "/bat/${lower(var.environment)}-spree-db-app-username"
   with_decryption = true
@@ -392,7 +388,7 @@ module "spree" {
   basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
   basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
   products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
-  rollbar_env            = data.aws_ssm_parameter.rollbar_env.value
+  rollbar_env            = var.rollbar_env
   redis_url              = module.memcached.redis_url
   memcached_endpoint     = module.memcached.memcached_endpoint
   security_groups        = [aws_security_group.spree.id]
@@ -429,7 +425,7 @@ module "sidekiq" {
   basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
   basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
   products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
-  rollbar_env            = data.aws_ssm_parameter.rollbar_env.value
+  rollbar_env            = var.rollbar_env
   redis_url              = module.memcached.redis_url
   security_groups        = [aws_security_group.spree.id]
   env_file               = module.s3.env_file_spree
@@ -464,8 +460,8 @@ module "client" {
   security_groups       = [aws_security_group.client.id]
   env_file              = module.s3.env_file_client
   cloudfront_id         = data.aws_ssm_parameter.cloudfront_id.value
-  rollbar_env           = data.aws_ssm_parameter.rollbar_env.value
   spree_api_host        = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
   spree_image_host      = "https://${module.load_balancer_spree.lb_public_alb_dns}"
+  rollbar_env           = var.rollbar_env
   ecr_image_id_client   = var.ecr_image_id_client
 }
