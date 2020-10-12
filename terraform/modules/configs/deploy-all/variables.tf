@@ -30,3 +30,7 @@ variable "ecr_image_id_client" {
   type    = string
   default = "latest"
 }
+
+variable "rollbar_env" {
+  type    = string
+}
