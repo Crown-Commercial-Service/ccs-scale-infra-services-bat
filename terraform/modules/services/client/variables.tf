@@ -39,11 +39,11 @@ variable "aws_region" {
   type = string
 }
 
-variable "client_app_host" {
+variable "papertrail_hostname" {
   type = string
 }
 
-variable "spree_api_host" {
+variable "papertrail_remote_port" {
   type = string
 }
 
@@ -92,5 +92,13 @@ variable "cloudfront_id" {
 }
 
 variable "ecr_image_id_client" {
+  type = string
+}
+
+variable "papertrail_hostname" {
+  type = string
+}
+
+variable "papertrail_remote_port" {
   type = string
 }
