@@ -83,6 +83,10 @@
       {
         "name": "BUYER_UI_URL",
         "value": "${buyer_ui_url}"
+      },
+      {
+        "name": "AWS_REGION",
+        "value": "${aws_region}"
       }
     ],
     "command": [
@@ -96,4 +100,3 @@
     ]
   }
 ]
-
