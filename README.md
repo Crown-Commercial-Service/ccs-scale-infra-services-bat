@@ -27,6 +27,8 @@ Check the README file for details of how to create the database.
   /bar/{env}-basic-auth-enabled
   /bat/{env}-session-cookie-secret
   /bat/{env}-products-import-bucket
+  /bat/{env}-papertrail-hostname
+  /bat/{env}-papertrail-remote-port
 ```
 
 4. Run `terraform apply`

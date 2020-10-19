@@ -94,11 +94,3 @@ variable "cloudfront_id" {
 variable "ecr_image_id_client" {
   type = string
 }
-
-variable "papertrail_hostname" {
-  type = string
-}
-
-variable "papertrail_remote_port" {
-  type = string
-}
