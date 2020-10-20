@@ -98,6 +98,15 @@ data "aws_ssm_parameter" "elasticsearch_url" {
   name = "/bat/${lower(var.environment)}-elasticsearch-url"
 }
 
+data "aws_ssm_parameter" "papertrail_hostname" {
+  name = "/bat/${lower(var.environment)}-papertrail-hostname"
+}
+
+data "aws_ssm_parameter" "papertrail_remote_port" {
+  name = "/bat/${lower(var.environment)}-papertrail-remote-port"
+}
+
+
 ######################################
 # CIDR ranges for whitelisting
 ######################################
@@ -398,6 +407,8 @@ module "spree" {
   elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
   buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
   app_domain             = module.load_balancer_spree.lb_public_alb_dns
+  papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
+  papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
 }
 
 ######################################
@@ -433,6 +444,8 @@ module "sidekiq" {
   elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
   buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
   app_domain             = module.load_balancer_spree.lb_public_alb_dns
+  papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
+  papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
 }
 
 ######################################
@@ -440,28 +453,30 @@ module "sidekiq" {
 ######################################
 
 module "client" {
-  source                = "../../services/client"
-  environment           = var.environment
-  vpc_id                = data.aws_ssm_parameter.vpc_id.value
-  ecs_cluster_id        = module.ecs.ecs_cluster_id
-  lb_public_alb_arn     = module.load_balancer_client.lb_public_alb_arn
-  public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  execution_role_arn    = aws_iam_role.ecs_task_execution_role.arn
-  client_app_port       = "8080" //8080
-  client_app_host       = "0.0.0.0"
-  client_cpu            = 256
-  client_memory         = 512
-  aws_region            = local.aws_region
-  rollbar_access_token  = data.aws_ssm_parameter.rollbar_access_token.value
-  basicauth_username    = data.aws_ssm_parameter.basic_auth_username.value
-  basicauth_password    = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled     = data.aws_ssm_parameter.basic_auth_enabled.value
-  client_session_secret = data.aws_ssm_parameter.client_session_secret.value
-  security_groups       = [aws_security_group.client.id]
-  env_file              = module.s3.env_file_client
-  cloudfront_id         = data.aws_ssm_parameter.cloudfront_id.value
-  spree_api_host        = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
-  spree_image_host      = "https://${module.load_balancer_spree.lb_public_alb_dns}"
-  rollbar_env           = var.rollbar_env
-  ecr_image_id_client   = var.ecr_image_id_client
+  source                 = "../../services/client"
+  environment            = var.environment
+  vpc_id                 = data.aws_ssm_parameter.vpc_id.value
+  ecs_cluster_id         = module.ecs.ecs_cluster_id
+  lb_public_alb_arn      = module.load_balancer_client.lb_public_alb_arn
+  public_web_subnet_ids  = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+  execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
+  client_app_port        = "8080" //8080
+  client_app_host        = "0.0.0.0"
+  client_cpu             = 256
+  client_memory          = 512
+  aws_region             = local.aws_region
+  rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
+  basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
+  basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
+  basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
+  client_session_secret  = data.aws_ssm_parameter.client_session_secret.value
+  security_groups        = [aws_security_group.client.id]
+  env_file               = module.s3.env_file_client
+  cloudfront_id          = data.aws_ssm_parameter.cloudfront_id.value
+  spree_api_host         = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
+  spree_image_host       = "https://${module.load_balancer_spree.lb_public_alb_dns}"
+  rollbar_env            = var.rollbar_env
+  ecr_image_id_client    = var.ecr_image_id_client
+  papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
+  papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
 }

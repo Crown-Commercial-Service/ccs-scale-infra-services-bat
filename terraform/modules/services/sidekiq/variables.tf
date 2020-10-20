@@ -105,3 +105,11 @@ variable "ecr_image_id_spree" {
 variable "app_domain" {
   type = string
 }
+
+variable "papertrail_hostname" {
+  type = string
+}
+
+variable "papertrail_remote_port" {
+  type = string
+}

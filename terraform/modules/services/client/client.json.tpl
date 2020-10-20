@@ -63,6 +63,14 @@
       {
         "name": "SPREE_API_HOST",
         "value": "${spree_api_host}"
+      },
+      {
+        "name": "PAPERTRAIL_HOSTNAME",
+        "value": "${papertrail_hostname}"
+      },
+      {
+        "name": "PAPERTRAIL_REMOTE_PORT",
+        "value": "${papertrail_remote_port}"
       }
     ],
     "command": [

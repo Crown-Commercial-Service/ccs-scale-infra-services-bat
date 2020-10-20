@@ -135,6 +135,8 @@ data "template_file" "app_client" {
     elasticsearch_url          = var.elasticsearch_url
     buyer_ui_url               = var.buyer_ui_url
     app_domain                 = var.app_domain
+    papertrail_hostname        = var.papertrail_hostname
+    papertrail_remote_port     = var.papertrail_remote_port
   }
 }
 
@@ -166,7 +168,7 @@ resource "aws_ecs_service" "spree" {
     container_name   = "spree-app-task"
     container_port   = var.app_port
   }
-  
+
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group_4567_nlb.arn
     container_name   = "spree-app-task"
