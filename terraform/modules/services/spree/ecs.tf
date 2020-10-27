@@ -86,13 +86,7 @@ resource "aws_lb_target_group" "target_group_4567_nlb" {
   target_type = "ip"
   vpc_id      = var.vpc_id
 
-  stickiness {
-    type    = "lb_cookie"
-    enabled = false
-  }
-
   tags = merge(module.globals.project_resource_tags, { AppType = "LOADBALANCER" })
-
 }
 
 resource "aws_lb_listener" "port_80_internal" {
