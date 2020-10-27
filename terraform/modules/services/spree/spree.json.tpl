@@ -87,6 +87,18 @@
       {
         "name": "AWS_REGION",
         "value": "${aws_region}"
+      },
+      {
+        "name": "NEW_RELIC_LICENSE_KEY",
+        "value": "${new_relic_license_key}"
+      },
+      {
+        "name": "NEW_RELIC_APP_NAME",
+        "value": "${new_relic_app_name}"
+      },
+      {
+        "name": "NEW_RELIC_AGENT_ENABLED",
+        "value": "${new_relic_agent_enabled}"
       }
     ],
     "command": [

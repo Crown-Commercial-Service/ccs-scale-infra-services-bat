@@ -32,6 +32,9 @@ data "template_file" "app_sidekiq" {
     app_domain                 = var.app_domain
     papertrail_hostname        = var.papertrail_hostname
     papertrail_remote_port     = var.papertrail_remote_port
+    new_relic_license_key      = var.new_relic_license_key
+    new_relic_app_name         = var.new_relic_app_name
+    new_relic_agent_enabled    = var.new_relic_agent_enabled
   }
 }
 

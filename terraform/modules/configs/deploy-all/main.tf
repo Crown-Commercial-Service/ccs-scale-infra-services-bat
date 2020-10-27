@@ -106,6 +106,17 @@ data "aws_ssm_parameter" "papertrail_remote_port" {
   name = "/bat/${lower(var.environment)}-papertrail-remote-port"
 }
 
+data "aws_ssm_parameter" "new_relic_license_key" {
+  name = "/bat/${lower(var.environment)}-new-relic-license-key"
+}
+
+data "aws_ssm_parameter" "new_relic_app_name" {
+  name = "/bat/${lower(var.environment)}-new-relic-app-name"
+}
+
+data "aws_ssm_parameter" "new_relic_agent_enabled" {
+  name = "/bat/${lower(var.environment)}-new-relic-agent-enabled"
+}
 
 ######################################
 # CIDR ranges for whitelisting
@@ -374,41 +385,44 @@ module "load_balancer_client" {
 ######################################
 
 module "spree" {
-  source                 = "../../services/spree"
-  environment            = var.environment
-  vpc_id                 = data.aws_ssm_parameter.vpc_id.value
-  ecs_cluster_id         = module.ecs.ecs_cluster_id
-  lb_public_alb_arn      = module.load_balancer_spree.lb_public_alb_arn
-  lb_public_alb_dns      = module.load_balancer_spree.lb_public_alb_dns
-  lb_private_nlb_arn     = data.aws_ssm_parameter.lb_private_arn.value
-  private_app_subnet_ids = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
-  execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
-  app_port               = "4567"
-  cpu                    = 512
-  memory                 = 2048
-  aws_region             = local.aws_region
-  db_name                = local.spree_db_name
-  db_host                = data.aws_ssm_parameter.spree_db_endpoint.value
-  db_username            = data.aws_ssm_parameter.spree_db_username.value
-  db_password            = data.aws_ssm_parameter.spree_db_password.value
-  secret_key_base        = data.aws_ssm_parameter.secret_key_base.value
-  rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
-  basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
-  basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
-  products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
-  rollbar_env            = var.rollbar_env
-  redis_url              = module.memcached.redis_url
-  memcached_endpoint     = module.memcached.memcached_endpoint
-  security_groups        = [aws_security_group.spree.id]
-  env_file               = module.s3.env_file_spree
-  cloudfront_id          = data.aws_ssm_parameter.cloudfront_id.value
-  ecr_image_id_spree     = var.ecr_image_id_spree
-  elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
-  buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
-  app_domain             = module.load_balancer_spree.lb_public_alb_dns
-  papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
-  papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
+  source                  = "../../services/spree"
+  environment             = var.environment
+  vpc_id                  = data.aws_ssm_parameter.vpc_id.value
+  ecs_cluster_id          = module.ecs.ecs_cluster_id
+  lb_public_alb_arn       = module.load_balancer_spree.lb_public_alb_arn
+  lb_public_alb_dns       = module.load_balancer_spree.lb_public_alb_dns
+  lb_private_nlb_arn      = data.aws_ssm_parameter.lb_private_arn.value
+  private_app_subnet_ids  = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  execution_role_arn      = aws_iam_role.ecs_task_execution_role.arn
+  app_port                = "4567"
+  cpu                     = 512
+  memory                  = 2048
+  aws_region              = local.aws_region
+  db_name                 = local.spree_db_name
+  db_host                 = data.aws_ssm_parameter.spree_db_endpoint.value
+  db_username             = data.aws_ssm_parameter.spree_db_username.value
+  db_password             = data.aws_ssm_parameter.spree_db_password.value
+  secret_key_base         = data.aws_ssm_parameter.secret_key_base.value
+  rollbar_access_token    = data.aws_ssm_parameter.rollbar_access_token.value
+  basicauth_username      = data.aws_ssm_parameter.basic_auth_username.value
+  basicauth_password      = data.aws_ssm_parameter.basic_auth_password.value
+  basicauth_enabled       = data.aws_ssm_parameter.basic_auth_enabled.value
+  products_import_bucket  = data.aws_ssm_parameter.products_import_bucket.value
+  rollbar_env             = var.rollbar_env
+  redis_url               = module.memcached.redis_url
+  memcached_endpoint      = module.memcached.memcached_endpoint
+  security_groups         = [aws_security_group.spree.id]
+  env_file                = module.s3.env_file_spree
+  cloudfront_id           = data.aws_ssm_parameter.cloudfront_id.value
+  ecr_image_id_spree      = var.ecr_image_id_spree
+  elasticsearch_url       = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
+  buyer_ui_url            = "https://${module.load_balancer_client.lb_public_alb_dns}"
+  app_domain              = module.load_balancer_spree.lb_public_alb_dns
+  papertrail_hostname     = data.aws_ssm_parameter.papertrail_hostname.value
+  papertrail_remote_port  = data.aws_ssm_parameter.papertrail_remote_port.value
+  new_relic_license_key   = data.aws_ssm_parameter.new_relic_license_key.value
+  new_relic_app_name      = data.aws_ssm_parameter.new_relic_app_name.value
+  new_relic_agent_enabled = data.aws_ssm_parameter.new_relic_agent_enabled.value
 }
 
 ######################################
@@ -446,6 +460,9 @@ module "sidekiq" {
   app_domain             = module.load_balancer_spree.lb_public_alb_dns
   papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
   papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
+  new_relic_license_key   = data.aws_ssm_parameter.new_relic_license_key.value
+  new_relic_app_name      = data.aws_ssm_parameter.new_relic_app_name.value
+  new_relic_agent_enabled = data.aws_ssm_parameter.new_relic_agent_enabled.value
 }
 
 ######################################
@@ -479,4 +496,7 @@ module "client" {
   ecr_image_id_client    = var.ecr_image_id_client
   papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
   papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
+  new_relic_license_key   = data.aws_ssm_parameter.new_relic_license_key.value
+  new_relic_app_name      = data.aws_ssm_parameter.new_relic_app_name.value
+  new_relic_agent_enabled = data.aws_ssm_parameter.new_relic_agent_enabled.value
 }

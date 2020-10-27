@@ -86,24 +86,27 @@ data "template_file" "app_client" {
   template = file("${path.module}/client.json.tpl")
 
   vars = {
-    app_image              = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:${var.ecr_image_id_client}"
-    app_port               = var.client_app_port
-    fargate_cpu            = var.client_cpu
-    fargate_memory         = var.client_memory
-    aws_region             = var.aws_region
-    name                   = "client-app-task"
-    api_host               = var.client_app_host
-    spree_api_host         = var.spree_api_host
-    spree_image_host       = var.spree_image_host
-    rollbar_access_token   = var.rollbar_access_token
-    basicauth_username     = var.basicauth_username
-    basicauth_password     = var.basicauth_password
-    basicauth_enabled      = var.basicauth_enabled
-    rollbar_env            = var.rollbar_env
-    env_file               = var.env_file
-    client_session_secret  = var.client_session_secret
-    papertrail_hostname    = var.papertrail_hostname
-    papertrail_remote_port = var.papertrail_remote_port
+    app_image               = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:${var.ecr_image_id_client}"
+    app_port                = var.client_app_port
+    fargate_cpu             = var.client_cpu
+    fargate_memory          = var.client_memory
+    aws_region              = var.aws_region
+    name                    = "client-app-task"
+    api_host                = var.client_app_host
+    spree_api_host          = var.spree_api_host
+    spree_image_host        = var.spree_image_host
+    rollbar_access_token    = var.rollbar_access_token
+    basicauth_username      = var.basicauth_username
+    basicauth_password      = var.basicauth_password
+    basicauth_enabled       = var.basicauth_enabled
+    rollbar_env             = var.rollbar_env
+    env_file                = var.env_file
+    client_session_secret   = var.client_session_secret
+    papertrail_hostname     = var.papertrail_hostname
+    papertrail_remote_port  = var.papertrail_remote_port
+    new_relic_license_key   = var.new_relic_license_key
+    new_relic_app_name      = var.new_relic_app_name
+    new_relic_agent_enabled = var.new_relic_agent_enabled
   }
 }
 

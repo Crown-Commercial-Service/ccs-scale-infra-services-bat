@@ -102,3 +102,15 @@ variable "papertrail_hostname" {
 variable "papertrail_remote_port" {
   type = string
 }
+
+variable "new_relic_license_key" {
+  type = string
+}
+
+variable "new_relic_app_name" {
+  type = string
+}
+
+variable "new_relic_agent_enabled" {
+  type = string
+}
