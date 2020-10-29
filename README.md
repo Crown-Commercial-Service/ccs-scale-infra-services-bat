@@ -169,3 +169,16 @@ After importing CNET data you will need to reindex Elastic search again
 ```
 bundle exec rails searchkick:reindex:all
 ```
+
+Set up product catalogue directory structure
+
+Go to the following S3 bucket spree-{env}-product-import
+
+- create folder called `imports`
+- inside the `imports` folder create the following folders
+```
+  - done
+  - error
+  - new
+  - processings
+```
