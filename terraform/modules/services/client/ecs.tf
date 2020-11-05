@@ -56,10 +56,8 @@ resource "aws_lb_listener" "port_80" {
   }
 }
 
-# TEMPORARY - REFACTOR - JUST MIMICS MANUAL CHANGES IN CONSOLE
-# Data sources for the ALB custom domain name and SSL certificate
 data "aws_ssm_parameter" "hosted_zone_name_alb" {
-  name = "${lower(var.environment)}-hosted-zone-name-alb"
+  name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-client"
 }
 
 data "aws_acm_certificate" "alb" {
