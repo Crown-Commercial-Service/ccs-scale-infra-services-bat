@@ -5,6 +5,15 @@
 #
 ##############################################################
 
+# Data sources for the ALB custom domain name and SSL certificate
+data "aws_ssm_parameter" "hosted_zone_name_alb_bat_client" {
+  name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-client"
+}
+
+data "aws_ssm_parameter" "hosted_zone_name_alb_bat_backend" {
+  name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-backend"
+}
+
 module "globals" {
   source      = "../globals"
   environment = var.environment
@@ -87,5 +96,24 @@ resource "aws_security_group" "public_alb_cf_regional" {
   }
 
   tags = merge(module.globals.project_resource_tags, { AppType = "ECS" })
+}
 
+##############################################################
+# Route53 CDN Alias ('A') record
+##############################################################
+data "aws_route53_zone" "alb" {
+  name         = var.hosted_zone_name
+  private_zone = false
+}
+
+resource "aws_route53_record" "alb" {
+  zone_id = data.aws_route53_zone.alb.zone_id
+  name    = var.hosted_zone_name
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.public_alb.dns_name
+    zone_id                = aws_lb.public_alb.zone_id
+    evaluate_target_health = true
+  }
 }

@@ -56,12 +56,8 @@ resource "aws_lb_listener" "port_80" {
   }
 }
 
-data "aws_ssm_parameter" "hosted_zone_name_alb" {
-  name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-client"
-}
-
 data "aws_acm_certificate" "alb" {
-  domain   = data.aws_ssm_parameter.hosted_zone_name_alb.value
+  domain   = var.hosted_zone_name
   statuses = ["ISSUED"]
 }
 

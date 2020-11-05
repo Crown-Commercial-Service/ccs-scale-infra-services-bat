@@ -106,6 +106,13 @@ data "aws_ssm_parameter" "papertrail_remote_port" {
   name = "/bat/${lower(var.environment)}-papertrail-remote-port"
 }
 
+data "aws_ssm_parameter" "hosted_zone_name_alb_bat_client" {
+  name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-client"
+}
+
+data "aws_ssm_parameter" "hosted_zone_name_alb_bat_backend" {
+  name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-backend"
+}
 
 ######################################
 # CIDR ranges for whitelisting
@@ -359,6 +366,7 @@ module "load_balancer_spree" {
   vpc_id                = data.aws_ssm_parameter.vpc_id.value
   lb_suffix             = "spree"
   public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+  hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
 }
 
 module "load_balancer_client" {
@@ -367,6 +375,7 @@ module "load_balancer_client" {
   vpc_id                = data.aws_ssm_parameter.vpc_id.value
   lb_suffix             = "client"
   public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+  hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
 }
 
 ######################################
@@ -381,6 +390,7 @@ module "spree" {
   lb_public_alb_arn      = module.load_balancer_spree.lb_public_alb_arn
   lb_public_alb_dns      = module.load_balancer_spree.lb_public_alb_dns
   lb_private_nlb_arn     = data.aws_ssm_parameter.lb_private_arn.value
+  hosted_zone_name       = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
   private_app_subnet_ids = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
   app_port               = "4567"
@@ -458,6 +468,7 @@ module "client" {
   vpc_id                 = data.aws_ssm_parameter.vpc_id.value
   ecs_cluster_id         = module.ecs.ecs_cluster_id
   lb_public_alb_arn      = module.load_balancer_client.lb_public_alb_arn
+  hosted_zone_name       = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
   public_web_subnet_ids  = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
   execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
   client_app_port        = "8080" //8080
