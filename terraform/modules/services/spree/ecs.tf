@@ -34,23 +34,6 @@ resource "aws_lb_target_group" "target_group_4567" {
   tags = merge(module.globals.project_resource_tags, { AppType = "LOADBALANCER" })
 }
 
-resource "aws_lb_listener" "port_80" {
-  load_balancer_arn = var.lb_public_alb_arn
-  port              = "80"
-  protocol          = "HTTP"
-  # ssl_policy        = "ELBSecurityPolicy-2016-08"
-  # certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group_4567.arn
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 data "aws_acm_certificate" "alb" {
   domain   = var.hosted_zone_name
   statuses = ["ISSUED"]
