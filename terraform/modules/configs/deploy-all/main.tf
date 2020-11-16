@@ -106,7 +106,6 @@ data "aws_ssm_parameter" "papertrail_remote_port" {
   name = "/bat/${lower(var.environment)}-papertrail-remote-port"
 }
 
-<<<<<<< HEAD
 data "aws_ssm_parameter" "hosted_zone_name_alb_bat_client" {
   name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-client"
 }
