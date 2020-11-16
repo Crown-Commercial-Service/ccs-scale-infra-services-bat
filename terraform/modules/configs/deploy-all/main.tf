@@ -106,12 +106,17 @@ data "aws_ssm_parameter" "papertrail_remote_port" {
   name = "/bat/${lower(var.environment)}-papertrail-remote-port"
 }
 
+<<<<<<< HEAD
 data "aws_ssm_parameter" "hosted_zone_name_alb_bat_client" {
   name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-client"
 }
 
 data "aws_ssm_parameter" "hosted_zone_name_alb_bat_backend" {
   name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-backend"
+}
+
+data "aws_ssm_parameter" "suppliers_sftp_bucket" {
+  name = "/bat/${lower(var.environment)}-suppliers-sftp-bucket"
 }
 
 ######################################
@@ -419,6 +424,7 @@ module "spree" {
   app_domain             = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
   papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
   papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
+  suppliers_sftp_bucket  = data.aws_ssm_parameter.suppliers_sftp_bucket.value
 }
 
 ######################################
@@ -456,6 +462,7 @@ module "sidekiq" {
   app_domain             = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
   papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
   papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
+  suppliers_sftp_bucket  = data.aws_ssm_parameter.suppliers_sftp_bucket.value
 }
 
 ######################################

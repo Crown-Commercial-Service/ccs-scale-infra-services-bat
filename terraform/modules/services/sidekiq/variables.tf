@@ -113,3 +113,7 @@ variable "papertrail_hostname" {
 variable "papertrail_remote_port" {
   type = string
 }
+
+variable "suppliers_sftp_bucket" {
+  type = string
+}
