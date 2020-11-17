@@ -133,3 +133,7 @@ variable "papertrail_hostname" {
 variable "papertrail_remote_port" {
   type = string
 }
+
+variable "hosted_zone_name" {
+  type = string
+}
