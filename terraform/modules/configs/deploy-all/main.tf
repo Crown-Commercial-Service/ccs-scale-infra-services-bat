@@ -485,7 +485,7 @@ module "client" {
   env_file               = module.s3.env_file_client
   cloudfront_id          = data.aws_ssm_parameter.cloudfront_id.value
   spree_api_host         = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
-  spree_image_host       = "https://${data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value}"
+  spree_image_host       = "https://${data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value}"
   rollbar_env            = var.rollbar_env
   ecr_image_id_client    = var.ecr_image_id_client
   papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
