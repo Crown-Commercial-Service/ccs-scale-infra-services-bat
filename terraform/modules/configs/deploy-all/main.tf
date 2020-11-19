@@ -416,7 +416,7 @@ module "spree" {
   ecr_image_id_spree     = var.ecr_image_id_spree
   elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
   buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
-  app_domain             = module.load_balancer_spree.lb_public_alb_dns
+  app_domain             = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
   papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
   papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
 }
@@ -453,7 +453,7 @@ module "sidekiq" {
   ecr_image_id_spree     = var.ecr_image_id_spree
   elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
   buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
-  app_domain             = module.load_balancer_spree.lb_public_alb_dns
+  app_domain             = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
   papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
   papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
 }
