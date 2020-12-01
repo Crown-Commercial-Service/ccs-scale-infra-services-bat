@@ -87,6 +87,10 @@
       {
         "name": "AWS_REGION",
         "value": "${aws_region}"
+      },
+      {
+        "name": "SUPPLIERS_SFTP_BUCKET",
+        "value": "${suppliers_sftp_bucket}"
       }
     ],
     "command": [
