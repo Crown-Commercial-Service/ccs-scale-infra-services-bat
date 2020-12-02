@@ -27,8 +27,8 @@ Check the README file for details of how to create the database.
   /bar/{env}-basic-auth-enabled
   /bat/{env}-session-cookie-secret
   /bat/{env}-products-import-bucket
-  /bat/{env}-papertrail-hostname
-  /bat/{env}-papertrail-remote-port
+  /bat/{env}-logit-hostname
+  /bat/{env}-logit-remote-port
   /bat/{env}-suppliers-sftp-bucket
 ```
 

@@ -65,12 +65,12 @@
         "value": "${spree_api_host}"
       },
       {
-        "name": "PAPERTRAIL_HOSTNAME",
-        "value": "${papertrail_hostname}"
+        "name": "LOGIT_HOSTNAME",
+        "value": "${logit_hostname}"
       },
       {
-        "name": "PAPERTRAIL_REMOTE_PORT",
-        "value": "${papertrail_remote_port}"
+        "name": "LOGIT_REMOTE_PORT",
+        "value": "${logit_remote_port}"
       }
     ],
     "command": [

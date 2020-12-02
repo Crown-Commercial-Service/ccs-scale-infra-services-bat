@@ -91,6 +91,14 @@
       {
         "name": "SUPPLIERS_SFTP_BUCKET",
         "value": "${suppliers_sftp_bucket}"
+      },
+      {
+        "name": "LOGIT_HOSTNAME",
+        "value": "${logit_hostname}"
+      },
+      {
+        "name": "LOGIT_REMOTE_PORT",
+        "value": "${logit_remote_port}"
       }
     ],
     "command": [
