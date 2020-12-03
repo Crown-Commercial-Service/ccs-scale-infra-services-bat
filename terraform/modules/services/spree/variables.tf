@@ -126,11 +126,11 @@ variable "app_domain" {
   type = string
 }
 
-variable "papertrail_hostname" {
+variable "logit_hostname" {
   type = string
 }
 
-variable "papertrail_remote_port" {
+variable "logit_remote_port" {
   type = string
 }
 

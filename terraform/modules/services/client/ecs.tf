@@ -79,8 +79,8 @@ data "template_file" "app_client" {
     rollbar_env            = var.rollbar_env
     env_file               = var.env_file
     client_session_secret  = var.client_session_secret
-    papertrail_hostname    = var.papertrail_hostname
-    papertrail_remote_port = var.papertrail_remote_port
+    logit_hostname         = var.logit_hostname
+    logit_remote_port      = var.logit_remote_port
   }
 }
 

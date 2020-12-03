@@ -98,12 +98,12 @@ data "aws_ssm_parameter" "elasticsearch_url" {
   name = "/bat/${lower(var.environment)}-elasticsearch-url"
 }
 
-data "aws_ssm_parameter" "papertrail_hostname" {
-  name = "/bat/${lower(var.environment)}-papertrail-hostname"
+data "aws_ssm_parameter" "logit_hostname" {
+  name = "/bat/${lower(var.environment)}-logit-hostname"
 }
 
-data "aws_ssm_parameter" "papertrail_remote_port" {
-  name = "/bat/${lower(var.environment)}-papertrail-remote-port"
+data "aws_ssm_parameter" "logit_remote_port" {
+  name = "/bat/${lower(var.environment)}-logit-remote-port"
 }
 
 data "aws_ssm_parameter" "hosted_zone_name_alb_bat_client" {
@@ -421,8 +421,8 @@ module "spree" {
   elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
   buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
   app_domain             = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
-  papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
-  papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
+  logit_hostname         = data.aws_ssm_parameter.logit_hostname.value
+  logit_remote_port      = data.aws_ssm_parameter.logit_remote_port.value
   suppliers_sftp_bucket  = data.aws_ssm_parameter.suppliers_sftp_bucket.value
 }
 
@@ -459,8 +459,8 @@ module "sidekiq" {
   elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
   buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
   app_domain             = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
-  papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
-  papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
+  logit_hostname         = data.aws_ssm_parameter.logit_hostname.value
+  logit_remote_port      = data.aws_ssm_parameter.logit_remote_port.value
   suppliers_sftp_bucket  = data.aws_ssm_parameter.suppliers_sftp_bucket.value
 }
 
@@ -494,6 +494,6 @@ module "client" {
   spree_image_host       = "https://${data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value}"
   rollbar_env            = var.rollbar_env
   ecr_image_id_client    = var.ecr_image_id_client
-  papertrail_hostname    = data.aws_ssm_parameter.papertrail_hostname.value
-  papertrail_remote_port = data.aws_ssm_parameter.papertrail_remote_port.value
+  logit_hostname         = data.aws_ssm_parameter.logit_hostname.value
+  logit_remote_port      = data.aws_ssm_parameter.logit_remote_port.value
 }
