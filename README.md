@@ -30,6 +30,7 @@ Check the README file for details of how to create the database.
   /bat/{env}-logit-hostname
   /bat/{env}-logit-remote-port
   /bat/{env}-suppliers-sftp-bucket
+  /bat/{env}-documents-terms-and-conditions-url
 ```
 
 4. Run `terraform apply`

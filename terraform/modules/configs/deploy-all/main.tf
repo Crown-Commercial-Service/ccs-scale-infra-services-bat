@@ -118,6 +118,10 @@ data "aws_ssm_parameter" "suppliers_sftp_bucket" {
   name = "/bat/${lower(var.environment)}-suppliers-sftp-bucket"
 }
 
+data "aws_ssm_parameter" "documents_terms_and_conditions_url" {
+  name = "/bat/${lower(var.environment)}-documents-terms-and-conditions-url"
+}
+
 ######################################
 # CIDR ranges for whitelisting
 ######################################
@@ -496,4 +500,5 @@ module "client" {
   ecr_image_id_client    = var.ecr_image_id_client
   logit_hostname         = data.aws_ssm_parameter.logit_hostname.value
   logit_remote_port      = data.aws_ssm_parameter.logit_remote_port.value
+  documents_terms_and_conditions_url = data.aws_ssm_parameter.documents_terms_and_conditions_url.value
 }
