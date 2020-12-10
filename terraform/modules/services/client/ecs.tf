@@ -81,6 +81,7 @@ data "template_file" "app_client" {
     client_session_secret  = var.client_session_secret
     logit_hostname         = var.logit_hostname
     logit_remote_port      = var.logit_remote_port
+    documents_terms_and_conditions_url = var.documents_terms_and_conditions_url
   }
 }
 

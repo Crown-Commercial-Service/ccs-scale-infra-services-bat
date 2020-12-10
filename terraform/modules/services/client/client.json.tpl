@@ -71,6 +71,10 @@
       {
         "name": "LOGIT_REMOTE_PORT",
         "value": "${logit_remote_port}"
+      },
+      {
+        "name": "DOCUMENTS_TERMS_AND_CONDITIONS_URL",
+        "value": "${documents_terms_and_conditions_url}"
       }
     ],
     "command": [

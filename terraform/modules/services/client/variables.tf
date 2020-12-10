@@ -106,3 +106,7 @@ variable "logit_remote_port" {
 variable "hosted_zone_name" {
   type = string
 }
+
+variable "documents_terms_and_conditions_url" {
+  type = string
+}
