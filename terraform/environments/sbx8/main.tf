@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 locals {
-  environment = "sbx8"
+  environment = "SBX8"
 }
 
 data "aws_ssm_parameter" "aws_account_id" {
