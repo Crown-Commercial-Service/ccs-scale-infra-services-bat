@@ -13,7 +13,6 @@ resource "aws_elasticache_subnet_group" "ec" {
   subnet_ids = var.private_app_subnet_ids
 }
 
-# To be replaced by Redis, left in for now until Sparks make necessary code changes
 resource "aws_elasticache_cluster" "memcached" {
   cluster_id           = "scale-eu2-ec-spree-memcached"
   engine               = "memcached"
@@ -29,20 +28,6 @@ resource "aws_elasticache_cluster" "memcached" {
 
 resource "aws_elasticache_cluster" "redis" {
   cluster_id           = "scale-eu2-ec-spree-redis"
-  engine               = "redis"
-  node_type            = "cache.t2.medium"
-  num_cache_nodes      = 1
-  parameter_group_name = "default.redis5.0"
-  engine_version       = "5.0.6"
-  security_group_ids   = var.security_group_redis_ids
-  subnet_group_name    = aws_elasticache_subnet_group.ec.name
-
-  tags = merge(module.globals.project_resource_tags, { AppType = "REDIS" })
-}
-
-# Designed to replace Memcached in client
-resource "aws_elasticache_cluster" "redis_cache" {
-  cluster_id           = "scale-eu2-ec-spree-redis-cache"
   engine               = "redis"
   node_type            = "cache.t2.medium"
   num_cache_nodes      = 1

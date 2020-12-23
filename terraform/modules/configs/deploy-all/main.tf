@@ -417,7 +417,6 @@ module "spree" {
   products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
   rollbar_env            = var.rollbar_env
   redis_url              = module.memcached.redis_url
-  redis_cache_url        = module.memcached.redis_cache_url #TODO: will replace 'memcached_endpoint' after testing
   memcached_endpoint     = module.memcached.memcached_endpoint
   security_groups        = [aws_security_group.spree.id]
   env_file               = module.s3.env_file_spree

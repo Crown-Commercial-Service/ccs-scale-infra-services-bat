@@ -159,62 +159,36 @@ Products - 50k
 ```
 Product Documents - 50k
 ```
-::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xaa.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.co
-m/initial_import/digitalcontent/Digital_Content-xaa.txt')
+::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xaa.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xaa.txt')
 
-::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xab.txt', names_path_name: 'https://cnet-spree-{env}staging.s3.eu-west-2.amazonaws.co
-m/initial_import/digitalcontent/Digital_Content-xab.txt')
+::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xab.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xab.txt')
 
-::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xac.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.co
-m/initial_import/digitalcontent/Digital_Content-xac.txt')
+::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xac.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xac.txt')
 ```
 
 Product Xmls - 50k
 ```
-::Cnet::Import::ProductXmls.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xaa.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xaa.txt')
-
-::Cnet::Import::ProductXmls.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xab.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xab.txt')
-
-::Cnet::Import::ProductXmls.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xac.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xac.txt')
+::Cnet::Import::ProductXmls.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-sample-50k.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-sample-50k.txt')
 
 ```
 Products Categories - 50k
 ```
-::Cnet::Import::ProductCategories.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/categorization/Cct_Products-xaa.txt')
-
-::Cnet::Import::ProductCategories.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/categorization/Cct_Products-xab.txt')
-
-::Cnet::Import::ProductCategories.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/categorization/Cct_Products-xac.txt')
+::Cnet::Import::ProductCategories.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/categorization/Cct_Products-sample-50k.txt')
 ```
 
 Product Properties - 50k
 ```
-::Cnet::Import::ProductProperties.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/especee-xaa.txt', names_path_name: 'https://cnet-spree-s{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/evocee.txt')
-
-::Cnet::Import::ProductProperties.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/especee-xab.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/evocee.txt')
-
-::Cnet::Import::ProductProperties.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/especee-xac.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/evocee.txt')
+::Cnet::Import::ProductProperties.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/especee-sample-50k.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/evocee.txt')
 ```
 
 Products Images - 50k - (Images is still being worked on, though. It works, we just limiting number of duplicated images or image placeholders)
 ```
 ::Cnet::Import::ProductImages.call(
-  path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xaa.txt',
-  image_data_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xaa.txt',
-  attributes_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta-xaa.txt',
-  attributes_dictionary_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta_Value_Voc-xaa.txt')
-
-::Cnet::Import::ProductImages.call(
-  path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xab.txt',
-  image_data_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xab.txt',
-  attributes_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta-xaa.txt',
-  attributes_dictionary_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta_Value_Voc-xab.txt')
-
-::Cnet::Import::ProductImages.call(
-  path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xab.txt',
-  image_data_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xab.txt',
-  attributes_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta-xab.txt',
-  attributes_dictionary_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta_Value_Voc-xab.txt')
+  path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-sample-50k.txt',
+  image_data_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-sample-50k.txt',
+  attributes_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta-sample-50k.txt',
+  attributes_dictionary_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta_Value_Voc-sample-50k.txt'
+)
 ```
 
 After importing CNET data you will need to reindex Elastic search again

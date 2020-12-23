@@ -102,7 +102,6 @@ data "template_file" "app_client" {
     rollbar_env                = var.rollbar_env
     env_file                   = var.env_file
     redis_url                  = var.redis_url
-    redis_cache_url            = var.redis_cache_url #TODO: will replace 'memcached_endpoint' after testing
     memcached_endpoint         = var.memcached_endpoint
     elasticsearch_url          = var.elasticsearch_url
     buyer_ui_url               = var.buyer_ui_url

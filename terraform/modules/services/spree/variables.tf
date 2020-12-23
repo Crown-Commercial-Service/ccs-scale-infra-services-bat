@@ -98,11 +98,6 @@ variable "redis_url" {
   type = string
 }
 
-#TODO: will replace 'memcached_endpoint' after testing
-variable "redis_cache_url" {
-  type = string
-}
-
 variable "memcached_endpoint" {
   type = string
 }

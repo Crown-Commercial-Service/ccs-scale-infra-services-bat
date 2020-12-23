@@ -61,10 +61,6 @@
         "value": "${redis_url}"
       },
       {
-        "name": "REDIS_CACHE_URL",
-        "value": "${redis_cache_url}"
-      },
-      {
         "name": "MEMCACHED_ENDPOINT",
         "value": "${memcached_endpoint}:11211"
       },
