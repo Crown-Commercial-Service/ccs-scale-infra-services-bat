@@ -16,6 +16,7 @@ resource "aws_elasticache_subnet_group" "ec" {
 resource "aws_elasticache_cluster" "memcached" {
   cluster_id           = "scale-eu2-ec-spree-memcached"
   engine               = "memcached"
+  engine_version       = "1.5.16"
   node_type            = "cache.t3.medium"
   num_cache_nodes      = 2
   parameter_group_name = "default.memcached1.5"
