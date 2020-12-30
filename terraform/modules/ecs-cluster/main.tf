@@ -27,7 +27,7 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
 }
 
 resource "aws_launch_configuration" "ecs-launch-configuration" {
-  name_prefix                 = "SCALE-EU2-${var.environment}-ASG-LC_BAT_${var.resource_name_suffix}"
+  name_prefix                 = "SCALE-EU2-${var.environment}-ASG-LC_BAT_${var.resource_name_suffix}_"
   image_id                    = "ami-09f5dea513082ee2d"
   iam_instance_profile        = aws_iam_instance_profile.ecs_agent.name
   user_data                   = data.template_file.user_data.rendered
