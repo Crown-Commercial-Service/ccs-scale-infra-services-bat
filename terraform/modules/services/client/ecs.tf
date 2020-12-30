@@ -63,24 +63,24 @@ data "template_file" "app_client" {
   template = file("${path.module}/client.json.tpl")
 
   vars = {
-    app_image              = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:${var.ecr_image_id_client}"
-    app_port               = var.client_app_port
-    fargate_cpu            = var.client_cpu
-    fargate_memory         = var.client_memory
-    aws_region             = var.aws_region
-    name                   = "client-app-task"
-    api_host               = var.client_app_host
-    spree_api_host         = var.spree_api_host
-    spree_image_host       = var.spree_image_host
-    rollbar_access_token   = var.rollbar_access_token
-    basicauth_username     = var.basicauth_username
-    basicauth_password     = var.basicauth_password
-    basicauth_enabled      = var.basicauth_enabled
-    rollbar_env            = var.rollbar_env
-    env_file               = var.env_file
-    client_session_secret  = var.client_session_secret
-    logit_hostname         = var.logit_hostname
-    logit_remote_port      = var.logit_remote_port
+    app_image                          = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:${var.ecr_image_id_client}"
+    app_port                           = var.client_app_port
+    cpu                                = var.cpu
+    memory                             = var.memory
+    aws_region                         = var.aws_region
+    name                               = "client-app-task"
+    api_host                           = var.client_app_host
+    spree_api_host                     = var.spree_api_host
+    spree_image_host                   = var.spree_image_host
+    rollbar_access_token               = var.rollbar_access_token
+    basicauth_username                 = var.basicauth_username
+    basicauth_password                 = var.basicauth_password
+    basicauth_enabled                  = var.basicauth_enabled
+    rollbar_env                        = var.rollbar_env
+    env_file                           = var.env_file
+    client_session_secret              = var.client_session_secret
+    logit_hostname                     = var.logit_hostname
+    logit_remote_port                  = var.logit_remote_port
     documents_terms_and_conditions_url = var.documents_terms_and_conditions_url
   }
 }
@@ -90,8 +90,8 @@ resource "aws_ecs_task_definition" "app_client" {
   execution_role_arn       = var.execution_role_arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
-  cpu                      = var.client_cpu
-  memory                   = var.client_memory
+  cpu                      = var.cpu
+  memory                   = var.memory
   container_definitions    = data.template_file.app_client.rendered
 }
 
@@ -100,7 +100,7 @@ resource "aws_ecs_service" "client" {
   name            = "client-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.app_client.arn
-  desired_count   = 1
+  desired_count   = length(var.public_web_subnet_ids)
   launch_type     = "EC2"
 
   network_configuration {

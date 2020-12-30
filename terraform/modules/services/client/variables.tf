@@ -27,11 +27,11 @@ variable "client_app_port" {
   type = string
 }
 
-variable "client_cpu" {
+variable "cpu" {
   type = number
 }
 
-variable "client_memory" {
+variable "memory" {
   type = number
 }
 
