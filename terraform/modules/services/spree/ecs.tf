@@ -141,12 +141,6 @@ resource "aws_ecs_service" "spree" {
     container_port   = var.app_port
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.target_group_4567_nlb.arn
-    container_name   = "spree-app-task"
-    container_port   = var.app_port
-  }
-
   # TODO: need to opt-in to new arn and resource id formats before can enable tags - need to understand this first
   # https://aws.amazon.com/blogs/compute/migrating-your-amazon-ecs-deployment-to-the-new-arn-and-resource-id-format-2/
   #tags = merge(module.globals.project_resource_tags, {AppType = "ECS"})

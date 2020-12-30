@@ -17,3 +17,11 @@ variable "security_group_memcached_ids" {
 variable "security_group_redis_ids" {
   type = list(string)
 }
+
+variable "memcached_node_type" {
+  type = string
+}
+
+variable "redis_node_type" {
+  type = string
+}

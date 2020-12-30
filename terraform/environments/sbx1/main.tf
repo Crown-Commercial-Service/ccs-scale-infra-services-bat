@@ -32,12 +32,12 @@ module "deploy" {
   environment               = local.environment
   rollbar_env               = local.environment
   client_cpu                = 2048
-  client_memory             = 8192
+  client_memory             = 7168 #8192
   client_ec2_instance_type  = "t2.large"
   spree_cpu                 = 2048
-  spree_memory              = 8192
+  spree_memory              = 7168 #8192
   spree_ec2_instance_type   = "t2.large" 
   sidekiq_cpu               = 2048
-  sidekiq_memory            = 8192
+  sidekiq_memory            = 7168 #8192
   sidekiq_ec2_instance_type = "t2.large"
 }

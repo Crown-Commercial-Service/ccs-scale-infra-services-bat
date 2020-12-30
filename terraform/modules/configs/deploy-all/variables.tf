@@ -81,3 +81,13 @@ variable "sidekiq_ec2_instance_type" {
   type    = string
   default = "t2.xlarge"
 }
+
+variable "memcached_node_type" {
+  type    = string
+  default = "cache.t3.medium"
+}
+
+variable "redis_node_type" {
+  type    = string
+  default = "cache.t3.medium"
+}
