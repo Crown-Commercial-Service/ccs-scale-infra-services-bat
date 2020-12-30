@@ -67,17 +67,17 @@ variable "sidekiq_memory" {
 
 variable "client_ec2_instance_type" {
   type    = string
-  default = "t2.large"
+  default = "t2.medium"
 }
 
-# TODO: Confirm with Som - there is no t2 instance matching 4/8 split on spreadsheet
+# TODO: Confirm with Som - there is no t2 instance matching 4/8 split on spreadsheet (set to 4/16 t2.xlarge for now) 
 variable "spree_ec2_instance_type" {
   type    = string
-  default = "t2.large"
+  default = "t2.xlarge"
 }
 
-# TODO: Confirm with Som - there is no t2 instance matching 4/8 split on spreadsheet
+# TODO: Confirm with Som - there is no t2 instance matching 4/8 split on spreadsheet (set to 4/16 t2.xlarge for now) 
 variable "sidekiq_ec2_instance_type" {
   type    = string
-  default = "t2.large"
+  default = "t2.xlarge"
 }
