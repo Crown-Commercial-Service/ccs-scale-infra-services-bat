@@ -34,8 +34,8 @@ module "deploy" {
   ecr_image_id_spree         = "latest"
   ecr_image_id_client        = "latest"
   client_cpu                 = 4096
-  client_memory              = 8192
-  client_ec2_instance_type   = "t2.large" #TODO - t2.large is 2/8 - check with Som as doesn't match requirement
+  client_memory              = 16384
+  client_ec2_instance_type   = "t2.xlarge" # NB: Som's initial design was 4/8, Ravi approved use of t2.xlarge as nearest instance size
   spree_cpu                  = 4096
   spree_memory               = 16384
   spree_ec2_instance_type    = "t2.xlarge"
