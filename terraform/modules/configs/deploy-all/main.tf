@@ -364,7 +364,7 @@ module "memcached" {
 }
 
 module "ecs_client" {
-  source               = "../../ecs-cluster"
+  source               = "../../ecs"
   environment          = var.environment
   subnet_ids           = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
   security_group_ids   = [aws_security_group.client.id]
@@ -373,7 +373,7 @@ module "ecs_client" {
 }
 
 module "ecs_spree" {
-  source               = "../../ecs-cluster"
+  source               = "../../ecs"
   environment          = var.environment
   subnet_ids           = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   security_group_ids   = [aws_security_group.client.id]
@@ -382,7 +382,7 @@ module "ecs_spree" {
 }
 
 module "ecs_sidekiq" {
-  source               = "../../ecs-cluster"
+  source               = "../../ecs"
   environment          = var.environment
   subnet_ids           = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   security_group_ids   = [aws_security_group.client.id]
