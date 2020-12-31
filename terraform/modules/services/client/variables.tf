@@ -110,3 +110,11 @@ variable "hosted_zone_name" {
 variable "documents_terms_and_conditions_url" {
   type = string
 }
+
+variable "deployment_maximum_percent" {
+  type = number
+}
+
+variable "deployment_minimum_healthy_percent" {
+  type = number
+}

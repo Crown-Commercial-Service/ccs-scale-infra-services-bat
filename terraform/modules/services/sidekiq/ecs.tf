@@ -48,12 +48,13 @@ resource "aws_ecs_task_definition" "app_sidekiq" {
 
 
 resource "aws_ecs_service" "sidekiq" {
-  name                       = "sidekiq-service"
-  cluster                    = var.ecs_cluster_id
-  task_definition            = aws_ecs_task_definition.app_sidekiq.arn
-  desired_count              = length(var.private_app_subnet_ids)
-  launch_type                = "EC2"
-  deployment_maximum_percent = 100
+  name                               = "sidekiq-service"
+  cluster                            = var.ecs_cluster_id
+  task_definition                    = aws_ecs_task_definition.app_sidekiq.arn
+  desired_count                      = length(var.private_app_subnet_ids)
+  launch_type                        = "EC2"
+  deployment_maximum_percent         = var.deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
 
   network_configuration {
     security_groups = var.security_groups

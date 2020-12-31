@@ -141,3 +141,11 @@ variable "hosted_zone_name" {
 variable "suppliers_sftp_bucket" {
   type = string
 }
+
+variable "deployment_maximum_percent" {
+  type = number
+}
+
+variable "deployment_minimum_healthy_percent" {
+  type = number
+}

@@ -91,3 +91,13 @@ variable "redis_node_type" {
   type    = string
   default = "cache.t3.medium"
 }
+
+variable "deployment_maximum_percent" {
+  type    = number
+  default = 100
+}
+
+variable "deployment_minimum_healthy_percent" {
+  type    = number
+  default = 50
+}
