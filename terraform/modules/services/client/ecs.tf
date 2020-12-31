@@ -97,11 +97,12 @@ resource "aws_ecs_task_definition" "app_client" {
 
 
 resource "aws_ecs_service" "client" {
-  name            = "client-service"
-  cluster         = var.ecs_cluster_id
-  task_definition = aws_ecs_task_definition.app_client.arn
-  desired_count   = length(var.public_web_subnet_ids)
-  launch_type     = "EC2"
+  name                       = "client-service"
+  cluster                    = var.ecs_cluster_id
+  task_definition            = aws_ecs_task_definition.app_client.arn
+  desired_count              = length(var.public_web_subnet_ids)
+  launch_type                = "EC2"
+  deployment_maximum_percent = 100
 
   network_configuration {
     security_groups = var.security_groups

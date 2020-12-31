@@ -124,11 +124,12 @@ resource "aws_ecs_task_definition" "app_spree" {
 
 
 resource "aws_ecs_service" "spree" {
-  name            = "spree-service"
-  cluster         = var.ecs_cluster_id
-  task_definition = aws_ecs_task_definition.app_spree.arn
-  desired_count   = length(var.private_app_subnet_ids)
-  launch_type     = "EC2"
+  name                       = "spree-service"
+  cluster                    = var.ecs_cluster_id
+  task_definition            = aws_ecs_task_definition.app_spree.arn
+  desired_count              = length(var.private_app_subnet_ids)
+  launch_type                = "EC2"
+  deployment_maximum_percent = 100
 
   network_configuration {
     security_groups = var.security_groups
