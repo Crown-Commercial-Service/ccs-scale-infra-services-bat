@@ -375,7 +375,7 @@ module "ecs_client" {
 module "ecs_spree" {
   source               = "../../ecs"
   environment          = var.environment
-  subnet_ids           = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  subnet_ids           = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
   security_group_ids   = [aws_security_group.client.id]
   ec2_instance_type    = var.spree_ec2_instance_type
   resource_name_suffix = "SPREE"
@@ -384,7 +384,7 @@ module "ecs_spree" {
 module "ecs_sidekiq" {
   source               = "../../ecs"
   environment          = var.environment
-  subnet_ids           = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  subnet_ids           = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
   security_group_ids   = [aws_security_group.client.id]
   ec2_instance_type    = var.sidekiq_ec2_instance_type
   resource_name_suffix = "SIDEKIQ"
