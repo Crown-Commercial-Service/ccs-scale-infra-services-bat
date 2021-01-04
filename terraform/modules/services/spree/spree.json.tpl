@@ -2,8 +2,8 @@
   {
     "name": "${name}",
     "image": "${app_image}",
-    "cpu": ${fargate_cpu},
-    "memory": ${fargate_memory},
+    "cpu": ${cpu},
+    "memory": ${memory},
     "networkMode": "awsvpc",
     "logConfiguration": {
         "logDriver": "awslogs",

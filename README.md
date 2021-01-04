@@ -134,6 +134,17 @@ user.reload
 
 TODO: Currently this is achieved by copying the `/initial_import` folder from the equivalent S3 bucket in an existing environment. We need to understand where this data comes from in the event it needed to be populated from scratch. Also may be worth exploring the possibility of having a single central store for this (e.g. in Management account), as it is several GBs in size.
 
+Create the following folder structure in the `cnet-spree-{env}-staging` bucket
+
+```
+initial_import/
+nightly_updates/
+  - done/
+  - error/
+  - new/
+  - processing/
+```
+
 9. Seed Cnet data
 
 Manufacturers - all

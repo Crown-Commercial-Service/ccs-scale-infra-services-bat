@@ -10,8 +10,8 @@ data "template_file" "app_sidekiq" {
   vars = {
     app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/spree-service-staging:${var.ecr_image_id_spree}"
     app_port                   = var.app_port
-    fargate_cpu                = var.cpu
-    fargate_memory             = var.memory
+    cpu                        = var.cpu
+    memory                     = var.memory
     aws_region                 = var.aws_region
     name                       = "sidekiq-task"
     db_name                    = var.db_name
@@ -48,11 +48,13 @@ resource "aws_ecs_task_definition" "app_sidekiq" {
 
 
 resource "aws_ecs_service" "sidekiq" {
-  name            = "sidekiq-service"
-  cluster         = var.ecs_cluster_id
-  task_definition = aws_ecs_task_definition.app_sidekiq.arn
-  desired_count   = 1
-  launch_type     = "EC2"
+  name                               = "sidekiq-service"
+  cluster                            = var.ecs_cluster_id
+  task_definition                    = aws_ecs_task_definition.app_sidekiq.arn
+  desired_count                      = length(var.private_app_subnet_ids)
+  launch_type                        = "EC2"
+  deployment_maximum_percent         = var.deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
 
   network_configuration {
     security_groups = var.security_groups

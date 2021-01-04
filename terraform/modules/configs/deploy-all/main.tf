@@ -359,13 +359,35 @@ module "memcached" {
   private_app_subnet_ids       = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   security_group_memcached_ids = [aws_security_group.memcached.id]
   security_group_redis_ids     = [aws_security_group.redis.id]
+  memcached_node_type          = var.memcached_node_type
+  redis_node_type              = var.redis_node_type
 }
 
-module "ecs" {
-  source                = "../../ecs"
-  environment           = var.environment
-  public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  security_group_ids    = [aws_security_group.client.id]
+module "ecs_client" {
+  source               = "../../ecs"
+  environment          = var.environment
+  subnet_ids           = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+  security_group_ids   = [aws_security_group.client.id]
+  ec2_instance_type    = var.client_ec2_instance_type
+  resource_name_suffix = "CLIENT"
+}
+
+module "ecs_spree" {
+  source               = "../../ecs"
+  environment          = var.environment
+  subnet_ids           = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  security_group_ids   = [aws_security_group.client.id]
+  ec2_instance_type    = var.spree_ec2_instance_type
+  resource_name_suffix = "SPREE"
+}
+
+module "ecs_sidekiq" {
+  source               = "../../ecs"
+  environment          = var.environment
+  subnet_ids           = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  security_group_ids   = [aws_security_group.client.id]
+  ec2_instance_type    = var.sidekiq_ec2_instance_type
+  resource_name_suffix = "SIDEKIQ"
 }
 
 module "load_balancer_spree" {
@@ -391,43 +413,45 @@ module "load_balancer_client" {
 ######################################
 
 module "spree" {
-  source                 = "../../services/spree"
-  environment            = var.environment
-  vpc_id                 = data.aws_ssm_parameter.vpc_id.value
-  ecs_cluster_id         = module.ecs.ecs_cluster_id
-  lb_public_alb_arn      = module.load_balancer_spree.lb_public_alb_arn
-  lb_public_alb_dns      = module.load_balancer_spree.lb_public_alb_dns
-  lb_private_nlb_arn     = data.aws_ssm_parameter.lb_private_arn.value
-  hosted_zone_name       = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
-  private_app_subnet_ids = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
-  execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
-  app_port               = "4567"
-  cpu                    = 512
-  memory                 = 2048
-  aws_region             = local.aws_region
-  db_name                = local.spree_db_name
-  db_host                = data.aws_ssm_parameter.spree_db_endpoint.value
-  db_username            = data.aws_ssm_parameter.spree_db_username.value
-  db_password            = data.aws_ssm_parameter.spree_db_password.value
-  secret_key_base        = data.aws_ssm_parameter.secret_key_base.value
-  rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
-  basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
-  basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
-  products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
-  rollbar_env            = var.rollbar_env
-  redis_url              = module.memcached.redis_url
-  memcached_endpoint     = module.memcached.memcached_endpoint
-  security_groups        = [aws_security_group.spree.id]
-  env_file               = module.s3.env_file_spree
-  cloudfront_id          = data.aws_ssm_parameter.cloudfront_id.value
-  ecr_image_id_spree     = var.ecr_image_id_spree
-  elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
-  buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
-  app_domain             = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
-  logit_hostname         = data.aws_ssm_parameter.logit_hostname.value
-  logit_remote_port      = data.aws_ssm_parameter.logit_remote_port.value
-  suppliers_sftp_bucket  = data.aws_ssm_parameter.suppliers_sftp_bucket.value
+  source                             = "../../services/spree"
+  environment                        = var.environment
+  vpc_id                             = data.aws_ssm_parameter.vpc_id.value
+  ecs_cluster_id                     = module.ecs_spree.ecs_cluster_id
+  lb_public_alb_arn                  = module.load_balancer_spree.lb_public_alb_arn
+  lb_public_alb_dns                  = module.load_balancer_spree.lb_public_alb_dns
+  lb_private_nlb_arn                 = data.aws_ssm_parameter.lb_private_arn.value
+  hosted_zone_name                   = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
+  private_app_subnet_ids             = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  execution_role_arn                 = aws_iam_role.ecs_task_execution_role.arn
+  app_port                           = "4567"
+  cpu                                = var.spree_cpu
+  memory                             = var.spree_memory
+  aws_region                         = local.aws_region
+  db_name                            = local.spree_db_name
+  db_host                            = data.aws_ssm_parameter.spree_db_endpoint.value
+  db_username                        = data.aws_ssm_parameter.spree_db_username.value
+  db_password                        = data.aws_ssm_parameter.spree_db_password.value
+  secret_key_base                    = data.aws_ssm_parameter.secret_key_base.value
+  rollbar_access_token               = data.aws_ssm_parameter.rollbar_access_token.value
+  basicauth_username                 = data.aws_ssm_parameter.basic_auth_username.value
+  basicauth_password                 = data.aws_ssm_parameter.basic_auth_password.value
+  basicauth_enabled                  = data.aws_ssm_parameter.basic_auth_enabled.value
+  products_import_bucket             = data.aws_ssm_parameter.products_import_bucket.value
+  rollbar_env                        = var.rollbar_env
+  redis_url                          = module.memcached.redis_url
+  memcached_endpoint                 = module.memcached.memcached_endpoint
+  security_groups                    = [aws_security_group.spree.id]
+  env_file                           = module.s3.env_file_spree
+  cloudfront_id                      = data.aws_ssm_parameter.cloudfront_id.value
+  ecr_image_id_spree                 = var.ecr_image_id_spree
+  elasticsearch_url                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
+  buyer_ui_url                       = "https://${module.load_balancer_client.lb_public_alb_dns}"
+  app_domain                         = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
+  logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
+  logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
+  suppliers_sftp_bucket              = data.aws_ssm_parameter.suppliers_sftp_bucket.value
+  deployment_maximum_percent         = var.deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
 }
 
 ######################################
@@ -435,37 +459,39 @@ module "spree" {
 ######################################
 
 module "sidekiq" {
-  source                 = "../../services/sidekiq"
-  environment            = var.environment
-  vpc_id                 = data.aws_ssm_parameter.vpc_id.value
-  ecs_cluster_id         = module.ecs.ecs_cluster_id
-  private_app_subnet_ids = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
-  execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
-  app_port               = "4567"
-  cpu                    = 512
-  memory                 = 2048
-  aws_region             = local.aws_region
-  db_name                = local.spree_db_name
-  db_host                = data.aws_ssm_parameter.spree_db_endpoint.value
-  db_username            = data.aws_ssm_parameter.spree_db_username.value
-  db_password            = data.aws_ssm_parameter.spree_db_password.value
-  secret_key_base        = data.aws_ssm_parameter.secret_key_base.value
-  rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
-  basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
-  basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
-  products_import_bucket = data.aws_ssm_parameter.products_import_bucket.value
-  rollbar_env            = var.rollbar_env
-  redis_url              = module.memcached.redis_url
-  security_groups        = [aws_security_group.spree.id]
-  env_file               = module.s3.env_file_spree
-  ecr_image_id_spree     = var.ecr_image_id_spree
-  elasticsearch_url      = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
-  buyer_ui_url           = "https://${module.load_balancer_client.lb_public_alb_dns}"
-  app_domain             = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
-  logit_hostname         = data.aws_ssm_parameter.logit_hostname.value
-  logit_remote_port      = data.aws_ssm_parameter.logit_remote_port.value
-  suppliers_sftp_bucket  = data.aws_ssm_parameter.suppliers_sftp_bucket.value
+  source                             = "../../services/sidekiq"
+  environment                        = var.environment
+  vpc_id                             = data.aws_ssm_parameter.vpc_id.value
+  ecs_cluster_id                     = module.ecs_sidekiq.ecs_cluster_id
+  private_app_subnet_ids             = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  execution_role_arn                 = aws_iam_role.ecs_task_execution_role.arn
+  app_port                           = "4567"
+  cpu                                = var.sidekiq_cpu
+  memory                             = var.sidekiq_memory
+  aws_region                         = local.aws_region
+  db_name                            = local.spree_db_name
+  db_host                            = data.aws_ssm_parameter.spree_db_endpoint.value
+  db_username                        = data.aws_ssm_parameter.spree_db_username.value
+  db_password                        = data.aws_ssm_parameter.spree_db_password.value
+  secret_key_base                    = data.aws_ssm_parameter.secret_key_base.value
+  rollbar_access_token               = data.aws_ssm_parameter.rollbar_access_token.value
+  basicauth_username                 = data.aws_ssm_parameter.basic_auth_username.value
+  basicauth_password                 = data.aws_ssm_parameter.basic_auth_password.value
+  basicauth_enabled                  = data.aws_ssm_parameter.basic_auth_enabled.value
+  products_import_bucket             = data.aws_ssm_parameter.products_import_bucket.value
+  rollbar_env                        = var.rollbar_env
+  redis_url                          = module.memcached.redis_url
+  security_groups                    = [aws_security_group.spree.id]
+  env_file                           = module.s3.env_file_spree
+  ecr_image_id_spree                 = var.ecr_image_id_spree
+  elasticsearch_url                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
+  buyer_ui_url                       = "https://${module.load_balancer_client.lb_public_alb_dns}"
+  app_domain                         = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
+  logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
+  logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
+  suppliers_sftp_bucket              = data.aws_ssm_parameter.suppliers_sftp_bucket.value
+  deployment_maximum_percent         = var.deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
 }
 
 ######################################
@@ -473,32 +499,34 @@ module "sidekiq" {
 ######################################
 
 module "client" {
-  source                 = "../../services/client"
-  environment            = var.environment
-  vpc_id                 = data.aws_ssm_parameter.vpc_id.value
-  ecs_cluster_id         = module.ecs.ecs_cluster_id
-  lb_public_alb_arn      = module.load_balancer_client.lb_public_alb_arn
-  hosted_zone_name       = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
-  public_web_subnet_ids  = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  execution_role_arn     = aws_iam_role.ecs_task_execution_role.arn
-  client_app_port        = "8080" //8080
-  client_app_host        = "0.0.0.0"
-  client_cpu             = 256
-  client_memory          = 512
-  aws_region             = local.aws_region
-  rollbar_access_token   = data.aws_ssm_parameter.rollbar_access_token.value
-  basicauth_username     = data.aws_ssm_parameter.basic_auth_username.value
-  basicauth_password     = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled      = data.aws_ssm_parameter.basic_auth_enabled.value
-  client_session_secret  = data.aws_ssm_parameter.client_session_secret.value
-  security_groups        = [aws_security_group.client.id]
-  env_file               = module.s3.env_file_client
-  cloudfront_id          = data.aws_ssm_parameter.cloudfront_id.value
-  spree_api_host         = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
-  spree_image_host       = "https://${data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value}"
-  rollbar_env            = var.rollbar_env
-  ecr_image_id_client    = var.ecr_image_id_client
-  logit_hostname         = data.aws_ssm_parameter.logit_hostname.value
-  logit_remote_port      = data.aws_ssm_parameter.logit_remote_port.value
+  source                             = "../../services/client"
+  environment                        = var.environment
+  vpc_id                             = data.aws_ssm_parameter.vpc_id.value
+  ecs_cluster_id                     = module.ecs_client.ecs_cluster_id
+  lb_public_alb_arn                  = module.load_balancer_client.lb_public_alb_arn
+  hosted_zone_name                   = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
+  public_web_subnet_ids              = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+  execution_role_arn                 = aws_iam_role.ecs_task_execution_role.arn
+  client_app_port                    = "8080" //8080
+  client_app_host                    = "0.0.0.0"
+  cpu                                = var.client_cpu
+  memory                             = var.client_memory
+  aws_region                         = local.aws_region
+  rollbar_access_token               = data.aws_ssm_parameter.rollbar_access_token.value
+  basicauth_username                 = data.aws_ssm_parameter.basic_auth_username.value
+  basicauth_password                 = data.aws_ssm_parameter.basic_auth_password.value
+  basicauth_enabled                  = data.aws_ssm_parameter.basic_auth_enabled.value
+  client_session_secret              = data.aws_ssm_parameter.client_session_secret.value
+  security_groups                    = [aws_security_group.client.id]
+  env_file                           = module.s3.env_file_client
+  cloudfront_id                      = data.aws_ssm_parameter.cloudfront_id.value
+  spree_api_host                     = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
+  spree_image_host                   = "https://${data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value}"
+  rollbar_env                        = var.rollbar_env
+  ecr_image_id_client                = var.ecr_image_id_client
+  logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
+  logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
   documents_terms_and_conditions_url = data.aws_ssm_parameter.documents_terms_and_conditions_url.value
+  deployment_maximum_percent         = var.deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
 }
