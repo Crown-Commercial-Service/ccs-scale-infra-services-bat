@@ -36,7 +36,7 @@ module "deploy" {
   client_ec2_instance_type  = "t2.large"
   spree_cpu                 = 2048
   spree_memory              = 7168 #8192
-  spree_ec2_instance_type   = "t2.large" 
+  spree_ec2_instance_type   = "t2.large"
   sidekiq_cpu               = 2048
   sidekiq_memory            = 7168 #8192
   sidekiq_ec2_instance_type = "t2.large"
