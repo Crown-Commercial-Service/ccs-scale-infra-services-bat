@@ -1,5 +1,5 @@
 output "redis_url" {
-    value = "redis://${aws_elasticache_replication_group.redis.configuration_endpoint_address}"
+    value = "redis://${aws_elasticache_replication_group.redis.configuration_endpoint_address}:6379"
 }
 
 output "memcached_endpoint" {
