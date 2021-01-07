@@ -361,6 +361,7 @@ module "memcached" {
   security_group_redis_ids     = [aws_security_group.redis.id]
   memcached_node_type          = var.memcached_node_type
   redis_node_type              = var.redis_node_type
+  az_names                     = var.az_names
 }
 
 module "ecs_client" {
