@@ -1,3 +1,7 @@
+variable "aws_account_id" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }
@@ -24,4 +28,8 @@ variable "memcached_node_type" {
 
 variable "redis_node_type" {
   type = string
+}
+
+variable "az_names" {
+  type = list(string)
 }

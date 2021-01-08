@@ -101,3 +101,8 @@ variable "deployment_minimum_healthy_percent" {
   type    = number
   default = 50
 }
+
+variable "az_names" {
+  type    = list(string)
+  default = ["eu-west-2a", "eu-west-2b"]
+}

@@ -34,7 +34,7 @@ module "deploy" {
   ecr_image_id_spree        = "latest"
   ecr_image_id_client       = "latest"
   client_cpu                = 4096
-  client_memory             = 8192 #t2.xlarge - 16GB available
+  client_memory             = 8192        #t2.xlarge - 16GB available
   client_ec2_instance_type  = "t2.xlarge" # NB: Som's initial design was 4/8, Ravi approved use of t2.xlarge as nearest instance size
   spree_cpu                 = 4096
   spree_memory              = 15360 #16GB available - save 1GB for the instance (or increase to t2.xlarge)
@@ -44,4 +44,5 @@ module "deploy" {
   sidekiq_ec2_instance_type = "t2.xlarge"
   memcached_node_type       = "cache.m4.large"
   redis_node_type           = "cache.m4.large"
+  az_names                  = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
 }

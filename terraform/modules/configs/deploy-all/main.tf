@@ -354,6 +354,7 @@ module "s3" {
 
 module "memcached" {
   source                       = "../../memcached"
+  aws_account_id               = var.aws_account_id
   environment                  = var.environment
   vpc_id                       = data.aws_ssm_parameter.vpc_id.value
   private_app_subnet_ids       = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
@@ -361,6 +362,7 @@ module "memcached" {
   security_group_redis_ids     = [aws_security_group.redis.id]
   memcached_node_type          = var.memcached_node_type
   redis_node_type              = var.redis_node_type
+  az_names                     = var.az_names
 }
 
 module "ecs_client" {
