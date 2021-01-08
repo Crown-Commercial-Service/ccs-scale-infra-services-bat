@@ -1,12 +1,12 @@
 #########################################################
-# Environment: SBX8
+# Environment: NFT
 #
 # Deploy SCALE resources
 #########################################################
 terraform {
   backend "s3" {
     bucket         = "scale-terraform-state"
-    key            = "ccs-scale-infra-services-bat-sbx8"
+    key            = "ccs-scale-infra-services-bat-nft"
     region         = "eu-west-2"
     dynamodb_table = "scale_terraform_state_lock"
     encrypt        = true
@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 locals {
-  environment = "SBX8"
+  environment = "NFT"
 }
 
 data "aws_ssm_parameter" "aws_account_id" {
@@ -34,7 +34,7 @@ module "deploy" {
   ecr_image_id_spree        = "latest"
   ecr_image_id_client       = "latest"
   client_cpu                = 4096
-  client_memory             = 8192 #t2.xlarge - 16GB available
+  client_memory             = 8192        #t2.xlarge - 16GB available
   client_ec2_instance_type  = "t2.xlarge" # NB: Som's initial design was 4/8, Ravi approved use of t2.xlarge as nearest instance size
   spree_cpu                 = 4096
   spree_memory              = 15360 #16GB available - save 1GB for the instance (or increase to t2.xlarge)
