@@ -52,3 +52,17 @@ resource "aws_elasticache_replication_group" "redis" {
 
   tags = merge(module.globals.project_resource_tags, { AppType = "REDIS" })
 }
+
+# MultiAZ is not 'enabled' by default on Redis (although docs say it should be if 'automatic_failover_enabled' is true)
+# Workaround is to run a command to set it after the resource has been creted 
+# It may be this is not required in a later version of Terraform
+resource "null_resource" "nr" {
+  triggers = {
+    cache = aws_elasticache_replication_group.redis.id
+  }
+  provisioner "local-exec" {
+    command = "eval $(aws sts assume-role --role-arn arn:aws:iam::${var.aws_account_id}:role/CCS_SCALE_Build --role-session-name tf-session | jq -r '.Credentials | \"export AWS_ACCESS_KEY_ID=\\(.AccessKeyId)\nexport AWS_SECRET_ACCESS_KEY=\\(.SecretAccessKey)\nexport AWS_SESSION_TOKEN=\\(.SessionToken)\n\"') && echo AWS_ACCESS_KEY_ID && aws elasticache modify-replication-group --replication-group-id ${aws_elasticache_replication_group.redis.id} --multi-az-enabled --apply-immediately"
+  }
+}
+
+

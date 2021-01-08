@@ -354,6 +354,7 @@ module "s3" {
 
 module "memcached" {
   source                       = "../../memcached"
+  aws_account_id               = var.aws_account_id
   environment                  = var.environment
   vpc_id                       = data.aws_ssm_parameter.vpc_id.value
   private_app_subnet_ids       = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
