@@ -27,8 +27,17 @@ data "aws_ssm_parameter" "aws_account_id" {
 }
 
 module "deploy" {
-  source         = "../../modules/configs/deploy-all"
-  aws_account_id = data.aws_ssm_parameter.aws_account_id.value
-  environment    = local.environment
-  rollbar_env    = local.environment
+  source                    = "../../modules/configs/deploy-all"
+  aws_account_id            = data.aws_ssm_parameter.aws_account_id.value
+  environment               = local.environment
+  rollbar_env               = local.environment
+  client_cpu                = 2048
+  client_memory             = 3548 #4096
+  client_ec2_instance_type  = "t2.medium"
+  spree_cpu                 = 2048
+  spree_memory              = 7168 #8192
+  spree_ec2_instance_type   = "t2.large"
+  sidekiq_cpu               = 2048
+  sidekiq_memory            = 7168 #8192
+  sidekiq_ec2_instance_type = "t2.large"
 }

@@ -23,7 +23,7 @@ resource "aws_elasticache_cluster" "memcached" {
   engine_version               = "1.6.6"
   node_type                    = var.memcached_node_type
   num_cache_nodes              = length(var.private_app_subnet_ids)
-  parameter_group_name         = "default.memcached1.5"
+  parameter_group_name         = "default.memcached1.6"
   security_group_ids           = var.security_group_memcached_ids
   subnet_group_name            = aws_elasticache_subnet_group.ec.name
   az_mode                      = "cross-az"
