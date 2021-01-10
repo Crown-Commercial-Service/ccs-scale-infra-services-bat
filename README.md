@@ -65,6 +65,10 @@ S3_BUCKET_NAME=spree-${lower(var.environment)}-${lower(var.stage)}
  - then switch it to 'latest' again and rerun `terraform apply`
  - this whole part of the process needs review
 
+ Alternatively, force a redeployment using the AWS CLI e.g.
+
+     aws ecs update-service --cluster [CLUSTER_NAME]  --service [SERVICE_NAME]  --force-new-deployment
+
 NOTE/TODO: For steps 3 & 4 you have to provision the everything first to get the values to put into these files, so you then have to redploy the ECS Services - can we move these to environment variables rather than files (need to check with Sparks about this). There is also some duplication between env variables and file - is this necessary?
 
 ### Post install steps

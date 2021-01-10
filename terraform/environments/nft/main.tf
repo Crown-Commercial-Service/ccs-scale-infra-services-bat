@@ -44,4 +44,5 @@ module "deploy" {
   sidekiq_ec2_instance_type = "t2.xlarge"
   memcached_node_type       = "cache.m4.large"
   redis_node_type           = "cache.m4.large"
+  az_names                  = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
 }
