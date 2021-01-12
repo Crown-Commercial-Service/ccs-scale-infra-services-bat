@@ -31,6 +31,9 @@ Check the README file for details of how to create the database.
   /bat/{env}-logit-remote-port
   /bat/{env}-suppliers-sftp-bucket
   /bat/{env}-documents-terms-and-conditions-url
+  /bat/{env}-lograge-enabled
+  /bat/{env}-sendgrid-api-key
+  /bat/{env}-mail-from
 ```
 
 4. Run `terraform apply`

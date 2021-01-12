@@ -125,3 +125,15 @@ variable "deployment_maximum_percent" {
 variable "deployment_minimum_healthy_percent" {
   type = number
 }
+
+variable "lograge_enabled" {
+  type = string
+}
+
+variable "sendgrid_api_key" {
+  type = string
+}
+
+variable "mail_from" {
+  type = string
+}
