@@ -122,6 +122,18 @@ data "aws_ssm_parameter" "documents_terms_and_conditions_url" {
   name = "/bat/${lower(var.environment)}-documents-terms-and-conditions-url"
 }
 
+data "aws_ssm_parameter" "lograge_enabled" {
+  name = "/bat/${lower(var.environment)}-lograge-enabled"
+}
+
+data "aws_ssm_parameter" "sendgrid_api_key" {
+  name = "/bat/${lower(var.environment)}-sendgrid-api-key"
+}
+
+data "aws_ssm_parameter" "mail_from" {
+  name = "/bat/${lower(var.environment)}-mail-from"
+}
+
 ######################################
 # CIDR ranges for whitelisting
 ######################################
@@ -452,6 +464,9 @@ module "spree" {
   suppliers_sftp_bucket              = data.aws_ssm_parameter.suppliers_sftp_bucket.value
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
+  lograge_enabled                    = data.aws_ssm_parameter.lograge_enabled.value
+  sendgrid_api_key                   = data.aws_ssm_parameter.sendgrid_api_key.value
+  mail_from                          = data.aws_ssm_parameter.mail_from.value
 }
 
 ######################################
@@ -492,6 +507,10 @@ module "sidekiq" {
   suppliers_sftp_bucket              = data.aws_ssm_parameter.suppliers_sftp_bucket.value
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
+  lograge_enabled                    = data.aws_ssm_parameter.lograge_enabled.value
+  sendgrid_api_key                   = data.aws_ssm_parameter.sendgrid_api_key.value
+  mail_from                          = data.aws_ssm_parameter.mail_from.value
+
 }
 
 ######################################

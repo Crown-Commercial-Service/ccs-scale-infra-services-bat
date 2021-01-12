@@ -33,6 +33,10 @@ data "template_file" "app_sidekiq" {
     logit_hostname             = var.logit_hostname
     logit_remote_port          = var.logit_remote_port
     suppliers_sftp_bucket      = var.suppliers_sftp_bucket
+    lograge_enabled            = var.lograge_enabled
+    sendgrid_api_key           = var.sendgrid_api_key
+    mail_from                  = var.mail_from
+
   }
 }
 
