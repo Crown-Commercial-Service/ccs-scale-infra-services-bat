@@ -95,6 +95,18 @@
       {
         "name": "LOGIT_REMOTE_PORT",
         "value": "${logit_remote_port}"
+      },
+      {
+        "name": "LOGRAGE_ENABLED",
+        "value": "${lograge_enabled}"
+      },
+      {
+        "name": "SENDGRID_API_KEY",
+        "value": "${sendgrid_api_key}"
+      },
+      {
+        "name": "MAIL_FROM",
+        "value": "${mail_from}"
       }
     ],
     "command": [
