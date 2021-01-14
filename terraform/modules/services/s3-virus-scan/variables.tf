@@ -33,3 +33,7 @@ variable "memory" {
 variable "aws_region" {
   type = string
 }
+
+variable "ecr_image_id_s3_virus_scan" {
+  type = string
+}
