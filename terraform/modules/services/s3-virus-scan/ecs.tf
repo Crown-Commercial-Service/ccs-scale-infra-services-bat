@@ -7,7 +7,7 @@ data "template_file" "app_s3_virus_scan" {
   template = file("${path.module}/s3_virus_scan.json.tpl")
 
   vars = {
-    app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/s3-virus-scan:${var.ecr_image_id_spree}"
+    app_image                  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/s3-virus-scan:${var.ecr_image_id_s3_virus_scan}"
     app_port                   = var.app_port
     cpu                        = var.cpu
     memory                     = var.memory
