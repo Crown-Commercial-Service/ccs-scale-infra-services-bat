@@ -260,6 +260,25 @@ resource "aws_security_group_rule" "client-allow-outgoing" {
   security_group_id = aws_security_group.client.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
+
+resource "aws_security_group_rule" "s3-virus-scan-allow-https" {
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  security_group_id = aws_security_group.s3-virus-scan.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "s3-virus-scan-allow-outgoing" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.s3-virus-scan.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 resource "aws_security_group" "rds" {
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
   name        = "rds-spree-${lower(var.stage)}"
@@ -404,6 +423,15 @@ module "ecs_sidekiq" {
   resource_name_suffix = "SIDEKIQ"
 }
 
+module "ecs_s3_virus_scan" {
+  source               = "../../ecs"
+  environment          = var.environment
+  subnet_ids           = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+  security_group_ids   = [aws_security_group.client.id]
+  ec2_instance_type    = var.s3_virus_scan_ec2_instance_type
+  resource_name_suffix = "S3_VIRUS_SCAN"
+}
+
 module "load_balancer_spree" {
   source                = "../../load-balancer"
   environment           = var.environment
@@ -421,6 +449,18 @@ module "load_balancer_client" {
   public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
   hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
 }
+
+# I am not sure if this app S3_VIRUS_SCAN app needs a load_balancer_s3_virus_scan
+
+module "load_balancer_s3_virus_scan" {
+  source                = "../../load-balancer"
+  environment           = var.environment
+  vpc_id                = data.aws_ssm_parameter.vpc_id.value
+  lb_suffix             = "client"
+  public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+  hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_s3_virus_scan.value
+}
+
 
 ######################################
 # Spree Service
@@ -550,4 +590,22 @@ module "client" {
   documents_terms_and_conditions_url = data.aws_ssm_parameter.documents_terms_and_conditions_url.value
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
+}
+
+######################################
+# S3 Virus scan Service
+######################################
+
+module "s3_virus_scan" {
+  source                             = "../../services/s3-virus-scan"
+  environment                        = var.environment
+  vpc_id                             = data.aws_ssm_parameter.vpc_id.value
+  ecs_cluster_id                     = module.ecs_s3_virus_scan.ecs_cluster_id
+  private_app_subnet_ids             = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  execution_role_arn                 = aws_iam_role.ecs_task_execution_role.arn
+  app_port                           = "4567"
+  cpu                                = var.s3_virus_scan_cpu
+  memory                             = var.s3_virus_scan_memory
+  ecr_image_id_s3_virus_scan         = var.ecr_image_id_s3_virus_scan
+  aws_region                         = local.aws_region
 }
