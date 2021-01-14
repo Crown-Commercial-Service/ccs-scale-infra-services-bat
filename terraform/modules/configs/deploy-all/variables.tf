@@ -36,11 +36,6 @@ variable "ecr_image_id_s3_virus_scan" {
   default = "latest"
 }
 
-variable "ecr_image_id_s3_virus_scan" {
-  type    = string
-  default = "latest"
-}
-
 variable "rollbar_env" {
   type = string
 }
