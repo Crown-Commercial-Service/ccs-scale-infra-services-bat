@@ -114,10 +114,6 @@ data "aws_ssm_parameter" "hosted_zone_name_alb_bat_backend" {
   name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-backend"
 }
 
-data "aws_ssm_parameter" "hosted_zone_name_alb_bat_s3_virus_scan" {
-  name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-s3-virus-scan"
-}
-
 data "aws_ssm_parameter" "suppliers_sftp_bucket" {
   name = "/bat/${lower(var.environment)}-suppliers-sftp-bucket"
 }
@@ -271,13 +267,13 @@ resource "aws_security_group" "s3-virus-scan" {
   description = "Allow inbound db traffic"
 }
 
-resource "aws_security_group_rule" "s3-virus-scan-allow-https" {
+resource "aws_security_group_rule" "s3-virus-scan-allow-http" {
   type              = "ingress"
-  from_port         = 443
-  to_port           = 443
+  from_port         = 4567
+  to_port           = 4567
   protocol          = "tcp"
   security_group_id = aws_security_group.s3-virus-scan.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
 }
 
 resource "aws_security_group_rule" "s3-virus-scan-allow-outgoing" {
@@ -436,8 +432,8 @@ module "ecs_sidekiq" {
 module "ecs_s3_virus_scan" {
   source               = "../../ecs"
   environment          = var.environment
-  subnet_ids           = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  security_group_ids   = [aws_security_group.client.id]
+  subnet_ids           = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  security_group_ids   = [aws_security_group.s3-virus-scan.id]
   ec2_instance_type    = var.s3_virus_scan_ec2_instance_type
   resource_name_suffix = "S3_VIRUS_SCAN"
 }
@@ -458,17 +454,6 @@ module "load_balancer_client" {
   lb_suffix             = "client"
   public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
   hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
-}
-
-# I am not sure if this app S3_VIRUS_SCAN app needs a load_balancer_s3_virus_scan
-
-module "load_balancer_s3_virus_scan" {
-  source                = "../../load-balancer"
-  environment           = var.environment
-  vpc_id                = data.aws_ssm_parameter.vpc_id.value
-  lb_suffix             = "client"
-  public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_s3_virus_scan.value
 }
 
 
@@ -611,6 +596,7 @@ module "s3_virus_scan" {
   environment                        = var.environment
   vpc_id                             = data.aws_ssm_parameter.vpc_id.value
   ecs_cluster_id                     = module.ecs_s3_virus_scan.ecs_cluster_id
+  lb_private_nlb_arn                 = data.aws_ssm_parameter.lb_private_arn.value
   private_app_subnet_ids             = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
   execution_role_arn                 = aws_iam_role.ecs_task_execution_role.arn
   app_port                           = "4567"

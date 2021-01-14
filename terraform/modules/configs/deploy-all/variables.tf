@@ -70,11 +70,13 @@ variable "sidekiq_memory" {
   default = 8192
 }
 
+# TODO: Has this been specified?
 variable "s3_virus_scan_cpu" {
   type    = number
   default = 4096
 }
 
+# TODO: Has this been specified?
 variable "s3_virus_scan_memory" {
   type    = number
   default = 8192
@@ -97,7 +99,7 @@ variable "sidekiq_ec2_instance_type" {
   default = "t2.xlarge"
 }
 
-# TODO: Confirm with Som - there is no t2 instance matching 4/8 split on spreadsheet (set to 4/16 t2.xlarge for now)
+# TODO: Has this been specified?
 variable "s3_virus_scan_ec2_instance_type" {
   type    = string
   default = "t2.xlarge"

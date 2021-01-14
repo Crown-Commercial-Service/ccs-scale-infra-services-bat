@@ -50,3 +50,7 @@ variable "security_groups" {
   type = list(string)
 }
 
+variable "lb_private_nlb_arn" {
+  type = string
+}
+
