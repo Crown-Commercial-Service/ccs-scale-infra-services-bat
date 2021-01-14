@@ -114,6 +114,10 @@ data "aws_ssm_parameter" "hosted_zone_name_alb_bat_backend" {
   name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-backend"
 }
 
+data "aws_ssm_parameter" "hosted_zone_name_alb_bat_s3_virus_scan" {
+  name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-s3-virus-scan"
+}
+
 data "aws_ssm_parameter" "suppliers_sftp_bucket" {
   name = "/bat/${lower(var.environment)}-suppliers-sftp-bucket"
 }
@@ -259,6 +263,12 @@ resource "aws_security_group_rule" "client-allow-outgoing" {
   protocol          = "-1"
   security_group_id = aws_security_group.client.id
   cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group" "s3-virus-scan" {
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
+  name        = "app-s3-virus-scan-${lower(var.stage)}"
+  description = "Allow inbound db traffic"
 }
 
 resource "aws_security_group_rule" "s3-virus-scan-allow-https" {
@@ -608,4 +618,7 @@ module "s3_virus_scan" {
   memory                             = var.s3_virus_scan_memory
   ecr_image_id_s3_virus_scan         = var.ecr_image_id_s3_virus_scan
   aws_region                         = local.aws_region
+  deployment_maximum_percent         = var.deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
+  security_groups                    = [aws_security_group.s3-virus-scan.id]
 }

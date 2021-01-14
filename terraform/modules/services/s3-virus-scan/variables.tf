@@ -37,3 +37,16 @@ variable "aws_region" {
 variable "ecr_image_id_s3_virus_scan" {
   type = string
 }
+
+variable "deployment_maximum_percent" {
+  type = number
+}
+
+variable "deployment_minimum_healthy_percent" {
+  type = number
+}
+
+variable "security_groups" {
+  type = list(string)
+}
+

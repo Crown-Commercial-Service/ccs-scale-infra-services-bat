@@ -16,7 +16,6 @@ data "template_file" "app_s3_virus_scan" {
   }
 }
 
-
 resource "aws_ecs_task_definition" "app_s3_virus_scan" {
   family                   = "s3-virus-scan-task"
   execution_role_arn       = var.execution_role_arn
@@ -28,9 +27,9 @@ resource "aws_ecs_task_definition" "app_s3_virus_scan" {
 }
 
 resource "aws_ecs_service" "s3_virus_scan" {
-  name                               = "s3_virus_scan-service"
+  name                               = "s3-virus-scan-service"
   cluster                            = var.ecs_cluster_id
-  task_definition                    = aws_ecs_task_definition.s3_virus_scan.arn
+  task_definition                    = aws_ecs_task_definition.app_s3_virus_scan.arn
   desired_count                      = length(var.private_app_subnet_ids)
   launch_type                        = "EC2"
   deployment_maximum_percent         = var.deployment_maximum_percent
