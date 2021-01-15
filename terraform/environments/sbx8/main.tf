@@ -45,4 +45,10 @@ module "deploy" {
   memcached_node_type       = "cache.m4.large"
   redis_node_type           = "cache.m4.large"
   az_names                  = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
+
+  # default values for s3-virus-scan-service subject to change based on testing on DEV
+  ecr_image_id_s3_virus_scan      = "latest"
+  s3_virus_scan_cpu               = 1024
+  s3_virus_scan_memory            = 2048
+  s3_virus_scan_ec2_instance_type = "t2.medium"
 }
