@@ -430,25 +430,6 @@ module "ecs_s3_virus_scan" {
   resource_name_suffix = "S3_VIRUS_SCAN"
 }
 
-# module "load_balancer_spree" {
-#   source                = "../../load-balancer"
-#   environment           = var.environment
-#   vpc_id                = data.aws_ssm_parameter.vpc_id.value
-#   lb_suffix             = "spree"
-#   public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-#   hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
-# }
-
-# module "load_balancer_client" {
-#   source                = "../../load-balancer"
-#   environment           = var.environment
-#   vpc_id                = data.aws_ssm_parameter.vpc_id.value
-#   lb_suffix             = "client"
-#   public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-#   hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
-# }
-
-
 ######################################
 # Spree Service
 ######################################
