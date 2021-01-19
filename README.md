@@ -34,6 +34,8 @@ Check the README file for details of how to create the database.
   /bat/{env}-lograge-enabled
   /bat/{env}-sendgrid-api-key
   /bat/{env}-mail-from
+  /bat/{env}-aws_access_key_id
+  /bat/{env}-aws_secret_access_key
 ```
 
 4. Run `terraform apply`
