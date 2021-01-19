@@ -173,14 +173,11 @@ Products - 50k
 ```
 Product Documents - 50k
 ```
-::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xaa.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.co
-m/initial_import/digitalcontent/Digital_Content-xaa.txt')
+::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xaa.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xaa.txt')
 
-::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xab.txt', names_path_name: 'https://cnet-spree-{env}staging.s3.eu-west-2.amazonaws.co
-m/initial_import/digitalcontent/Digital_Content-xab.txt')
+::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xab.txt', names_path_name: 'https://cnet-spree-{env}staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xab.txt')
 
-::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xac.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.co
-m/initial_import/digitalcontent/Digital_Content-xac.txt')
+::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xac.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xac.txt')
 ```
 
 Product Xmls - 50k
