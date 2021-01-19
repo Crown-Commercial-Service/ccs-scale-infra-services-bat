@@ -134,6 +134,14 @@ data "aws_ssm_parameter" "mail_from" {
   name = "/bat/${lower(var.environment)}-mail-from"
 }
 
+data "aws_ssm_parameter" "aws_access_key_id" {
+  name = "/bat/${lower(var.environment)}-aws-access-key-id"
+}
+
+data "aws_ssm_parameter" "aws_secret_access_key" {
+  name = "/bat/${lower(var.environment)}-aws-secret-access-key"
+}
+
 ######################################
 # CIDR ranges for whitelisting
 ######################################
@@ -607,4 +615,6 @@ module "s3_virus_scan" {
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
   security_groups                    = [aws_security_group.s3-virus-scan.id]
+  aws_access_key_id                  = data.aws_ssm_parameter.aws_access_key_id.value
+  aws_secret_access_key              = data.aws_ssm_parameter.aws_secret_access_key.value
 }
