@@ -32,12 +32,14 @@ data "template_file" "app_s3_virus_scan" {
   template = file("${path.module}/s3_virus_scan.json.tpl")
 
   vars = {
-    app_image  = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/s3-virus-scan:${var.ecr_image_id_s3_virus_scan}"
-    app_port   = var.app_port
-    cpu        = var.cpu
-    memory     = var.memory
-    aws_region = var.aws_region
-    name       = "s3-virus-scan-task"
+    app_image              = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/s3-virus-scan:${var.ecr_image_id_s3_virus_scan}"
+    app_port               = var.app_port
+    cpu                    = var.cpu
+    memory                 = var.memory
+    aws_region             = var.aws_region
+    name                   = "s3-virus-scan-task"
+    aws_access_key_id      = var.aws_access_key_id
+    aws_secret_access_key  = var.aws_secret_access_key
   }
 }
 

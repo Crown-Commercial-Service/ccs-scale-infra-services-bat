@@ -47,7 +47,7 @@ module "deploy" {
 
   # default values for s3-virus-scan-service subject to change based on testing on DEV
   ecr_image_id_s3_virus_scan      = "latest"
-  s3_virus_scan_cpu               = 1024
-  s3_virus_scan_memory            = 2048
-  s3_virus_scan_ec2_instance_type = "t2.medium"
+  s3_virus_scan_cpu               = 2048
+  s3_virus_scan_memory            = 4096
+  s3_virus_scan_ec2_instance_type = "t2.large"
 }
