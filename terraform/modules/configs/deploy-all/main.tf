@@ -387,6 +387,11 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_s3" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_read_ssm" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+}
+
 ######################################
 # Modules
 ######################################
@@ -615,6 +620,6 @@ module "s3_virus_scan" {
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
   security_groups                    = [aws_security_group.s3-virus-scan.id]
-  aws_access_key_id                  = data.aws_ssm_parameter.aws_access_key_id.value
-  aws_secret_access_key              = data.aws_ssm_parameter.aws_secret_access_key.value
+  aws_access_key_id                  = data.aws_ssm_parameter.aws_access_key_id.arn
+  aws_secret_access_key              = data.aws_ssm_parameter.aws_secret_access_key.arn
 }
