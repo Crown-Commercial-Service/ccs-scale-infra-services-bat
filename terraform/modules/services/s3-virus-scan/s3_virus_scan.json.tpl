@@ -17,7 +17,9 @@
       {
         "name": "AWS_REGION",
         "value": "${aws_region}"
-      },
+      }
+    ],
+    "secrets": [
       {
         "name": "AWS_ACCESS_KEY_ID",
         "value": "${aws_access_key_id}"
