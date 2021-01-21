@@ -284,6 +284,15 @@ resource "aws_security_group_rule" "s3-virus-scan-allow-http" {
   cidr_blocks       = [data.aws_vpc.scale.cidr_block]
 }
 
+resource "aws_security_group_rule" "s3-virus-scan-allow-ssh" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = aws_security_group.s3-virus-scan.id
+  cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
+}
+
 resource "aws_security_group_rule" "s3-virus-scan-allow-outgoing" {
   type              = "egress"
   from_port         = 0
