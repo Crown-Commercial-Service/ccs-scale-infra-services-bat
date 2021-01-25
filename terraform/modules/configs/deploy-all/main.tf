@@ -405,6 +405,14 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_read_ssm" {
 # Modules
 ######################################
 
+module "lambda" {
+  source             = "../../lambda"
+  environment        = var.environment
+  host               = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
+  subnet_ids         = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  security_groups    = [aws_security_group.s3-virus-scan.id] # think this need a different security_group
+}
+
 module "s3" {
   source      = "../../s3"
   stage       = var.stage
