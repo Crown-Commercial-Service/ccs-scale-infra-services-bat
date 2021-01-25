@@ -220,6 +220,14 @@ data "aws_ssm_parameter" "cidr_blocks_allowed_external_cognizant" {
   name = "${lower(var.environment)}-cidr-blocks-allowed-external-cognizant"
 }
 
+data "aws_ssm_parameter" "cidr_block_vpc" {
+  name = "${lower(var.environment)}-cidr-block-vpc"
+}
+
+data "aws_ssm_parameter" "cidr_blocks_allowed_external_api_gateway" {
+  name = "${lower(var.environment)}-cidr-blocks-allowed-external-api-gateway"
+}
+
 locals {
   # Normalised CIDR blocks (accounting for 'none' i.e. "-" as value in SSM parameter)
   cidr_blocks_allowed_external_ccs       = data.aws_ssm_parameter.cidr_blocks_allowed_external_ccs.value != "-" ? split(",", data.aws_ssm_parameter.cidr_blocks_allowed_external_ccs.value) : []
@@ -230,6 +238,23 @@ locals {
 data "aws_vpc" "scale" {
   id = data.aws_ssm_parameter.vpc_id.value
 }
+
+# Get the public IP values for NAT/GW to add to the API gateway allowed list
+data "aws_ssm_parameter" "nat_eip_ids" {
+  name = "${lower(var.environment)}-eip-ids-nat-gateway"
+}
+
+data "aws_eip" "nat_eips" {
+  for_each = toset(split(",", data.aws_ssm_parameter.nat_eip_ids.value))
+
+  id = each.key
+}
+
+locals {
+  # Normalised CIDR blocks (accounting for 'none' i.e. "-" as value in SSM parameter)
+  cidr_blocks_allowed_external_api_gateway = data.aws_ssm_parameter.cidr_blocks_allowed_external_api_gateway.value != "-" ? split(",", data.aws_ssm_parameter.cidr_blocks_allowed_external_api_gateway.value) : []
+}
+
 
 ######################################
 # Temporary solution - security groups
@@ -646,4 +671,50 @@ module "s3_virus_scan" {
   host                               = "http://${data.aws_ssm_parameter.lb_private_dns.value}:4567"
   stage                              = var.stage
   cidr_blocks                        = [data.aws_vpc.scale.cidr_block]
+}
+
+######################################
+# Catalogue Service API
+######################################
+
+module "api" {
+  source      = "../../api"
+  environment = var.environment
+
+  # Allow traffic from VPC, NAT and environment specific CIDR ranges (e.g. CCS, CCS web infra etc)
+  cidr_blocks_allowed_external_api_gateway = concat(tolist([data.aws_ssm_parameter.cidr_block_vpc.value]), values(data.aws_eip.nat_eips)[*].public_ip, local.cidr_blocks_allowed_external_api_gateway)
+}
+
+module "catalogue" {
+  source                       = "../../services/catalogue"
+  environment                  = var.environment
+  vpc_id                       = data.aws_ssm_parameter.vpc_id.value
+  private_app_subnet_ids       = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  private_db_subnet_ids        = split(",", data.aws_ssm_parameter.private_db_subnet_ids.value)
+  vpc_link_id                  = data.aws_ssm_parameter.vpc_link_id.value
+  lb_private_arn               = data.aws_ssm_parameter.lb_private_arn.value
+  lb_private_dns               = data.aws_ssm_parameter.lb_private_dns.value
+  scale_rest_api_id            = module.api.scale_rest_api_id
+  scale_rest_api_execution_arn = module.api.scale_rest_api_execution_arn
+  parent_resource_id           = module.api.parent_resource_id
+  #ecs_security_group_id        = module.ecs.ecs_security_group_id
+  #ecs_task_execution_arn       = module.ecs.ecs_task_execution_arn
+  #ecs_cluster_id               = module.ecs.ecs_cluster_id
+  catalogue_cpu                = var.catalogue_cpu
+  catalogue_memory             = var.catalogue_memory
+  ecr_image_id_catalogue       = var.ecr_image_id_catalogue
+  ecs_log_retention_in_days    = var.ecs_log_retention_in_days
+}
+
+module "api-deployment" {
+  source                       = "../../services/api-deployment"
+  environment                  = var.environment
+  scale_rest_api_id            = module.api.scale_rest_api_id
+  api_rate_limit               = var.api_rate_limit
+  api_burst_limit              = var.api_burst_limit
+  api_gw_log_retention_in_days = var.api_gw_log_retention_in_days
+  scale_rest_api_policy_json   = module.api.scale_rest_api_policy_json
+
+  // Simulate depends_on:
+  catalogue_api_gateway_integration = module.catalogue.catalogue_api_gateway_integration
 }

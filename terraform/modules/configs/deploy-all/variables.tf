@@ -129,3 +129,28 @@ variable "az_names" {
   type    = list(string)
   default = ["eu-west-2a", "eu-west-2b"]
 }
+
+variable "ecr_image_id_catalogue" {
+  type    = string
+  default = "a6b65cd-candidate"
+}
+
+variable "catalogue_cpu" {
+  type    = number
+  default = 512
+}
+
+variable "catalogue_memory" {
+  type    = number
+  default = 1024
+}
+
+variable "api_gw_log_retention_in_days" {
+  type    = number
+  default = 7
+}
+
+variable "ecs_log_retention_in_days" {
+  type    = number
+  default = 7
+}

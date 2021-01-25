@@ -4,6 +4,10 @@
 # Deployed in public (web) subnet
 ##########################################################
 
+locals {
+  cluster_name = "SCALE-EU2-${var.environment}-APP-ECS_BAT_CLIENT"
+}
+
 module "globals" {
   source      = "../../globals"
   environment = var.environment
@@ -106,6 +110,10 @@ data "template_file" "app_client" {
     enable_quotes                      = var.enable_quotes
     logit_application                  = var.logit_application
   }
+}
+
+resource "aws_ecs_cluster" "main" {
+  name = local.cluster_name
 }
 
 resource "aws_ecs_task_definition" "app_client" {
