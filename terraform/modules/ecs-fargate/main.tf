@@ -68,7 +68,7 @@ resource "aws_security_group" "allow_http" {
 }
 
 resource "aws_iam_role" "ecs_task_execution" {
-  name = "SCALE_ECS_BAT_Services_Task_Execution"
+  name = "SCALE_ECS_BAT_Services_Fargate_Task_Execution"
 
   assume_role_policy = <<EOF
 {
@@ -90,7 +90,7 @@ EOF
 }
 
 resource "aws_iam_policy" "ecs_task_execution" {
-  description = "BaT ECS task execution policy"
+  description = "BaT ECS Fargate task execution policy"
 
   policy = <<EOF
 {

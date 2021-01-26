@@ -14,7 +14,7 @@ resource "aws_api_gateway_account" "this" {
 }
 
 resource "aws_iam_role" "api_gw_cloudwatch_logs_role" {
-  name = "SCALE_Shared_ApiGateway_PushToCWLog"
+  name = "SCALE_BaT_ApiGateway_PushToCWLog"
 
   assume_role_policy = <<EOF
 {

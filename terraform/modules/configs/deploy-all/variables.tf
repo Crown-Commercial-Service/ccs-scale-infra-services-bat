@@ -132,7 +132,7 @@ variable "az_names" {
 
 variable "ecr_image_id_catalogue" {
   type    = string
-  default = "a6b65cd-candidate"
+  default = "latest"
 }
 
 variable "catalogue_cpu" {

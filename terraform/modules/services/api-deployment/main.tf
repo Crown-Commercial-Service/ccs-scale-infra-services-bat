@@ -7,7 +7,7 @@
 #########################################################
 # Deployment
 #########################################################
-resource "aws_api_gateway_deployment" "shared" {
+resource "aws_api_gateway_deployment" "bat" {
   description = "Deployed at ${timestamp()}"
   rest_api_id = var.scale_rest_api_id
 
@@ -24,7 +24,7 @@ resource "aws_api_gateway_deployment" "shared" {
   }
 }
 
-resource "aws_api_gateway_stage" "shared" {
+resource "aws_api_gateway_stage" "bat" {
   description = "Deployed at ${timestamp()}"
   depends_on = [
     aws_cloudwatch_log_group.api_gw_execution
@@ -32,12 +32,12 @@ resource "aws_api_gateway_stage" "shared" {
 
   stage_name    = lower(var.environment)
   rest_api_id   = var.scale_rest_api_id
-  deployment_id = aws_api_gateway_deployment.shared.id
+  deployment_id = aws_api_gateway_deployment.bat.id
 }
 
 resource "aws_api_gateway_method_settings" "scale" {
   rest_api_id = var.scale_rest_api_id
-  stage_name  = aws_api_gateway_stage.shared.stage_name
+  stage_name  = aws_api_gateway_stage.bat.stage_name
   method_path = "*/*"
   settings {
     logging_level      = "INFO"
@@ -47,14 +47,14 @@ resource "aws_api_gateway_method_settings" "scale" {
 }
 
 resource "aws_cloudwatch_log_group" "api_gw_execution" {
-  name              = "API-Gateway-Execution-Logs_${var.scale_rest_api_id}/${lower(var.environment)}-shared"
+  name              = "API-Gateway-Execution-Logs_${var.scale_rest_api_id}/${lower(var.environment)}-bat"
   retention_in_days = var.api_gw_log_retention_in_days
 }
 
 resource "aws_ssm_parameter" "api_invoke_url" {
   name      = "${lower(var.environment)}-catalogue-service-root-url"
   type      = "String"
-  value     = aws_api_gateway_stage.shared.invoke_url
+  value     = aws_api_gateway_stage.bat.invoke_url
   overwrite = true
 }
 
@@ -62,12 +62,12 @@ resource "aws_ssm_parameter" "api_invoke_url" {
 # Usage Plans
 #########################################################
 resource "aws_api_gateway_usage_plan" "default" {
-  name        = "default-usage-plan-shared"
-  description = "Default Usage Plan"
+  name        = "default-usage-plan-bat"
+  description = "Default BaT Usage Plan"
 
   api_stages {
     api_id = var.scale_rest_api_id
-    stage  = aws_api_gateway_stage.shared.stage_name
+    stage  = aws_api_gateway_stage.bat.stage_name
   }
 
   throttle_settings {
@@ -80,11 +80,11 @@ resource "aws_api_gateway_usage_plan" "default" {
 # API Keys
 #########################################################
 resource "aws_api_gateway_api_key" "bat_testers" {
-  name = "FaT Testers API Key (Shared)"
+  name = "BaT Testers API Key"
 }
 
 resource "aws_api_gateway_api_key" "bat_developers" {
-  name = "FaT Developers API Key (Shared)"
+  name = "BaT Developers API Key"
 }
 
 resource "aws_api_gateway_usage_plan_key" "bat_testers" {
