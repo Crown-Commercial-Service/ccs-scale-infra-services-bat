@@ -420,13 +420,6 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_read_ssm" {
 # Modules
 ######################################
 
-module "s3_virus_scan_lambda" {
-  source             = "../../services/s3-virus-scan/lambda"
-  environment        = var.environment
-  host               = "http://${data.aws_ssm_parameter.lb_private_dns.value}:4567"
-  subnet_ids         = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
-  security_groups    = [aws_security_group.s3-virus-scan-lambda.id]
-}
 
 module "s3" {
   source      = "../../s3"
@@ -654,4 +647,6 @@ module "s3_virus_scan" {
   security_groups                    = [aws_security_group.s3-virus-scan.id]
   aws_access_key_id                  = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key              = data.aws_ssm_parameter.aws_secret_access_key.arn
+  host                               = "http://${data.aws_ssm_parameter.lb_private_dns.value}:4567"
+  lambda_security_groups             = aws_security_group.s3-virus-scan-lambda.id
 }

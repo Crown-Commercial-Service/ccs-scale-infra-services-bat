@@ -62,4 +62,10 @@ variable "aws_secret_access_key" {
   type = string
 }
 
+variable "lambda_security_groups" {
+  type = string
+}
 
+variable "host" {
+  type = string
+}

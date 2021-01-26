@@ -78,3 +78,13 @@ resource "aws_cloudwatch_log_group" "ecs" {
   name              = "/ecs/service/scale/s3_virus_scan"
   retention_in_days = 7
 }
+
+
+module "s3_virus_scan_lambda" {
+  source           = "./lambda"
+  environment      = var.environment
+  host             = var.host
+  subnet_ids       = var.private_app_subnet_ids
+  security_groups  =[var.lambda_security_groups]
+}
+
