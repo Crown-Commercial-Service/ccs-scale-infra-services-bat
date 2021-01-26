@@ -42,7 +42,7 @@ resource "aws_api_gateway_integration" "catalogue_proxy" {
   resource_id             = aws_api_gateway_resource.catalogue_proxy.id
   http_method             = aws_api_gateway_method.catalogue_proxy.http_method
   type                    = "HTTP_PROXY"
-  uri                     = "http://${var.lb_private_dns}:8010/{proxy}"
+  uri                     = "http://${var.lb_private_dns}:9030/{proxy}"
   connection_type         = "VPC_LINK"
   connection_id           = var.vpc_link_id
   integration_http_method = "ANY"

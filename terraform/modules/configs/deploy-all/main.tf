@@ -499,6 +499,13 @@ module "ecs_s3_virus_scan" {
   resource_name_suffix = "S3_VIRUS_SCAN"
 }
 
+module "ecs_fargate" {
+  source         = "../../ecs-fargate"
+  vpc_id         = data.aws_ssm_parameter.vpc_id.value
+  environment    = var.environment
+  cidr_block_vpc = data.aws_ssm_parameter.cidr_block_vpc.value
+}
+
 ######################################
 # Spree Service
 ######################################
@@ -697,9 +704,9 @@ module "catalogue" {
   scale_rest_api_id            = module.api.scale_rest_api_id
   scale_rest_api_execution_arn = module.api.scale_rest_api_execution_arn
   parent_resource_id           = module.api.parent_resource_id
-  #ecs_security_group_id        = module.ecs.ecs_security_group_id
-  #ecs_task_execution_arn       = module.ecs.ecs_task_execution_arn
-  #ecs_cluster_id               = module.ecs.ecs_cluster_id
+  ecs_security_group_id        = module.ecs_fargate.ecs_security_group_id
+  ecs_task_execution_arn       = module.ecs_fargate.ecs_task_execution_arn
+  ecs_cluster_id               = module.ecs_fargate.ecs_cluster_id
   catalogue_cpu                = var.catalogue_cpu
   catalogue_memory             = var.catalogue_memory
   ecr_image_id_catalogue       = var.ecr_image_id_catalogue
