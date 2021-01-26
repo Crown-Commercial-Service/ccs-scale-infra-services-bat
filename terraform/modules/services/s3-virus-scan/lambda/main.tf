@@ -41,7 +41,7 @@ resource "aws_lambda_function" "ccs_virus_scan_lambda" {
   filename         = "${path.module}/.build/ccs-virus-scan.zip"
   source_code_hash = data.archive_file.lambda_ccs_virus_scan_zip.output_base64sha256
   function_name    = "ccs-${lower(var.environment)}-virus-scan"
-  role             = aws_iam_role.lambda_role.name
+  role             = aws_iam_role.lambda_role.arn
   runtime          = "python3.8"
   handler          = "lambda_function.lambda_handler"
   timeout          = 30
