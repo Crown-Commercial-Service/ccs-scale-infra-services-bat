@@ -309,7 +309,7 @@ resource "aws_security_group" "s3-virus-scan-lambda" {
 }
 
 resource "aws_security_group_rule" "s3-virus-scan-lambda-allow-http" {
-  type              = "ingress"
+  type              = "egress"
   from_port         = 4567
   to_port           = 4567
   protocol          = "tcp"
