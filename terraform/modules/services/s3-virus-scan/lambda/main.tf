@@ -20,6 +20,7 @@ data "aws_iam_policy_document" "lambda_role" {
     }
   }
 }
+
 resource "aws_iam_role" "lambda_role" {
   name               = "SCALE_LAMBDA_BAT"
   assume_role_policy = data.aws_iam_policy_document.lambda_role.json
@@ -40,7 +41,7 @@ resource "aws_lambda_function" "ccs_virus_scan_lambda" {
   filename         = "${path.module}/.build/ccs-virus-scan.zip"
   source_code_hash = data.archive_file.lambda_ccs_virus_scan_zip.output_base64sha256
   function_name    = "ccs-${lower(var.environment)}-virus-scan"
-  role             = aws_iam_role.lambda_role.arn
+  role             = aws_iam_role.lambda_role.name
   runtime          = "python3.8"
   handler          = "lambda_function.lambda_handler"
   timeout          = 30
