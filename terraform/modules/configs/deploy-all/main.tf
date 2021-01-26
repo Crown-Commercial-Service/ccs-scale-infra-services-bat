@@ -302,21 +302,6 @@ resource "aws_security_group_rule" "s3-virus-scan-allow-outgoing" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group" "s3-virus-scan-lambda" {
-  vpc_id      = data.aws_ssm_parameter.vpc_id.value
-  name        = "s3-virus-scan-lambda-${lower(var.stage)}"
-  description = "Allow inbound db traffic"
-}
-
-resource "aws_security_group_rule" "s3-virus-scan-lambda-allow-http" {
-  type              = "egress"
-  from_port         = 4567
-  to_port           = 4567
-  protocol          = "tcp"
-  security_group_id = aws_security_group.s3-virus-scan-lambda.id
-  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
-}
-
 resource "aws_security_group" "rds" {
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
   name        = "rds-spree-${lower(var.stage)}"
@@ -648,5 +633,6 @@ module "s3_virus_scan" {
   aws_access_key_id                  = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key              = data.aws_ssm_parameter.aws_secret_access_key.arn
   host                               = "http://${data.aws_ssm_parameter.lb_private_dns.value}:4567"
-  lambda_security_groups             = aws_security_group.s3-virus-scan-lambda.id
+  stage                              = var.stage
+  cidr_blocks                        = [data.aws_vpc.scale.cidr_block]
 }

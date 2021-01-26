@@ -62,10 +62,14 @@ variable "aws_secret_access_key" {
   type = string
 }
 
-variable "lambda_security_groups" {
+variable "host" {
   type = string
 }
 
-variable "host" {
+variable "stage" {
   type = string
+}
+
+variable "cidr_blocks" {
+  type = list(string)
 }
