@@ -9,7 +9,7 @@ def lambda_handler(event, context):
     for record in event["Records"]:
         key    = record["s3"]["object"]["key"]
         bucket = record["s3"]["bucket"]["name"]
-        url    = host + ":4567/scan?" + urlparse.urlencode({"key": key, "bucket": bucket})
+        url    = host + "/scan?" + urlparse.urlencode({"key": key, "bucket": bucket})
         print("url: " + url)
 
         data = request.urlopen(url)

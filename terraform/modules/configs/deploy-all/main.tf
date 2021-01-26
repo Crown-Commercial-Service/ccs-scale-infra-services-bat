@@ -302,6 +302,21 @@ resource "aws_security_group_rule" "s3-virus-scan-allow-outgoing" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
+resource "aws_security_group" "s3-virus-scan-lambda" {
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
+  name        = "s3-virus-scan-lambda-${lower(var.stage)}"
+  description = "Allow inbound db traffic"
+}
+
+resource "aws_security_group_rule" "s3-virus-scan-lambda-allow-http" {
+  type              = "ingress"
+  from_port         = 4567
+  to_port           = 4567
+  protocol          = "tcp"
+  security_group_id = aws_security_group.s3-virus-scan-lambda.id
+  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
+}
+
 resource "aws_security_group" "rds" {
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
   name        = "rds-spree-${lower(var.stage)}"
@@ -405,12 +420,12 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_read_ssm" {
 # Modules
 ######################################
 
-module "lambda" {
-  source             = "../../lambda"
+module "s3_virus_scan_lambda" {
+  source             = "../../services/s3-virus-scan/lambda"
   environment        = var.environment
-  host               = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
+  host               = "http://${data.aws_ssm_parameter.lb_private_dns.value}:4567"
   subnet_ids         = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
-  security_groups    = [aws_security_group.s3-virus-scan.id] # think this need a different security_group
+  security_groups    = [aws_security_group.s3-virus-scan-lambda.id]
 }
 
 module "s3" {
