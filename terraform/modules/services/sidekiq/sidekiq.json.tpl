@@ -107,6 +107,14 @@
       {
         "name": "MAIL_FROM",
         "value": "${mail_from}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY",
+        "value": "${sidekiq_concurrency}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY_SEARCHKICK",
+        "value": "${sidekiq_concurrency_searchkick}"
       }
     ],
     "command": [

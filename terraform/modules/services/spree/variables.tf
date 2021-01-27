@@ -161,3 +161,11 @@ variable "sendgrid_api_key" {
 variable "mail_from" {
   type = string
 }
+
+variable "sidekiq_concurrency" {
+  type = string
+}
+
+variable "sidekiq_concurrency_searchkick" {
+  type = string
+}

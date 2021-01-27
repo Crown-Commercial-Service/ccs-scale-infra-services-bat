@@ -137,9 +137,16 @@ data "aws_ssm_parameter" "mail_from" {
 data "aws_ssm_parameter" "aws_access_key_id" {
   name = "/bat/${lower(var.environment)}-aws-access-key-id"
 }
-
 data "aws_ssm_parameter" "aws_secret_access_key" {
   name = "/bat/${lower(var.environment)}-aws-secret-access-key"
+}
+
+data "aws_ssm_parameter" "sidekiq_concurrency" {
+  name = "/bat/${lower(var.environment)}-sidekiq-concurrency"
+}
+
+data "aws_ssm_parameter" "sidekiq_concurrency_searchkick" {
+  name = "/bat/${lower(var.environment)}-sidekiq-concurrency-searchkick"
 }
 
 ######################################
@@ -526,6 +533,9 @@ module "spree" {
   lograge_enabled                    = data.aws_ssm_parameter.lograge_enabled.value
   sendgrid_api_key                   = data.aws_ssm_parameter.sendgrid_api_key.value
   mail_from                          = data.aws_ssm_parameter.mail_from.value
+  sidekiq_concurrency                = data.aws_ssm_parameter.sidekiq_concurrency.value
+  sidekiq_concurrency_searchkick     = data.aws_ssm_parameter.sidekiq_concurrency_searchkick.value
+
 }
 
 ######################################
@@ -569,7 +579,8 @@ module "sidekiq" {
   lograge_enabled                    = data.aws_ssm_parameter.lograge_enabled.value
   sendgrid_api_key                   = data.aws_ssm_parameter.sendgrid_api_key.value
   mail_from                          = data.aws_ssm_parameter.mail_from.value
-
+  sidekiq_concurrency                = data.aws_ssm_parameter.sidekiq_concurrency.value
+  sidekiq_concurrency_searchkick     = data.aws_ssm_parameter.sidekiq_concurrency_searchkick.value
 }
 
 ######################################
