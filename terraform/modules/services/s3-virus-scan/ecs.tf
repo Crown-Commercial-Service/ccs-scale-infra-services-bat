@@ -78,3 +78,28 @@ resource "aws_cloudwatch_log_group" "ecs" {
   name              = "/ecs/service/scale/s3_virus_scan"
   retention_in_days = 7
 }
+
+
+resource "aws_security_group" "s3-virus-scan-lambda" {
+  vpc_id      = var.vpc_id
+  name        = "s3-virus-scan-lambda-${lower(var.stage)}"
+  description = "Allow inbound db traffic"
+}
+
+resource "aws_security_group_rule" "s3-virus-scan-lambda-allow-http" {
+  type              = "egress"
+  from_port         = 4567
+  to_port           = 4567
+  protocol          = "tcp"
+  security_group_id = aws_security_group.s3-virus-scan-lambda.id
+  cidr_blocks       = var.cidr_blocks
+}
+
+module "s3_virus_scan_lambda" {
+  source           = "./lambda"
+  environment      = var.environment
+  host             = var.host
+  subnet_ids       = var.private_app_subnet_ids
+  security_groups  =[aws_security_group.s3-virus-scan-lambda.id]
+}
+

@@ -412,6 +412,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_read_ssm" {
 # Modules
 ######################################
 
+
 module "s3" {
   source      = "../../s3"
   stage       = var.stage
@@ -642,4 +643,7 @@ module "s3_virus_scan" {
   security_groups                    = [aws_security_group.s3-virus-scan.id]
   aws_access_key_id                  = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key              = data.aws_ssm_parameter.aws_secret_access_key.arn
+  host                               = "http://${data.aws_ssm_parameter.lb_private_dns.value}:4567"
+  stage                              = var.stage
+  cidr_blocks                        = [data.aws_vpc.scale.cidr_block]
 }
