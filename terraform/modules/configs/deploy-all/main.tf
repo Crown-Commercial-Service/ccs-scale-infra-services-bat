@@ -149,6 +149,11 @@ data "aws_ssm_parameter" "sidekiq_concurrency_searchkick" {
   name = "/bat/${lower(var.environment)}-sidekiq-concurrency-searchkick"
 }
 
+data "aws_ssm_parameter" "logit_node" {
+  name = "/bat/${lower(var.environment)}-logit-node"
+}
+
+
 ######################################
 # CIDR ranges for whitelisting
 ######################################
@@ -619,6 +624,7 @@ module "client" {
   documents_terms_and_conditions_url = data.aws_ssm_parameter.documents_terms_and_conditions_url.value
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
+  logit_node                         = data.aws_ssm_parameter.logit_node.value
 }
 
 ######################################

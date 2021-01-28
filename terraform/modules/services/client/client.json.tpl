@@ -75,6 +75,10 @@
       {
         "name": "DOCUMENTS_TERMS_AND_CONDITIONS_URL",
         "value": "${documents_terms_and_conditions_url}"
+      },
+      {
+        "name": "LOGIT_NODE",
+        "value": "${logit_node}"
       }
     ],
     "command": [

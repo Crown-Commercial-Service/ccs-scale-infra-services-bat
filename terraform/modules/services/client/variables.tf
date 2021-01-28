@@ -118,3 +118,7 @@ variable "deployment_maximum_percent" {
 variable "deployment_minimum_healthy_percent" {
   type = number
 }
+
+variable "logit_node" {
+  type = string
+}
