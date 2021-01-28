@@ -82,6 +82,7 @@ data "template_file" "app_client" {
     logit_hostname                     = var.logit_hostname
     logit_remote_port                  = var.logit_remote_port
     documents_terms_and_conditions_url = var.documents_terms_and_conditions_url
+    logit_node                         = var.logit_node
   }
 }
 

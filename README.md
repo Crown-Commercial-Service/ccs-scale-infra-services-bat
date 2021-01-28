@@ -38,6 +38,7 @@ Check the README file for details of how to create the database.
   /bat/{env}-aws_secret_access_key
   /bat/{env}-sidekiq-concurrency
   /bat/{env}-sidekiq-concurrency-searchkick
+  /bat/{env}-logit-node
 ```
 
 4. Run `terraform apply`
