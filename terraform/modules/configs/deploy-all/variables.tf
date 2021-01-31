@@ -145,6 +145,21 @@ variable "catalogue_memory" {
   default = 1024
 }
 
+variable "ecr_image_id_auth" {
+  type    = string
+  default = "latest"
+}
+
+variable "auth_cpu" {
+  type    = number
+  default = 512
+}
+
+variable "auth_memory" {
+  type    = number
+  default = 1024
+}
+
 variable "api_gw_log_retention_in_days" {
   type    = number
   default = 7

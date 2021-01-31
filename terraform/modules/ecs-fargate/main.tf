@@ -49,6 +49,14 @@ resource "aws_security_group" "allow_http" {
     protocol    = "tcp"
     cidr_blocks = [var.cidr_block_vpc]
   }
+  
+  ingress {
+    # Auth API Service
+    from_port   = 9040
+    to_port     = 9040
+    protocol    = "tcp"
+    cidr_blocks = [var.cidr_block_vpc]
+  }
 
   # Allow traffic to/from ECR and S3 endpoints via VPC link
   # https://7thzero.com/blog/limiting-outbound-egress-traffic-while-using-aws-fargate-and-ecr

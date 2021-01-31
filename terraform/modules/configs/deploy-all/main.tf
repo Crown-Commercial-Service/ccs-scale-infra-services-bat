@@ -681,7 +681,7 @@ module "s3_virus_scan" {
 }
 
 ######################################
-# Catalogue Service API
+# API Gateway
 ######################################
 
 module "api" {
@@ -691,6 +691,11 @@ module "api" {
   # Allow traffic from VPC, NAT and environment specific CIDR ranges (e.g. CCS, CCS web infra etc)
   cidr_blocks_allowed_external_api_gateway = concat(tolist([data.aws_ssm_parameter.cidr_block_vpc.value]), values(data.aws_eip.nat_eips)[*].public_ip, local.cidr_blocks_allowed_external_api_gateway)
 }
+
+
+######################################
+# Catalogue Service API
+######################################
 
 module "catalogue" {
   source                       = "../../services/catalogue"
@@ -710,6 +715,31 @@ module "catalogue" {
   catalogue_cpu                = var.catalogue_cpu
   catalogue_memory             = var.catalogue_memory
   ecr_image_id_catalogue       = var.ecr_image_id_catalogue
+  ecs_log_retention_in_days    = var.ecs_log_retention_in_days
+}
+
+######################################
+# Auth Service API
+######################################
+
+module "auth" {
+  source                       = "../../services/auth"
+  environment                  = var.environment
+  vpc_id                       = data.aws_ssm_parameter.vpc_id.value
+  private_app_subnet_ids       = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  private_db_subnet_ids        = split(",", data.aws_ssm_parameter.private_db_subnet_ids.value)
+  vpc_link_id                  = data.aws_ssm_parameter.vpc_link_id.value
+  lb_private_arn               = data.aws_ssm_parameter.lb_private_arn.value
+  lb_private_dns               = data.aws_ssm_parameter.lb_private_dns.value
+  scale_rest_api_id            = module.api.scale_rest_api_id
+  scale_rest_api_execution_arn = module.api.scale_rest_api_execution_arn
+  parent_resource_id           = module.api.parent_resource_id
+  ecs_security_group_id        = module.ecs_fargate.ecs_security_group_id
+  ecs_task_execution_arn       = module.ecs_fargate.ecs_task_execution_arn
+  ecs_cluster_id               = module.ecs_fargate.ecs_cluster_id
+  auth_cpu                     = var.auth_cpu
+  auth_memory                  = var.auth_memory
+  ecr_image_id_auth            = var.ecr_image_id_auth
   ecs_log_retention_in_days    = var.ecs_log_retention_in_days
 }
 
