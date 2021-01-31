@@ -12,7 +12,8 @@ resource "aws_api_gateway_deployment" "bat" {
   rest_api_id = var.scale_rest_api_id
 
   depends_on = [
-    var.catalogue_api_gateway_integration
+    var.catalogue_api_gateway_integration,
+    var.auth_api_gateway_integration
   ]
 
   triggers = {
@@ -49,13 +50,6 @@ resource "aws_api_gateway_method_settings" "scale" {
 resource "aws_cloudwatch_log_group" "api_gw_execution" {
   name              = "API-Gateway-Execution-Logs_${var.scale_rest_api_id}/${lower(var.environment)}-bat"
   retention_in_days = var.api_gw_log_retention_in_days
-}
-
-resource "aws_ssm_parameter" "api_invoke_url" {
-  name      = "${lower(var.environment)}-catalogue-service-root-url"
-  type      = "String"
-  value     = aws_api_gateway_stage.bat.invoke_url
-  overwrite = true
 }
 
 #########################################################

@@ -10,6 +10,10 @@ variable "catalogue_api_gateway_integration" {
   type = string
 }
 
+variable "auth_api_gateway_integration" {
+  type = string
+}
+
 variable "api_rate_limit" {
   type = number
 }

@@ -754,4 +754,5 @@ module "api-deployment" {
 
   // Simulate depends_on:
   catalogue_api_gateway_integration = module.catalogue.catalogue_api_gateway_integration
+  auth_api_gateway_integration      = module.auth.auth_api_gateway_integration
 }
