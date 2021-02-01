@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "lambda_role" {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
     principals {
-      type     = "Service"
+      type        = "Service"
       identifiers = ["lambda.amazonaws.com", "s3.amazonaws.com"]
     }
   }
@@ -32,7 +32,7 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
 }
 
 data "archive_file" "lambda_ccs_virus_scan_zip" {
-  type          = "zip"
+  type        = "zip"
   source_dir  = "${path.module}/ccs-virus-scan"
   output_path = "${path.module}/.build/ccs-virus-scan.zip"
 }

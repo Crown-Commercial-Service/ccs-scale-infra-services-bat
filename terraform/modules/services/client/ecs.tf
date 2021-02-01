@@ -16,7 +16,7 @@ resource "aws_lb_target_group" "target_group_8080" {
   name        = "SCALE-EU2-${upper(var.environment)}-VPC-BaTClient"
   port        = 8080
   protocol    = "HTTP"
-  target_type = "ip"
+  target_type = "instance"
   vpc_id      = var.vpc_id
 
   stickiness {
@@ -89,7 +89,7 @@ data "template_file" "app_client" {
 resource "aws_ecs_task_definition" "app_client" {
   family                   = "client-app-task"
   execution_role_arn       = var.execution_role_arn
-  network_mode             = "awsvpc"
+  network_mode             = "host"
   requires_compatibilities = ["EC2"]
   cpu                      = var.cpu
   memory                   = var.memory
@@ -105,11 +105,6 @@ resource "aws_ecs_service" "client" {
   launch_type                        = "EC2"
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
-
-  network_configuration {
-    security_groups = var.security_groups
-    subnets         = var.public_web_subnet_ids
-  }
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group_8080.arn
