@@ -39,6 +39,7 @@ Check the README file for details of how to create the database.
   /bat/{env}-sidekiq-concurrency
   /bat/{env}-sidekiq-concurrency-searchkick
   /bat/{env}-logit-node
+  /bat/{env}-browser-rollbar-access-token
 ```
 
 4. Run `terraform apply`
