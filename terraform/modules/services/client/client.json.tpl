@@ -79,6 +79,10 @@
       {
         "name": "LOGIT_NODE",
         "value": "${logit_node}"
+      },
+      {
+        "name": "BROWSER_ROLLBAR_ACCESS_TOKEN",
+        "value": "${browser_rollbar_access_token}"
       }
     ],
     "command": [

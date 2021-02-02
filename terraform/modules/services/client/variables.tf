@@ -122,3 +122,7 @@ variable "deployment_minimum_healthy_percent" {
 variable "logit_node" {
   type = string
 }
+
+variable "browser_rollbar_access_token" {
+  type = string
+}
