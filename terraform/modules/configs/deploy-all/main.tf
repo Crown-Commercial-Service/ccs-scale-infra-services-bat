@@ -153,6 +153,9 @@ data "aws_ssm_parameter" "logit_node" {
   name = "/bat/${lower(var.environment)}-logit-node"
 }
 
+data "aws_ssm_parameter" "browser_rollbar_access_token" {
+  name = "/bat/${lower(var.environment)}-browser-rollbar-access-token"
+}
 
 ######################################
 # CIDR ranges for whitelisting
@@ -625,6 +628,7 @@ module "client" {
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
   logit_node                         = data.aws_ssm_parameter.logit_node.value
+  browser_rollbar_access_token       = data.aws_ssm_parameter.browser_rollbar_access_token.value
 }
 
 ######################################
