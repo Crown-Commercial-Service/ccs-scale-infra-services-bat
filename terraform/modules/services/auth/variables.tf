@@ -65,3 +65,7 @@ variable "ecr_image_id_auth" {
 variable "ecs_log_retention_in_days" {
   type = number
 }
+
+variable "spree_api_host" {
+  type = string
+}
