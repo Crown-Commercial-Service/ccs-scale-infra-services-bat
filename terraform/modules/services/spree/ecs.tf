@@ -41,7 +41,7 @@ data "aws_acm_certificate" "alb" {
 
 resource "aws_lb_listener" "port_443" {
   load_balancer_arn = var.lb_public_alb_arn
-  port              = "443"
+  port              = "4443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
   certificate_arn   = data.aws_acm_certificate.alb.arn
@@ -51,6 +51,36 @@ resource "aws_lb_listener" "port_443" {
     target_group_arn = aws_lb_target_group.target_group_4567.arn
   }
 }
+
+# data "aws_ssm_parameter" "external_alb_port_443_listener_arn" {
+#   name = "${lower(var.environment)}-ext-alb-port-443-listener-arn"
+# }
+
+# resource "aws_lb_listener_certificate" "bat_client" {
+#   listener_arn    = data.aws_ssm_parameter.external_alb_port_443_listener_arn.value
+#   certificate_arn = data.aws_acm_certificate.alb.arn
+# }
+
+# resource "aws_lb_listener_rule" "authenticate_cloudfront" {
+#   listener_arn = data.aws_ssm_parameter.external_alb_port_443_listener_arn.value
+#   # priority     = 1
+
+#   action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.target_group_4567.arn
+#   }
+
+#   condition {
+#     # http_header {
+#     #   http_header_name = "CloudFrontID"
+#     #   values           = [var.cloudfront_id]
+#     # }
+
+#     host_header {
+#       values = [var.hosted_zone_name]
+#     }
+#   }
+# }
 
 #######################################################################
 # NLB target group & listener for traffic on port 80 -> 4567 (Spree app)
