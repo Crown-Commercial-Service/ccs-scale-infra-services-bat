@@ -191,152 +191,102 @@ resource "aws_security_group" "spree" {
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
   name        = "app-spree-${lower(var.stage)}"
   description = "Allow inbound db traffic"
-}
-resource "aws_security_group_rule" "spree-allow-ssh" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  security_group_id = aws_security_group.spree.id
-  cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
-}
-resource "aws_security_group_rule" "spree-allow-http" {
-  type              = "ingress"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  security_group_id = aws_security_group.spree.id
-  cidr_blocks       = [data.aws_vpc.scale.cidr_block] # Load balancer only (from client)
-}
-resource "aws_security_group_rule" "spree-allow-https" {
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  security_group_id = aws_security_group.spree.id
-  cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
-}
 
-resource "aws_security_group_rule" "spree-test" {
-  type              = "ingress"
-  from_port         = 4567
-  to_port           = 4567
-  protocol          = "tcp"
-  security_group_id = aws_security_group.spree.id
-  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
-}
+  # TODO: Can this be limited to VPC (i.e. via Bastion host in pub subs?)
+  ingress {
+    description = "SSH from allowed external ranges"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
+  }
 
-resource "aws_security_group_rule" "spree-es" {
-  type              = "ingress"
-  from_port         = 9200
-  to_port           = 9200
-  protocol          = "tcp"
-  security_group_id = aws_security_group.spree.id
-  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
-}
+  ingress {
+    description = "HTTP via internal LB"
+    from_port   = 4567
+    to_port     = 4567
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.scale.cidr_block]
+  }
 
-resource "aws_security_group_rule" "spree-allow-outgoing" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  security_group_id = aws_security_group.spree.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 }
 
 resource "aws_security_group" "client" {
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
   name        = "app-client-${lower(var.stage)}"
   description = "Allow inbound db traffic"
-}
-resource "aws_security_group_rule" "client-allow-ssh" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  security_group_id = aws_security_group.client.id
-  cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
-}
-resource "aws_security_group_rule" "client-allow-http-internal" {
-  type              = "ingress"
-  from_port         = 8080
-  to_port           = 8080
-  protocol          = "tcp"
-  security_group_id = aws_security_group.client.id
-  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
-}
 
-resource "aws_security_group_rule" "client-allow-https" {
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  security_group_id = aws_security_group.client.id
-  cidr_blocks       = ["0.0.0.0/0"]
-}
+  ingress {
+    description = "SSH from allowed external ranges"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
+  }
 
-resource "aws_security_group_rule" "client-allow-outgoing" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  security_group_id = aws_security_group.client.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  ingress {
+    description = "HTTP via external ALB"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.scale.cidr_block]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 }
 
 resource "aws_security_group" "s3-virus-scan" {
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
   name        = "app-s3-virus-scan-${lower(var.stage)}"
   description = "Allow inbound db traffic"
-}
 
-resource "aws_security_group_rule" "s3-virus-scan-allow-http" {
-  type              = "ingress"
-  from_port         = 4567
-  to_port           = 4567
-  protocol          = "tcp"
-  security_group_id = aws_security_group.s3-virus-scan.id
-  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
-}
+  ingress {
+    from_port   = 4567
+    to_port     = 4567
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.scale.cidr_block]
+  }
 
-resource "aws_security_group_rule" "s3-virus-scan-allow-ssh" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  security_group_id = aws_security_group.s3-virus-scan.id
-  cidr_blocks       = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
-}
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = concat(local.cidr_blocks_allowed_external_ccs, local.cidr_blocks_allowed_external_spark, tolist([data.aws_vpc.scale.cidr_block]))
+  }
 
-resource "aws_security_group_rule" "s3-virus-scan-allow-outgoing" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  security_group_id = aws_security_group.s3-virus-scan.id
-  cidr_blocks       = ["0.0.0.0/0"]
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_security_group" "rds" {
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
   name        = "rds-spree-${lower(var.stage)}"
   description = "Allow inbound db traffic"
-}
-resource "aws_security_group_rule" "rds-allow-psql" {
-  type              = "ingress"
-  from_port         = 5432
-  to_port           = 5432
-  protocol          = "tcp"
-  security_group_id = aws_security_group.rds.id
-  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
-}
-resource "aws_security_group_rule" "rds-allow-outgoing" {
-  type              = "egress"
-  from_port         = 5432
-  to_port           = 5432
-  protocol          = "tcp"
-  security_group_id = aws_security_group.rds.id
-  cidr_blocks       = [data.aws_vpc.scale.cidr_block]
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.scale.cidr_block]
+  }
 }
 
 resource "aws_security_group" "redis" {
@@ -452,8 +402,8 @@ module "ecs_client" {
 module "ecs_spree" {
   source               = "../../ecs"
   environment          = var.environment
-  subnet_ids           = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  security_group_ids   = [aws_security_group.client.id]
+  subnet_ids           = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  security_group_ids   = [aws_security_group.spree.id]
   ec2_instance_type    = var.spree_ec2_instance_type
   resource_name_suffix = "SPREE"
 }
@@ -461,8 +411,8 @@ module "ecs_spree" {
 module "ecs_sidekiq" {
   source               = "../../ecs"
   environment          = var.environment
-  subnet_ids           = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  security_group_ids   = [aws_security_group.client.id]
+  subnet_ids           = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  security_group_ids   = [aws_security_group.spree.id]
   ec2_instance_type    = var.sidekiq_ec2_instance_type
   resource_name_suffix = "SIDEKIQ"
 }
