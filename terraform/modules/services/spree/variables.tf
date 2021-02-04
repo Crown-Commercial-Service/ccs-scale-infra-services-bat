@@ -18,10 +18,6 @@ variable "lb_public_alb_arn" {
   type = string
 }
 
-variable "lb_public_alb_dns" {
-  type = string
-}
-
 variable "lb_private_nlb_arn" {
   type = string
 }

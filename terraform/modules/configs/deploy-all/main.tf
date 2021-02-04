@@ -157,6 +157,10 @@ data "aws_ssm_parameter" "browser_rollbar_access_token" {
   name = "/bat/${lower(var.environment)}-browser-rollbar-access-token"
 }
 
+data "aws_ssm_parameter" "lb_public_alb_arn" {
+  name = "${lower(var.environment)}-lb-public-alb-arn"
+}
+
 ######################################
 # CIDR ranges for whitelisting
 ######################################
@@ -426,23 +430,23 @@ module "ecs_s3_virus_scan" {
   resource_name_suffix = "S3_VIRUS_SCAN"
 }
 
-module "load_balancer_spree" {
-  source                = "../../load-balancer"
-  environment           = var.environment
-  vpc_id                = data.aws_ssm_parameter.vpc_id.value
-  lb_suffix             = "spree"
-  public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
-}
+# module "load_balancer_spree" {
+#   source                = "../../load-balancer"
+#   environment           = var.environment
+#   vpc_id                = data.aws_ssm_parameter.vpc_id.value
+#   lb_suffix             = "spree"
+#   public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+#   hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
+# }
 
-module "load_balancer_client" {
-  source                = "../../load-balancer"
-  environment           = var.environment
-  vpc_id                = data.aws_ssm_parameter.vpc_id.value
-  lb_suffix             = "client"
-  public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
-}
+# module "load_balancer_client" {
+#   source                = "../../load-balancer"
+#   environment           = var.environment
+#   vpc_id                = data.aws_ssm_parameter.vpc_id.value
+#   lb_suffix             = "client"
+#   public_web_subnet_ids = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+#   hosted_zone_name      = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
+# }
 
 
 ######################################
@@ -454,8 +458,7 @@ module "spree" {
   environment                        = var.environment
   vpc_id                             = data.aws_ssm_parameter.vpc_id.value
   ecs_cluster_id                     = module.ecs_spree.ecs_cluster_id
-  lb_public_alb_arn                  = module.load_balancer_spree.lb_public_alb_arn
-  lb_public_alb_dns                  = module.load_balancer_spree.lb_public_alb_dns
+  lb_public_alb_arn                  = data.aws_ssm_parameter.lb_public_alb_arn.value
   lb_private_nlb_arn                 = data.aws_ssm_parameter.lb_private_arn.value
   hosted_zone_name                   = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
   private_app_subnet_ids             = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
@@ -482,7 +485,7 @@ module "spree" {
   cloudfront_id                      = data.aws_ssm_parameter.cloudfront_id.value
   ecr_image_id_spree                 = var.ecr_image_id_spree
   elasticsearch_url                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
-  buyer_ui_url                       = "https://${module.load_balancer_client.lb_public_alb_dns}"
+  buyer_ui_url                       = "https://${data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value}"
   app_domain                         = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
   logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
   logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
@@ -528,7 +531,7 @@ module "sidekiq" {
   env_file                           = module.s3.env_file_spree
   ecr_image_id_spree                 = var.ecr_image_id_spree
   elasticsearch_url                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
-  buyer_ui_url                       = "https://${module.load_balancer_client.lb_public_alb_dns}"
+  buyer_ui_url                       = "https://${data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value}"
   app_domain                         = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
   logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
   logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
@@ -551,7 +554,7 @@ module "client" {
   environment                        = var.environment
   vpc_id                             = data.aws_ssm_parameter.vpc_id.value
   ecs_cluster_id                     = module.ecs_client.ecs_cluster_id
-  lb_public_alb_arn                  = module.load_balancer_client.lb_public_alb_arn
+  lb_public_alb_arn                  = data.aws_ssm_parameter.lb_public_alb_arn.value
   hosted_zone_name                   = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
   public_web_subnet_ids              = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
   execution_role_arn                 = aws_iam_role.ecs_task_execution_role.arn
