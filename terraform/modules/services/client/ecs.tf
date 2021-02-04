@@ -44,48 +44,38 @@ data "aws_acm_certificate" "alb" {
   statuses = ["ISSUED"]
 }
 
-resource "aws_lb_listener" "port_443" {
-  load_balancer_arn = var.lb_public_alb_arn
-  port              = "4453"
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
-  certificate_arn   = data.aws_acm_certificate.alb.arn
+data "aws_ssm_parameter" "external_alb_port_443_listener_arn" {
+  name = "${lower(var.environment)}-ext-alb-port-443-listener-arn"
+}
 
-  default_action {
+resource "aws_lb_listener_certificate" "bat_client" {
+  listener_arn    = data.aws_ssm_parameter.external_alb_port_443_listener_arn.value
+  certificate_arn = data.aws_acm_certificate.alb.arn
+}
+
+resource "aws_lb_listener_rule" "authenticate_cloudfront" {
+  listener_arn = data.aws_ssm_parameter.external_alb_port_443_listener_arn.value
+  # priority     = 1
+
+  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group_8080.arn
   }
+
+  # TODO: Instate as part of SINF-332
+  # condition {
+  #   http_header {
+  #     http_header_name = "CloudFrontID"
+  #     values           = [var.cloudfront_id]
+  #   }
+  # }
+
+  condition {
+    host_header {
+      values = [var.hosted_zone_name]
+    }
+  }
 }
-
-# data "aws_ssm_parameter" "external_alb_port_443_listener_arn" {
-#   name = "${lower(var.environment)}-ext-alb-port-443-listener-arn"
-# }
-
-# resource "aws_lb_listener_certificate" "bat_client" {
-#   listener_arn    = data.aws_ssm_parameter.external_alb_port_443_listener_arn.value
-#   certificate_arn = data.aws_acm_certificate.alb.arn
-# }
-
-# resource "aws_lb_listener_rule" "authenticate_cloudfront" {
-#   listener_arn = data.aws_ssm_parameter.external_alb_port_443_listener_arn.value
-#   # priority     = 1
-
-#   action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.target_group_8080.arn
-#   }
-
-#   condition {
-#     # http_header {
-#     #   http_header_name = "CloudFrontID"
-#     #   values           = [var.cloudfront_id]
-#     # }
-
-#     host_header {
-#       values = [var.hosted_zone_name]
-#     }
-#   }
-# }
 
 # https://github.com/hashicorp/terraform/issues/19601
 data "template_file" "app_client" {
