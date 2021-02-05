@@ -159,6 +159,7 @@ data "aws_ssm_parameter" "browser_rollbar_access_token" {
 
 data "aws_ssm_parameter" "lb_public_alb_arn" {
   name = "${lower(var.environment)}-lb-public-alb-arn"
+}
 
 data "aws_ssm_parameter" "enable_basket" {
   name = "/bat/${lower(var.environment)}-enable-basket"
