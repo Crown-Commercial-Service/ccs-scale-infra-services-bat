@@ -145,3 +145,23 @@ variable "sidekiq_concurrency" {
 variable "sidekiq_concurrency_searchkick" {
   type = string
 }
+
+variable "elasticsearch_limit" {
+  type = string
+}
+
+variable "cnet_ftp_endpoint" {
+  type = string
+}
+
+variable "cnet_ftp_port" {
+  type = string
+}
+
+variable "cnet_ftp_username" {
+  type = string
+}
+
+variable "cnet_ftp_password" {
+  type = string
+}

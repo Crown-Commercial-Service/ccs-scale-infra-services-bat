@@ -83,6 +83,18 @@
       {
         "name": "BROWSER_ROLLBAR_ACCESS_TOKEN",
         "value": "${browser_rollbar_access_token}"
+      },
+      {
+        "name": "ENABLE_BASKET",
+        "value": "${enable_basket}"
+      },
+      {
+        "name": "ENABLE_QUOTES",
+        "value": "${enable_quotes}"
+      },
+      {
+        "name": "LOGIT_APPLICATION",
+        "value": "${logit_application}"
       }
     ],
     "command": [

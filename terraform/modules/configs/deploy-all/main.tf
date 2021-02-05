@@ -159,6 +159,37 @@ data "aws_ssm_parameter" "browser_rollbar_access_token" {
 
 data "aws_ssm_parameter" "lb_public_alb_arn" {
   name = "${lower(var.environment)}-lb-public-alb-arn"
+
+data "aws_ssm_parameter" "enable_basket" {
+  name = "/bat/${lower(var.environment)}-enable-basket"
+}
+
+data "aws_ssm_parameter" "enable_quotes" {
+  name = "/bat/${lower(var.environment)}-enable-quotes"
+}
+
+data "aws_ssm_parameter" "elasticsearch_limit" {
+  name = "/bat/${lower(var.environment)}-elasticsearch-limit"
+}
+
+data "aws_ssm_parameter" "cnet_ftp_endpoint" {
+  name = "/bat/${lower(var.environment)}-cnet-ftp-endpoint"
+}
+
+data "aws_ssm_parameter" "cnet_ftp_port" {
+  name = "/bat/${lower(var.environment)}-cnet-ftp-port"
+}
+
+data "aws_ssm_parameter" "cnet_ftp_username" {
+  name = "/bat/${lower(var.environment)}-cnet-ftp-username"
+}
+
+data "aws_ssm_parameter" "cnet_ftp_password" {
+  name = "/bat/${lower(var.environment)}-cnet-ftp-password"
+}
+
+data "aws_ssm_parameter" "logit_application" {
+  name = "/bat/${lower(var.environment)}-logit-application"
 }
 
 ######################################
@@ -478,7 +509,11 @@ module "spree" {
   mail_from                          = data.aws_ssm_parameter.mail_from.value
   sidekiq_concurrency                = data.aws_ssm_parameter.sidekiq_concurrency.value
   sidekiq_concurrency_searchkick     = data.aws_ssm_parameter.sidekiq_concurrency_searchkick.value
-
+  elasticsearch_limit                = data.aws_ssm_parameter.elasticsearch_limit.value
+  cnet_ftp_endpoint                  = data.aws_ssm_parameter.cnet_ftp_endpoint.value
+  cnet_ftp_port                      = data.aws_ssm_parameter.cnet_ftp_port.value
+  cnet_ftp_username                  = data.aws_ssm_parameter.cnet_ftp_username.value
+  cnet_ftp_password                  = data.aws_ssm_parameter.cnet_ftp_password.value
 }
 
 ######################################
@@ -524,6 +559,11 @@ module "sidekiq" {
   mail_from                          = data.aws_ssm_parameter.mail_from.value
   sidekiq_concurrency                = data.aws_ssm_parameter.sidekiq_concurrency.value
   sidekiq_concurrency_searchkick     = data.aws_ssm_parameter.sidekiq_concurrency_searchkick.value
+  elasticsearch_limit                = data.aws_ssm_parameter.elasticsearch_limit.value
+  cnet_ftp_endpoint                  = data.aws_ssm_parameter.cnet_ftp_endpoint.value
+  cnet_ftp_port                      = data.aws_ssm_parameter.cnet_ftp_port.value
+  cnet_ftp_username                  = data.aws_ssm_parameter.cnet_ftp_username.value
+  cnet_ftp_password                  = data.aws_ssm_parameter.cnet_ftp_password.value
 }
 
 ######################################
@@ -563,6 +603,9 @@ module "client" {
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
   logit_node                         = data.aws_ssm_parameter.logit_node.value
   browser_rollbar_access_token       = data.aws_ssm_parameter.browser_rollbar_access_token.value
+  enable_basket                      = data.aws_ssm_parameter.enable_basket.value
+  enable_quotes                      = data.aws_ssm_parameter.enable_quotes.value
+  logit_application                  = data.aws_ssm_parameter.logit_application.value
 }
 
 ######################################

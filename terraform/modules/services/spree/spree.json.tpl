@@ -119,6 +119,26 @@
       {
         "name": "SIDEKIQ_CONCURRENCY_SEARCHKICK",
         "value": "${sidekiq_concurrency_searchkick}"
+      },
+      {
+        "name": "ELASTICSEARCH_LIMIT",
+        "value": "${elasticsearch_limit}"
+      },
+      {
+        "name": "CNET_FTP_ENDPOINT",
+        "value": "${cnet_ftp_endpoint}"
+      },
+      {
+        "name": "CNET_FTP_PORT",
+        "value": "${cnet_ftp_port}"
+      },
+      {
+        "name": "CNET_FTP_USERNAME",
+        "value": "${cnet_ftp_username}"
+      },
+      {
+        "name": "CNET_FTP_PASSWORD",
+        "value": "${cnet_ftp_password}"
       }
     ],
     "command": [
