@@ -718,7 +718,6 @@ module "catalogue" {
   ecs_log_retention_in_days    = var.ecs_log_retention_in_days
   spree_api_host               = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
 }
-}
 
 ######################################
 # Auth Service API
