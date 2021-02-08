@@ -87,7 +87,13 @@ resource "aws_ecs_task_definition" "catalogue" {
               "awslogs-region": "eu-west-2",
               "awslogs-stream-prefix": "fargate-catalogue"
           }
-        }
+        },
+        "environment": [
+            {
+                "name": "SPREE_API_HOST",
+                "value": "${var.spree_api_host}"
+            }
+        ]
       }
     ]
 DEFINITION
