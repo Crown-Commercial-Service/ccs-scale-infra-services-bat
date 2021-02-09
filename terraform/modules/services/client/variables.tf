@@ -126,3 +126,15 @@ variable "logit_node" {
 variable "browser_rollbar_access_token" {
   type = string
 }
+
+variable "enable_basket" {
+  type = string
+}
+
+variable "enable_quotes" {
+  type = string
+}
+
+variable "logit_application" {
+  type = string
+}

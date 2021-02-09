@@ -38,6 +38,11 @@ data "template_file" "app_sidekiq" {
     mail_from                      = var.mail_from
     sidekiq_concurrency            = var.sidekiq_concurrency
     sidekiq_concurrency_searchkick = var.sidekiq_concurrency_searchkick
+    elasticsearch_limit            = var.elasticsearch_limit
+    cnet_ftp_endpoint              = var.cnet_ftp_endpoint
+    cnet_ftp_port                  = var.cnet_ftp_port
+    cnet_ftp_username              = var.cnet_ftp_username
+    cnet_ftp_password              = var.cnet_ftp_password
   }
 }
 

@@ -20,26 +20,34 @@ Check the README file for details of how to create the database.
 
 3. Create SSM Params
 ```
-  /bat/{env}-rollbar-access-token
-	/bat/{env}-secret-key-base
-  /bat/{env}-basic-auth-username
-  /bat/{env}-basic-auth-password
-  /bar/{env}-basic-auth-enabled
-  /bat/{env}-session-cookie-secret
-  /bat/{env}-products-import-bucket
-  /bat/{env}-logit-hostname
-  /bat/{env}-logit-remote-port
-  /bat/{env}-suppliers-sftp-bucket
-  /bat/{env}-documents-terms-and-conditions-url
-  /bat/{env}-lograge-enabled
-  /bat/{env}-sendgrid-api-key
-  /bat/{env}-mail-from
-  /bat/{env}-aws_access_key_id
-  /bat/{env}-aws_secret_access_key
-  /bat/{env}-sidekiq-concurrency
-  /bat/{env}-sidekiq-concurrency-searchkick
-  /bat/{env}-logit-node
-  /bat/{env}-browser-rollbar-access-token
+  /bat/{env}-rollbar-access-token - token to send errors to rollbar
+	/bat/{env}-secret-key-base - secret key for the spree app
+  /bat/{env}-basic-auth-username - basic auth username for spree app and the client
+  /bat/{env}-basic-auth-password - basic auth password for spree app and the client
+  /bar/{env}-basic-auth-enabled - flag to enable/disable basic auth
+  /bat/{env}-session-cookie-secret - client session cookie secret
+  /bat/{env}-products-import-bucket - s3 bucket in which supplier import are progress
+  /bat/{env}-logit-hostname - logit.io endpoint
+  /bat/{env}-logit-remote-port - port to send logs to logit.io
+  /bat/{env}-suppliers-sftp-bucket - S3 bucket which holds suppliers sftp buckets
+  /bat/{env}-documents-terms-and-conditions-url - ulr
+  /bat/{env}-lograge-enabled - flag to enable log forrmating in spree
+  /bat/{env}-sendgrid-api-key - api key to sendgrid
+  /bat/{env}-mail-from - email address which email are sent from spree
+  /bat/{env}-aws_access_key_id - spree user access key id
+  /bat/{env}-aws_secret_access_key - spree user secret access key
+  /bat/{env}-sidekiq-concurrency - number of concurrent sidekiq workers
+  /bat/{env}-sidekiq-concurrency-searchkick - number of concurrent sidekiq workers for searchkick jobs
+  /bat/{env}-logit-node - url to logit.io elasticsearch cluster
+  /bat/{env}-browser-rollbar-access-token - client side rollbar token
+  /bat/{env}-cnet-ftp-username - username to cnet ftp site
+  /bat/{env}-cnet-ftp-endpoint - address to cnet ftp site
+  /bat/{env}-cnet-ftp-password - password to cnet ftp site
+  /bat/{env}-cnet-ftp-port - port to access cnet ftp site
+  /bat/{env}-elasticsearch-limit - limit the results return for elastic search query
+  /bat/{env}-enable-quotes - flag to enable/disable quotes in the buyer ui
+  /bat/{env}-enable-basket - flag to enable/disable the basket in the buyer ui
+  /bat/{env}-logit-application - send the name of app to logit.io
 ```
 
 4. Run `terraform apply`

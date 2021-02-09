@@ -103,6 +103,9 @@ data "template_file" "app_client" {
     documents_terms_and_conditions_url = var.documents_terms_and_conditions_url
     logit_node                         = var.logit_node
     browser_rollbar_access_token       = var.browser_rollbar_access_token
+    enable_basket                      = var.enable_basket
+    enable_quotes                      = var.enable_quotes
+    logit_application                  = var.logit_application
   }
 }
 
