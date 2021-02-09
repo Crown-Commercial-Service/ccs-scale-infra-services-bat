@@ -57,13 +57,12 @@ resource "aws_lb_listener_rule" "authenticate_cloudfront" {
     target_group_arn = aws_lb_target_group.target_group_4567.arn
   }
 
-  # TODO: Instate as part of SINF-332
-  # condition {
-  #   http_header {
-  #     http_header_name = "CloudFrontID"
-  #     values           = [var.cloudfront_id]
-  #   }
-  # }
+  condition {
+    http_header {
+      http_header_name = "CloudFrontID"
+      values           = [var.cloudfront_id]
+    }
+  }
 
   condition {
     host_header {

@@ -45,8 +45,12 @@ data "aws_ssm_parameter" "lb_private_dns" {
   name = "${lower(var.environment)}-lb-private-dns"
 }
 
-data "aws_ssm_parameter" "cloudfront_id" {
-  name = "${lower(var.environment)}-cloudfront-id"
+data "aws_ssm_parameter" "bat_client_cloudfront_id" {
+  name = "${lower(var.environment)}-bat-client-cloudfront-id"
+}
+
+data "aws_ssm_parameter" "bat_backend_cloudfront_id" {
+  name = "${lower(var.environment)}-bat-backend-cloudfront-id"
 }
 
 data "aws_ssm_parameter" "spree_db_endpoint" {
@@ -110,8 +114,16 @@ data "aws_ssm_parameter" "hosted_zone_name_alb_bat_client" {
   name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-client"
 }
 
+data "aws_ssm_parameter" "hosted_zone_name_cdn_bat_client" {
+  name = "/bat/${lower(var.environment)}-hosted-zone-name-cdn-bat-client"
+}
+
 data "aws_ssm_parameter" "hosted_zone_name_alb_bat_backend" {
   name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-backend"
+}
+
+data "aws_ssm_parameter" "hosted_zone_name_cdn_bat_backend" {
+  name = "/bat/${lower(var.environment)}-hosted-zone-name-cdn-bat-backend"
 }
 
 data "aws_ssm_parameter" "suppliers_sftp_bucket" {
@@ -495,11 +507,11 @@ module "spree" {
   memcached_endpoint                 = module.memcached.memcached_endpoint
   security_groups                    = [aws_security_group.spree.id]
   env_file                           = module.s3.env_file_spree
-  cloudfront_id                      = data.aws_ssm_parameter.cloudfront_id.value
+  cloudfront_id                      = data.aws_ssm_parameter.bat_backend_cloudfront_id.value
   ecr_image_id_spree                 = var.ecr_image_id_spree
   elasticsearch_url                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
-  buyer_ui_url                       = "https://${data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value}"
-  app_domain                         = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
+  buyer_ui_url                       = "https://${data.aws_ssm_parameter.hosted_zone_name_cdn_bat_client.value}"
+  app_domain                         = data.aws_ssm_parameter.hosted_zone_name_cdn_bat_backend.value
   logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
   logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
   suppliers_sftp_bucket              = data.aws_ssm_parameter.suppliers_sftp_bucket.value
@@ -548,7 +560,7 @@ module "sidekiq" {
   env_file                           = module.s3.env_file_spree
   ecr_image_id_spree                 = var.ecr_image_id_spree
   elasticsearch_url                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
-  buyer_ui_url                       = "https://${data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value}"
+  buyer_ui_url                       = "https://${data.aws_ssm_parameter.hosted_zone_name_cdn_bat_client.value}"
   app_domain                         = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
   logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
   logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
@@ -592,9 +604,9 @@ module "client" {
   client_session_secret              = data.aws_ssm_parameter.client_session_secret.value
   security_groups                    = [aws_security_group.client.id]
   env_file                           = module.s3.env_file_client
-  cloudfront_id                      = data.aws_ssm_parameter.cloudfront_id.value
+  cloudfront_id                      = data.aws_ssm_parameter.bat_client_cloudfront_id.value
   spree_api_host                     = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
-  spree_image_host                   = "https://${data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value}"
+  spree_image_host                   = "https://${data.aws_ssm_parameter.hosted_zone_name_cdn_bat_backend.value}"
   rollbar_env                        = var.rollbar_env
   ecr_image_id_client                = var.ecr_image_id_client
   logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
