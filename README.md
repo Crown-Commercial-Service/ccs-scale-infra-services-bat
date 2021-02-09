@@ -40,14 +40,14 @@ Check the README file for details of how to create the database.
   /bat/{env}-sidekiq-concurrency-searchkick - number of concurrent sidekiq workers for searchkick jobs
   /bat/{env}-logit-node - url to logit.io elasticsearch cluster
   /bat/{env}-browser-rollbar-access-token - client side rollbar token
-  /bat/sbx8-cnet-ftp-username - username to cnet ftp site
-  /bat/sbx8-cnet-ftp-endpoint - address to cnet ftp site
-  /bat/sbx8-cnet-ftp-password - password to cnet ftp site
-  /bat/sbx8-cnet-ftp-port - port to access cnet ftp site
-  /bat/sbx8-elasticsearch-limit - limit the results return for elastic search query
-  /bat/sbx8-enable-quotes - flag to enable/disable quotes in the buyer ui
-  /bat/sbx8-enable-basket - flag to enable/disable the basket in the buyer ui
-  /bat/sbx8-logit-application - send the name of app to logit.io
+  /bat/{env}-cnet-ftp-username - username to cnet ftp site
+  /bat/{env}-cnet-ftp-endpoint - address to cnet ftp site
+  /bat/{env}-cnet-ftp-password - password to cnet ftp site
+  /bat/{env}-cnet-ftp-port - port to access cnet ftp site
+  /bat/{env}-elasticsearch-limit - limit the results return for elastic search query
+  /bat/{env}-enable-quotes - flag to enable/disable quotes in the buyer ui
+  /bat/{env}-enable-basket - flag to enable/disable the basket in the buyer ui
+  /bat/{env}-logit-application - send the name of app to logit.io
 ```
 
 4. Run `terraform apply`
