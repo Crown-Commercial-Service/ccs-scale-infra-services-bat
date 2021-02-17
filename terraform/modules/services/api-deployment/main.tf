@@ -81,6 +81,10 @@ resource "aws_api_gateway_api_key" "bat_developers" {
   name = "BaT Developers API Key"
 }
 
+resource "aws_api_gateway_api_key" "apig" {
+  name = "Enterprise API Gateway API Key"
+}
+
 resource "aws_api_gateway_usage_plan_key" "bat_testers" {
   key_id        = aws_api_gateway_api_key.bat_testers.id
   key_type      = "API_KEY"
@@ -89,6 +93,12 @@ resource "aws_api_gateway_usage_plan_key" "bat_testers" {
 
 resource "aws_api_gateway_usage_plan_key" "bat_developers" {
   key_id        = aws_api_gateway_api_key.bat_developers.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.default.id
+}
+
+resource "aws_api_gateway_usage_plan_key" "apig" {
+  key_id        = aws_api_gateway_api_key.apig.id
   key_type      = "API_KEY"
   usage_plan_id = aws_api_gateway_usage_plan.default.id
 }
