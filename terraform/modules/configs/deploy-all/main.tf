@@ -593,7 +593,7 @@ module "sidekiq" {
   ecr_image_id_spree                 = var.ecr_image_id_spree
   elasticsearch_url                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
   buyer_ui_url                       = "https://${data.aws_ssm_parameter.hosted_zone_name_cdn_bat_client.value}"
-  app_domain                         = data.aws_ssm_parameter.hosted_zone_name_alb_bat_backend.value
+  app_domain                         = data.aws_ssm_parameter.hosted_zone_name_cdn_bat_backend.value
   logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
   logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
   suppliers_sftp_bucket              = data.aws_ssm_parameter.suppliers_sftp_bucket.value
