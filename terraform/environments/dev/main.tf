@@ -27,23 +27,24 @@ data "aws_ssm_parameter" "aws_account_id" {
 }
 
 module "deploy" {
-  source                    = "../../modules/configs/deploy-all"
-  aws_account_id            = data.aws_ssm_parameter.aws_account_id.value
-  environment               = local.environment
-  rollbar_env               = local.environment
-  ecr_image_id_spree        = "latest"
-  ecr_image_id_client       = "latest"
-  client_cpu                = 2048
-  client_memory             = 4096 #t2.large - 8GB available
-  client_ec2_instance_type  = "t2.large"
-  spree_cpu                 = 4096
-  spree_memory              = 8192 #t2.xlarge - 16GB available
-  spree_ec2_instance_type   = "t2.xlarge"
-  sidekiq_cpu               = 4096
-  sidekiq_memory            = 8192 #t2.xlarge - 16GB available
-  sidekiq_ec2_instance_type = "t2.xlarge"
-  memcached_node_type       = "cache.t3.medium"
-  redis_node_type           = "cache.t3.medium"
+  source                               = "../../modules/configs/deploy-all"
+  aws_account_id                       = data.aws_ssm_parameter.aws_account_id.value
+  environment                          = local.environment
+  rollbar_env                          = local.environment
+  ecr_image_id_spree                   = "latest"
+  ecr_image_id_client                  = "latest"
+  client_cpu                           = 2048
+  client_memory                        = 4096 #t2.large - 8GB available
+  client_ec2_instance_type             = "t2.large"
+  spree_cpu                            = 4096
+  spree_memory                         = 8192 #t2.xlarge - 16GB available
+  spree_ec2_instance_type              = "t2.xlarge"
+  sidekiq_cpu                          = 4096
+  sidekiq_memory                       = 8192 #t2.xlarge - 16GB available
+  sidekiq_ec2_instance_type            = "t2.xlarge"
+  memcached_node_type                  = "cache.t3.medium"
+  redis_node_type                      = "cache.t3.medium"
+  error_pages_unknonwn_server_endpoint = true
 
   # default values for s3-virus-scan-service subject to change based on testing on DEV
   ecr_image_id_s3_virus_scan      = "latest"

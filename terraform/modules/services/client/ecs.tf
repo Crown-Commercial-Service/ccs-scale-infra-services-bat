@@ -81,30 +81,32 @@ data "template_file" "app_client" {
   template = file("${path.module}/client.json.tpl")
 
   vars = {
-    app_image                          = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:${var.ecr_image_id_client}"
-    app_port                           = var.client_app_port
-    cpu                                = var.cpu
-    memory                             = var.memory
-    aws_region                         = var.aws_region
-    name                               = "client-app-task"
-    api_host                           = var.client_app_host
-    spree_api_host                     = var.spree_api_host
-    spree_image_host                   = var.spree_image_host
-    rollbar_access_token               = var.rollbar_access_token
-    basicauth_username                 = var.basicauth_username
-    basicauth_password                 = var.basicauth_password
-    basicauth_enabled                  = var.basicauth_enabled
-    rollbar_env                        = var.rollbar_env
-    env_file                           = var.env_file
-    client_session_secret              = var.client_session_secret
-    logit_hostname                     = var.logit_hostname
-    logit_remote_port                  = var.logit_remote_port
-    documents_terms_and_conditions_url = var.documents_terms_and_conditions_url
-    logit_node                         = var.logit_node
-    browser_rollbar_access_token       = var.browser_rollbar_access_token
-    enable_basket                      = var.enable_basket
-    enable_quotes                      = var.enable_quotes
-    logit_application                  = var.logit_application
+    app_image                            = "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/bat-buyer-ui-staging:${var.ecr_image_id_client}"
+    app_port                             = var.client_app_port
+    cpu                                  = var.cpu
+    memory                               = var.memory
+    aws_region                           = var.aws_region
+    name                                 = "client-app-task"
+    api_host                             = var.client_app_host
+    spree_api_host                       = var.spree_api_host
+    spree_image_host                     = var.spree_image_host
+    basicauth_enabled                    = var.basicauth_enabled
+    rollbar_env                          = var.rollbar_env
+    documents_terms_and_conditions_url   = var.documents_terms_and_conditions_url
+    enable_basket                        = var.enable_basket
+    enable_quotes                        = var.enable_quotes
+    logit_application                    = var.logit_application
+    error_pages_unknonwn_server_endpoint = var.error_pages_unknonwn_server_endpoint
+
+    # Secrets
+    browser_rollbar_access_token_ssm_arn = var.browser_rollbar_access_token_ssm_arn
+    client_session_secret_ssm_arn        = var.client_session_secret_ssm_arn
+    rollbar_access_token_ssm_arn         = var.rollbar_access_token_ssm_arn
+    basicauth_username_ssm_arn           = var.basicauth_username_ssm_arn
+    basicauth_password_ssm_arn           = var.basicauth_password_ssm_arn
+    logit_hostname_ssm_arn               = var.logit_hostname_ssm_arn
+    logit_remote_port_ssm_arn            = var.logit_remote_port_ssm_arn
+    logit_node_ssm_arn                   = var.logit_node_ssm_arn
   }
 }
 

@@ -13,8 +13,9 @@ provider "aws" {
 }
 
 locals {
-  aws_region    = "eu-west-2"
-  spree_db_name = "spree"
+  aws_region            = "eu-west-2"
+  spree_db_name         = "spree"
+  suppliers_sftp_bucket = "scale-${var.environment}-s3-aws-sftp"
 }
 
 data "aws_ssm_parameter" "vpc_id" {
@@ -57,6 +58,10 @@ data "aws_ssm_parameter" "spree_db_endpoint" {
   name = "/bat/${lower(var.environment)}-spree-db-endpoint"
 }
 
+data "aws_ssm_parameter" "elasticsearch_url" {
+  name = "/bat/${lower(var.environment)}-elasticsearch-url"
+}
+
 #######################################################
 # Following need to be added manually as SSM Parameters
 #######################################################
@@ -76,16 +81,8 @@ data "aws_ssm_parameter" "basic_auth_password" {
   name = "/bat/${lower(var.environment)}-basic-auth-password"
 }
 
-data "aws_ssm_parameter" "basic_auth_enabled" {
-  name = "/bat/${lower(var.environment)}-basic-auth-enabled"
-}
-
 data "aws_ssm_parameter" "client_session_secret" {
   name = "/bat/${lower(var.environment)}-session-cookie-secret"
-}
-
-data "aws_ssm_parameter" "products_import_bucket" {
-  name = "/bat/${lower(var.environment)}-products-import-bucket"
 }
 
 data "aws_ssm_parameter" "spree_db_username" {
@@ -96,18 +93,6 @@ data "aws_ssm_parameter" "spree_db_username" {
 data "aws_ssm_parameter" "spree_db_password" {
   name            = "/bat/${lower(var.environment)}-spree-db-app-password"
   with_decryption = true
-}
-
-data "aws_ssm_parameter" "elasticsearch_url" {
-  name = "/bat/${lower(var.environment)}-elasticsearch-url"
-}
-
-data "aws_ssm_parameter" "logit_hostname" {
-  name = "/bat/${lower(var.environment)}-logit-hostname"
-}
-
-data "aws_ssm_parameter" "logit_remote_port" {
-  name = "/bat/${lower(var.environment)}-logit-remote-port"
 }
 
 data "aws_ssm_parameter" "hosted_zone_name_alb_bat_client" {
@@ -126,24 +111,8 @@ data "aws_ssm_parameter" "hosted_zone_name_cdn_bat_backend" {
   name = "/bat/${lower(var.environment)}-hosted-zone-name-cdn-bat-backend"
 }
 
-data "aws_ssm_parameter" "suppliers_sftp_bucket" {
-  name = "/bat/${lower(var.environment)}-suppliers-sftp-bucket"
-}
-
-data "aws_ssm_parameter" "documents_terms_and_conditions_url" {
-  name = "/bat/${lower(var.environment)}-documents-terms-and-conditions-url"
-}
-
-data "aws_ssm_parameter" "lograge_enabled" {
-  name = "/bat/${lower(var.environment)}-lograge-enabled"
-}
-
 data "aws_ssm_parameter" "sendgrid_api_key" {
   name = "/bat/${lower(var.environment)}-sendgrid-api-key"
-}
-
-data "aws_ssm_parameter" "mail_from" {
-  name = "/bat/${lower(var.environment)}-mail-from"
 }
 
 data "aws_ssm_parameter" "aws_access_key_id" {
@@ -151,18 +120,6 @@ data "aws_ssm_parameter" "aws_access_key_id" {
 }
 data "aws_ssm_parameter" "aws_secret_access_key" {
   name = "/bat/${lower(var.environment)}-aws-secret-access-key"
-}
-
-data "aws_ssm_parameter" "sidekiq_concurrency" {
-  name = "/bat/${lower(var.environment)}-sidekiq-concurrency"
-}
-
-data "aws_ssm_parameter" "sidekiq_concurrency_searchkick" {
-  name = "/bat/${lower(var.environment)}-sidekiq-concurrency-searchkick"
-}
-
-data "aws_ssm_parameter" "logit_node" {
-  name = "/bat/${lower(var.environment)}-logit-node"
 }
 
 data "aws_ssm_parameter" "browser_rollbar_access_token" {
@@ -173,26 +130,6 @@ data "aws_ssm_parameter" "lb_public_alb_arn" {
   name = "${lower(var.environment)}-lb-public-alb-arn"
 }
 
-data "aws_ssm_parameter" "enable_basket" {
-  name = "/bat/${lower(var.environment)}-enable-basket"
-}
-
-data "aws_ssm_parameter" "enable_quotes" {
-  name = "/bat/${lower(var.environment)}-enable-quotes"
-}
-
-data "aws_ssm_parameter" "elasticsearch_limit" {
-  name = "/bat/${lower(var.environment)}-elasticsearch-limit"
-}
-
-data "aws_ssm_parameter" "cnet_ftp_endpoint" {
-  name = "/bat/${lower(var.environment)}-cnet-ftp-endpoint"
-}
-
-data "aws_ssm_parameter" "cnet_ftp_port" {
-  name = "/bat/${lower(var.environment)}-cnet-ftp-port"
-}
-
 data "aws_ssm_parameter" "cnet_ftp_username" {
   name = "/bat/${lower(var.environment)}-cnet-ftp-username"
 }
@@ -201,8 +138,36 @@ data "aws_ssm_parameter" "cnet_ftp_password" {
   name = "/bat/${lower(var.environment)}-cnet-ftp-password"
 }
 
-data "aws_ssm_parameter" "logit_application" {
-  name = "/bat/${lower(var.environment)}-logit-application"
+data "aws_ssm_parameter" "logit_hostname" {
+  name = "/bat/${lower(var.environment)}-logit-hostname"
+}
+
+data "aws_ssm_parameter" "logit_remote_port" {
+  name = "/bat/${lower(var.environment)}-logit-remote-port"
+}
+
+data "aws_ssm_parameter" "logit_node" {
+  name = "/bat/${lower(var.environment)}-logit-node"
+}
+
+data "aws_ssm_parameter" "sidekiq_username" {
+  name = "/bat/${lower(var.environment)}-sidekiq-username"
+}
+
+data "aws_ssm_parameter" "sidekiq_password" {
+  name = "/bat/${lower(var.environment)}-sidekiq-password"
+}
+
+data "aws_ssm_parameter" "sendgrid_username" {
+  name = "/bat/${lower(var.environment)}-sendgrid-username"
+}
+
+data "aws_ssm_parameter" "sendgrid_password" {
+  name = "/bat/${lower(var.environment)}-sendgrid-password"
+}
+
+data "aws_ssm_parameter" "new_relic_license_key" {
+  name = "/bat/${lower(var.environment)}-new-relic-license-key"
 }
 
 ######################################
@@ -526,14 +491,8 @@ module "spree" {
   aws_region                         = local.aws_region
   db_name                            = local.spree_db_name
   db_host                            = data.aws_ssm_parameter.spree_db_endpoint.value
-  db_username                        = data.aws_ssm_parameter.spree_db_username.value
-  db_password                        = data.aws_ssm_parameter.spree_db_password.value
-  secret_key_base                    = data.aws_ssm_parameter.secret_key_base.value
-  rollbar_access_token               = data.aws_ssm_parameter.rollbar_access_token.value
-  basicauth_username                 = data.aws_ssm_parameter.basic_auth_username.value
-  basicauth_password                 = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled                  = data.aws_ssm_parameter.basic_auth_enabled.value
-  products_import_bucket             = data.aws_ssm_parameter.products_import_bucket.value
+  basicauth_enabled                  = var.basic_auth_enabled
+  products_import_bucket             = module.s3.s3_product_import_name
   rollbar_env                        = var.rollbar_env
   redis_url                          = module.memcached.redis_url
   memcached_endpoint                 = module.memcached.memcached_endpoint
@@ -544,22 +503,39 @@ module "spree" {
   elasticsearch_url                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
   buyer_ui_url                       = "https://${data.aws_ssm_parameter.hosted_zone_name_cdn_bat_client.value}"
   app_domain                         = data.aws_ssm_parameter.hosted_zone_name_cdn_bat_backend.value
-  logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
-  logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
-  suppliers_sftp_bucket              = data.aws_ssm_parameter.suppliers_sftp_bucket.value
+  suppliers_sftp_bucket              = local.suppliers_sftp_bucket
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
-  lograge_enabled                    = data.aws_ssm_parameter.lograge_enabled.value
-  sendgrid_api_key                   = data.aws_ssm_parameter.sendgrid_api_key.value
-  mail_from                          = data.aws_ssm_parameter.mail_from.value
-  sidekiq_concurrency                = data.aws_ssm_parameter.sidekiq_concurrency.value
-  sidekiq_concurrency_searchkick     = data.aws_ssm_parameter.sidekiq_concurrency_searchkick.value
-  elasticsearch_limit                = data.aws_ssm_parameter.elasticsearch_limit.value
-  cnet_ftp_endpoint                  = data.aws_ssm_parameter.cnet_ftp_endpoint.value
-  cnet_ftp_port                      = data.aws_ssm_parameter.cnet_ftp_port.value
-  cnet_ftp_username                  = data.aws_ssm_parameter.cnet_ftp_username.value
-  cnet_ftp_password                  = data.aws_ssm_parameter.cnet_ftp_password.value
+  lograge_enabled                    = var.lograge_enabled
+  mail_from                          = var.email_from
+  sidekiq_concurrency                = var.sidekiq_concurrency
+  sidekiq_concurrency_searchkick     = var.sidekiq_concurrency_searchkick
+  elasticsearch_limit                = var.elasticsearch_limit
+  cnet_ftp_endpoint                  = var.cnet_ftp_endpoint
+  cnet_ftp_port                      = var.cnet_ftp_port
+  s3_static_bucket_name              = module.s3.s3_static_bucket_name
+  new_relic_app_name                 = var.new_relic_app_name == null ? "BAT Spree ${upper(var.environment)}" : var.new_relic_app_name
+  new_relic_agent_enabled            = var.new_relic_agent_enabled
   default_country_id                 = var.default_country_id
+  # Secrets
+  aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
+  aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
+  basicauth_username_ssm_arn    = data.aws_ssm_parameter.basic_auth_username.arn
+  basicauth_password_ssm_arn    = data.aws_ssm_parameter.basic_auth_password.arn
+  cnet_ftp_username_ssm_arn     = data.aws_ssm_parameter.cnet_ftp_username.arn
+  cnet_ftp_password_ssm_arn     = data.aws_ssm_parameter.cnet_ftp_password.arn
+  db_username_ssm_arn           = data.aws_ssm_parameter.spree_db_username.arn
+  db_password_ssm_arn           = data.aws_ssm_parameter.spree_db_password.arn
+  logit_hostname_ssm_arn        = data.aws_ssm_parameter.logit_hostname.arn
+  logit_remote_port_ssm_arn     = data.aws_ssm_parameter.logit_remote_port.arn
+  new_relic_license_key_ssm_arn = data.aws_ssm_parameter.new_relic_license_key.arn
+  rollbar_access_token_ssm_arn  = data.aws_ssm_parameter.rollbar_access_token.arn
+  secret_key_base_ssm_arn       = data.aws_ssm_parameter.secret_key_base.arn
+  sendgrid_username_ssm_arn     = data.aws_ssm_parameter.sendgrid_username.arn
+  sendgrid_password_ssm_arn     = data.aws_ssm_parameter.sendgrid_password.arn
+  sendgrid_api_key_ssm_arn      = data.aws_ssm_parameter.sendgrid_api_key.arn
+  sidekiq_username_ssm_arn      = data.aws_ssm_parameter.sidekiq_username.arn
+  sidekiq_password_ssm_arn      = data.aws_ssm_parameter.sidekiq_password.arn
 }
 
 ######################################
@@ -579,14 +555,8 @@ module "sidekiq" {
   aws_region                         = local.aws_region
   db_name                            = local.spree_db_name
   db_host                            = data.aws_ssm_parameter.spree_db_endpoint.value
-  db_username                        = data.aws_ssm_parameter.spree_db_username.value
-  db_password                        = data.aws_ssm_parameter.spree_db_password.value
-  secret_key_base                    = data.aws_ssm_parameter.secret_key_base.value
-  rollbar_access_token               = data.aws_ssm_parameter.rollbar_access_token.value
-  basicauth_username                 = data.aws_ssm_parameter.basic_auth_username.value
-  basicauth_password                 = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled                  = data.aws_ssm_parameter.basic_auth_enabled.value
-  products_import_bucket             = data.aws_ssm_parameter.products_import_bucket.value
+  basicauth_enabled                  = var.basic_auth_enabled
+  products_import_bucket             = module.s3.s3_product_import_name
   rollbar_env                        = var.rollbar_env
   redis_url                          = module.memcached.redis_url
   security_groups                    = [aws_security_group.spree.id]
@@ -595,22 +565,36 @@ module "sidekiq" {
   elasticsearch_url                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
   buyer_ui_url                       = "https://${data.aws_ssm_parameter.hosted_zone_name_cdn_bat_client.value}"
   app_domain                         = data.aws_ssm_parameter.hosted_zone_name_cdn_bat_backend.value
-  logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
-  logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
-  suppliers_sftp_bucket              = data.aws_ssm_parameter.suppliers_sftp_bucket.value
+  suppliers_sftp_bucket              = local.suppliers_sftp_bucket
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
-  lograge_enabled                    = data.aws_ssm_parameter.lograge_enabled.value
-  sendgrid_api_key                   = data.aws_ssm_parameter.sendgrid_api_key.value
-  mail_from                          = data.aws_ssm_parameter.mail_from.value
-  sidekiq_concurrency                = data.aws_ssm_parameter.sidekiq_concurrency.value
-  sidekiq_concurrency_searchkick     = data.aws_ssm_parameter.sidekiq_concurrency_searchkick.value
-  elasticsearch_limit                = data.aws_ssm_parameter.elasticsearch_limit.value
-  cnet_ftp_endpoint                  = data.aws_ssm_parameter.cnet_ftp_endpoint.value
-  cnet_ftp_port                      = data.aws_ssm_parameter.cnet_ftp_port.value
-  cnet_ftp_username                  = data.aws_ssm_parameter.cnet_ftp_username.value
-  cnet_ftp_password                  = data.aws_ssm_parameter.cnet_ftp_password.value
+  lograge_enabled                    = var.lograge_enabled
+  mail_from                          = var.email_from
+  sidekiq_concurrency                = var.sidekiq_concurrency
+  sidekiq_concurrency_searchkick     = var.sidekiq_concurrency_searchkick
+  elasticsearch_limit                = var.elasticsearch_limit
+  cnet_ftp_endpoint                  = var.cnet_ftp_endpoint
+  cnet_ftp_port                      = var.cnet_ftp_port
   default_country_id                 = var.default_country_id
+  # Secrets
+  aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
+  aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
+  basicauth_username_ssm_arn    = data.aws_ssm_parameter.basic_auth_username.arn
+  basicauth_password_ssm_arn    = data.aws_ssm_parameter.basic_auth_password.arn
+  cnet_ftp_username_ssm_arn     = data.aws_ssm_parameter.cnet_ftp_username.arn
+  cnet_ftp_password_ssm_arn     = data.aws_ssm_parameter.cnet_ftp_password.arn
+  db_username_ssm_arn           = data.aws_ssm_parameter.spree_db_username.arn
+  db_password_ssm_arn           = data.aws_ssm_parameter.spree_db_password.arn
+  logit_hostname_ssm_arn        = data.aws_ssm_parameter.logit_hostname.arn
+  logit_remote_port_ssm_arn     = data.aws_ssm_parameter.logit_remote_port.arn
+  new_relic_license_key_ssm_arn = data.aws_ssm_parameter.new_relic_license_key.arn
+  rollbar_access_token_ssm_arn  = data.aws_ssm_parameter.rollbar_access_token.arn
+  secret_key_base_ssm_arn       = data.aws_ssm_parameter.secret_key_base.arn
+  sendgrid_username_ssm_arn     = data.aws_ssm_parameter.sendgrid_username.arn
+  sendgrid_password_ssm_arn     = data.aws_ssm_parameter.sendgrid_password.arn
+  sendgrid_api_key_ssm_arn      = data.aws_ssm_parameter.sendgrid_api_key.arn
+  sidekiq_username_ssm_arn      = data.aws_ssm_parameter.sidekiq_username.arn
+  sidekiq_password_ssm_arn      = data.aws_ssm_parameter.sidekiq_password.arn
 }
 
 ######################################
@@ -618,41 +602,42 @@ module "sidekiq" {
 ######################################
 
 module "client" {
-  source                             = "../../services/client"
-  environment                        = var.environment
-  vpc_id                             = data.aws_ssm_parameter.vpc_id.value
-  ecs_cluster_id                     = module.ecs_client.ecs_cluster_id
-  lb_public_alb_arn                  = data.aws_ssm_parameter.lb_public_alb_arn.value
-  hosted_zone_name                   = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
-  public_web_subnet_ids              = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
-  execution_role_arn                 = aws_iam_role.ecs_task_execution_role.arn
-  client_app_port                    = "8080" //8080
-  client_app_host                    = "0.0.0.0"
-  cpu                                = var.client_cpu
-  memory                             = var.client_memory
-  aws_region                         = local.aws_region
-  rollbar_access_token               = data.aws_ssm_parameter.rollbar_access_token.value
-  basicauth_username                 = data.aws_ssm_parameter.basic_auth_username.value
-  basicauth_password                 = data.aws_ssm_parameter.basic_auth_password.value
-  basicauth_enabled                  = data.aws_ssm_parameter.basic_auth_enabled.value
-  client_session_secret              = data.aws_ssm_parameter.client_session_secret.value
-  security_groups                    = [aws_security_group.client.id]
-  env_file                           = module.s3.env_file_client
-  cloudfront_id                      = data.aws_ssm_parameter.bat_client_cloudfront_id.value
-  spree_api_host                     = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
-  spree_image_host                   = "https://${data.aws_ssm_parameter.hosted_zone_name_cdn_bat_backend.value}"
-  rollbar_env                        = var.rollbar_env
-  ecr_image_id_client                = var.ecr_image_id_client
-  logit_hostname                     = data.aws_ssm_parameter.logit_hostname.value
-  logit_remote_port                  = data.aws_ssm_parameter.logit_remote_port.value
-  documents_terms_and_conditions_url = data.aws_ssm_parameter.documents_terms_and_conditions_url.value
-  deployment_maximum_percent         = var.deployment_maximum_percent
-  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
-  logit_node                         = data.aws_ssm_parameter.logit_node.value
-  browser_rollbar_access_token       = data.aws_ssm_parameter.browser_rollbar_access_token.value
-  enable_basket                      = data.aws_ssm_parameter.enable_basket.value
-  enable_quotes                      = data.aws_ssm_parameter.enable_quotes.value
-  logit_application                  = data.aws_ssm_parameter.logit_application.value
+  source                               = "../../services/client"
+  environment                          = var.environment
+  vpc_id                               = data.aws_ssm_parameter.vpc_id.value
+  ecs_cluster_id                       = module.ecs_client.ecs_cluster_id
+  lb_public_alb_arn                    = data.aws_ssm_parameter.lb_public_alb_arn.value
+  hosted_zone_name                     = data.aws_ssm_parameter.hosted_zone_name_alb_bat_client.value
+  public_web_subnet_ids                = split(",", data.aws_ssm_parameter.public_web_subnet_ids.value)
+  execution_role_arn                   = aws_iam_role.ecs_task_execution_role.arn
+  client_app_port                      = "8080" //8080
+  client_app_host                      = "0.0.0.0"
+  cpu                                  = var.client_cpu
+  memory                               = var.client_memory
+  aws_region                           = local.aws_region
+  basicauth_enabled                    = var.basic_auth_enabled
+  security_groups                      = [aws_security_group.client.id]
+  cloudfront_id                        = data.aws_ssm_parameter.bat_client_cloudfront_id.value
+  spree_api_host                       = "http://${data.aws_ssm_parameter.lb_private_dns.value}"
+  spree_image_host                     = "https://${data.aws_ssm_parameter.hosted_zone_name_cdn_bat_backend.value}"
+  rollbar_env                          = var.rollbar_env
+  ecr_image_id_client                  = var.ecr_image_id_client
+  documents_terms_and_conditions_url   = var.documents_terms_and_conditions_url
+  deployment_maximum_percent           = var.deployment_maximum_percent
+  deployment_minimum_healthy_percent   = var.deployment_minimum_healthy_percent
+  enable_basket                        = var.enable_basket
+  enable_quotes                        = var.enable_quotes
+  logit_application                    = var.logit_application == null ? "BAT-Buyer-UI-${upper(var.environment)}" : var.logit_application
+  error_pages_unknonwn_server_endpoint = var.error_pages_unknonwn_server_endpoint
+  # Secrets
+  browser_rollbar_access_token_ssm_arn = data.aws_ssm_parameter.browser_rollbar_access_token.arn
+  rollbar_access_token_ssm_arn         = data.aws_ssm_parameter.rollbar_access_token.arn
+  basicauth_username_ssm_arn           = data.aws_ssm_parameter.basic_auth_username.arn
+  basicauth_password_ssm_arn           = data.aws_ssm_parameter.basic_auth_password.arn
+  client_session_secret_ssm_arn        = data.aws_ssm_parameter.client_session_secret.arn
+  logit_hostname_ssm_arn               = data.aws_ssm_parameter.logit_hostname.arn
+  logit_remote_port_ssm_arn            = data.aws_ssm_parameter.logit_remote_port.arn
+  logit_node_ssm_arn                   = data.aws_ssm_parameter.logit_node.arn
 }
 
 ######################################

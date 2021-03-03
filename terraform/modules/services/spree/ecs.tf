@@ -110,13 +110,7 @@ data "template_file" "app_client" {
     name                           = "spree-app-task"
     db_name                        = var.db_name
     db_host                        = var.db_host
-    db_username                    = var.db_username
-    db_password                    = var.db_password
-    secret_key_base                = var.secret_key_base
-    basicauth_username             = var.basicauth_username
-    basicauth_password             = var.basicauth_password
     basicauth_enabled              = var.basicauth_enabled
-    rollbar_spree_access_token     = var.rollbar_access_token
     products_import_bucket         = var.products_import_bucket
     rollbar_env                    = var.rollbar_env
     env_file                       = var.env_file
@@ -125,20 +119,38 @@ data "template_file" "app_client" {
     elasticsearch_url              = var.elasticsearch_url
     buyer_ui_url                   = var.buyer_ui_url
     app_domain                     = var.app_domain
-    logit_hostname                 = var.logit_hostname
-    logit_remote_port              = var.logit_remote_port
     suppliers_sftp_bucket          = var.suppliers_sftp_bucket
     lograge_enabled                = var.lograge_enabled
-    sendgrid_api_key               = var.sendgrid_api_key
     mail_from                      = var.mail_from
     sidekiq_concurrency            = var.sidekiq_concurrency
     sidekiq_concurrency_searchkick = var.sidekiq_concurrency_searchkick
     elasticsearch_limit            = var.elasticsearch_limit
     cnet_ftp_endpoint              = var.cnet_ftp_endpoint
     cnet_ftp_port                  = var.cnet_ftp_port
-    cnet_ftp_username              = var.cnet_ftp_username
-    cnet_ftp_password              = var.cnet_ftp_password
     default_country_id             = var.default_country_id
+    new_relic_app_name             = var.new_relic_app_name
+    new_relic_agent_enabled        = var.new_relic_agent_enabled
+    s3_static_bucket_name          = var.s3_static_bucket_name
+
+    # Secrets
+    db_username_ssm_arn           = var.db_username_ssm_arn
+    db_password_ssm_arn           = var.db_password_ssm_arn
+    secret_key_base_ssm_arn       = var.secret_key_base_ssm_arn
+    basicauth_username_ssm_arn    = var.basicauth_username_ssm_arn
+    basicauth_password_ssm_arn    = var.basicauth_password_ssm_arn
+    rollbar_access_token_ssm_arn  = var.rollbar_access_token_ssm_arn
+    cnet_ftp_username_ssm_arn     = var.cnet_ftp_username_ssm_arn
+    cnet_ftp_password_ssm_arn     = var.cnet_ftp_password_ssm_arn
+    sidekiq_username_ssm_arn      = var.sidekiq_username_ssm_arn
+    sidekiq_password_ssm_arn      = var.sidekiq_password_ssm_arn
+    sendgrid_username_ssm_arn     = var.sendgrid_username_ssm_arn
+    sendgrid_password_ssm_arn     = var.sendgrid_password_ssm_arn
+    sendgrid_api_key_ssm_arn      = var.sendgrid_api_key_ssm_arn
+    aws_access_key_id_ssm_arn     = var.aws_access_key_id_ssm_arn
+    aws_secret_access_key_ssm_arn = var.aws_secret_access_key_ssm_arn
+    new_relic_license_key_ssm_arn = var.new_relic_license_key_ssm_arn
+    logit_hostname_ssm_arn        = var.logit_hostname_ssm_arn
+    logit_remote_port_ssm_arn     = var.logit_remote_port_ssm_arn
   }
 }
 

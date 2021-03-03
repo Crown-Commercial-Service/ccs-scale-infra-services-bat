@@ -13,76 +13,40 @@ Check the README file for details of how to create the database.
 
 ### Pre install steps
 
-1. Create IAM user called `spree-user` with policy (`app-policy`) allowing full access to S3 (TODO: this needs to be reviewed/tied down)
-  - Add AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values to `spree.env`
+1. Create IAM user called `spree-user` with policy (`app-policy`) allowing full access to S3 (TODO: scripting of this added under SINF-372)
 
 2. Create an key pair instance called `{env}-spree-key'`
 
 3. Create SSM Params
-```
-  /bat/{env}-rollbar-access-token - token to send errors to rollbar
-	/bat/{env}-secret-key-base - secret key for the spree app
-  /bat/{env}-basic-auth-username - basic auth username for spree app and the client
-  /bat/{env}-basic-auth-password - basic auth password for spree app and the client
-  /bar/{env}-basic-auth-enabled - flag to enable/disable basic auth
-  /bat/{env}-session-cookie-secret - client session cookie secret
-  /bat/{env}-products-import-bucket - s3 bucket in which supplier import are progress
-  /bat/{env}-logit-hostname - logit.io endpoint
-  /bat/{env}-logit-remote-port - port to send logs to logit.io
-  /bat/{env}-suppliers-sftp-bucket - S3 bucket which holds suppliers sftp buckets
-  /bat/{env}-documents-terms-and-conditions-url - ulr
-  /bat/{env}-lograge-enabled - flag to enable log forrmating in spree
-  /bat/{env}-sendgrid-api-key - api key to sendgrid
-  /bat/{env}-mail-from - email address which email are sent from spree
-  /bat/{env}-aws_access_key_id - spree user access key id
-  /bat/{env}-aws_secret_access_key - spree user secret access key
-  /bat/{env}-sidekiq-concurrency - number of concurrent sidekiq workers
-  /bat/{env}-sidekiq-concurrency-searchkick - number of concurrent sidekiq workers for searchkick jobs
-  /bat/{env}-logit-node - url to logit.io elasticsearch cluster
-  /bat/{env}-browser-rollbar-access-token - client side rollbar token
-  /bat/{env}-cnet-ftp-username - username to cnet ftp site
-  /bat/{env}-cnet-ftp-endpoint - address to cnet ftp site
-  /bat/{env}-cnet-ftp-password - password to cnet ftp site
-  /bat/{env}-cnet-ftp-port - port to access cnet ftp site
-  /bat/{env}-elasticsearch-limit - limit the results return for elastic search query
-  /bat/{env}-enable-quotes - flag to enable/disable quotes in the buyer ui
-  /bat/{env}-enable-basket - flag to enable/disable the basket in the buyer ui
-  /bat/{env}-logit-application - send the name of app to logit.io
-```
+
+| System Parameter                        | Description |
+| ----------------------------------------|-------------|
+| /bat/{env}-rollbar-access-token         | token to send errors to rollbar |
+| /bat/{env}-secret-key-base              | secret key for the spree app |
+| /bat/{env}-basic-auth-username          | basic auth username for spree app and the client |
+| /bat/{env}-basic-auth-password          | basic auth password for spree app and the client |
+| /bar/{env}-basic-auth-enabled           | flag to enable/disable basic auth |
+| /bat/{env}-session-cookie-secret        | client session cookie secret |
+| /bat/{env}-products-import-bucket       | s3 bucket in which supplier import are progress |
+| /bat/{env}-logit-hostname               | logit.io endpoint |
+| /bat/{env}-logit-remote-port            | port to send logs to logit.io |
+| /bat/{env}-suppliers-sftp-bucket        | S3 bucket which holds suppliers sftp buckets |
+| /bat/{env}-sendgrid-api-key             | api key to sendgrid |
+| /bat/{env}-aws-access-key-id            | spree-user access key id |
+| /bat/{env}-aws-secret-access-key        | spree-user secret access key |
+| /bat/{env}-logit-node                   | url to logit.io elasticsearch cluster |
+| /bat/{env}-browser-rollbar-access-token | client side rollbar token |
+| /bat/{env}-cnet-ftp-username            | username to cnet ftp site |
+| /bat/{env}-cnet-ftp-password            | password to cnet ftp site |
+| /bat/{env}-sidekiq-username             | can be any value - internal BaT use only |
+| /bat/{env}-sidekiq-password             | can be any value - internal BaT use only |
+| /bat/{env}-sendgrid-username            | username for sendgrid site |
+| /bat/{env}-sendgrid-password            | password for sendgrid site |
+| /bat/{env}-new-relic-license-key        | key from new relic site |
+
 
 4. Run `terraform apply`
- - It will provision everything, but not ECS - as key is missing - but will have enough to complete step 5 now
- - (this is just hack to work around this cyclic dependency - need a better solution)
-
-5. Create `client.env` environment file
-
-```
-SESSION_COOKIE_SECRET={RANDOM_STRING? NOT SURE}
-DOCUMENTS_TERMS_AND_CONDITIONS_URL=https://purchasingplatform.crowncommercial.gov.uk/
-```
-
-6. Create `spree.env` environment file
-
-```
-SIDEKIQ_USERNAME={}
-SIDEKIQ_PASSWORD={}
-SENDGRID_USERNAME={}
-SENDGRID_PASSWORD={}
-AWS_REGION=eu-west-2
-AWS_ACCESS_KEY_ID={VALUE_FROM_IAM_USER_ABOVE}
-AWS_SECRET_ACCESS_KEY={VALUE_FROM_IAM_USER_ABOVE}
-S3_REGION=eu-west-2
-S3_BUCKET_NAME=spree-${lower(var.environment)}-${lower(var.stage)}
-```
-
-7. Upload `client.env` and `spree.env` to the provisioned S3 bucket `system-spree-[env]-staging`
-
-8. Update the services
- - simple hack for this is to change the docker image to some random id - run `terraform apply`
- - then switch it to 'latest' again and rerun `terraform apply`
- - this whole part of the process needs review
-
-NOTE/TODO: For steps 3 & 4 you have to provision the everything first to get the values to put into these files, so you then have to redploy the ECS Services - can we move these to environment variables rather than files (need to check with Sparks about this). There is also some duplication between env variables and file - is this necessary?
+ - This will provision the BaT service components
 
 ### Post install steps
 When first building on a clean environment - the database will not be populated. To populate the database you need to connect to the docker container running in the relevant ECS/EC2 instance and execute a command

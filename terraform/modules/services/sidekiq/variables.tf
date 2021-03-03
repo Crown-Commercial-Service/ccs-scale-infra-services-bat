@@ -42,30 +42,6 @@ variable "db_host" {
   type = string
 }
 
-variable "db_username" {
-  type = string
-}
-
-variable "db_password" {
-  type = string
-}
-
-variable "secret_key_base" {
-  type = string
-}
-
-variable "rollbar_access_token" {
-  type = string
-}
-
-variable "basicauth_username" {
-  type = string
-}
-
-variable "basicauth_password" {
-  type = string
-}
-
 variable "basicauth_enabled" {
   type = string
 }
@@ -106,14 +82,6 @@ variable "app_domain" {
   type = string
 }
 
-variable "logit_hostname" {
-  type = string
-}
-
-variable "logit_remote_port" {
-  type = string
-}
-
 variable "suppliers_sftp_bucket" {
   type = string
 }
@@ -127,10 +95,6 @@ variable "deployment_minimum_healthy_percent" {
 }
 
 variable "lograge_enabled" {
-  type = string
-}
-
-variable "sendgrid_api_key" {
   type = string
 }
 
@@ -158,11 +122,78 @@ variable "cnet_ftp_port" {
   type = string
 }
 
-variable "cnet_ftp_username" {
+#########
+# Secrets
+#########
+variable "aws_access_key_id_ssm_arn" {
   type = string
 }
 
-variable "cnet_ftp_password" {
+variable "aws_secret_access_key_ssm_arn" {
+  type = string
+}
+
+variable "basicauth_username_ssm_arn" {
+  type = string
+}
+
+variable "basicauth_password_ssm_arn" {
+  type = string
+}
+
+variable "cnet_ftp_username_ssm_arn" {
+  type = string
+}
+
+variable "db_username_ssm_arn" {
+  type = string
+}
+
+variable "db_password_ssm_arn" {
+  type = string
+}
+
+variable "logit_hostname_ssm_arn" {
+  type = string
+}
+
+variable "logit_remote_port_ssm_arn" {
+  type = string
+}
+
+variable "new_relic_license_key_ssm_arn" {
+  type = string
+}
+
+variable "rollbar_access_token_ssm_arn" {
+  type = string
+}
+
+variable "cnet_ftp_password_ssm_arn" {
+  type = string
+}
+
+variable "sidekiq_username_ssm_arn" {
+  type = string
+}
+
+variable "sidekiq_password_ssm_arn" {
+  type = string
+}
+
+variable "secret_key_base_ssm_arn" {
+  type = string
+}
+
+variable "sendgrid_username_ssm_arn" {
+  type = string
+}
+
+variable "sendgrid_password_ssm_arn" {
+  type = string
+}
+
+variable "sendgrid_api_key_ssm_arn" {
   type = string
 }
 
