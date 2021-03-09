@@ -132,7 +132,7 @@ variable "az_names" {
 
 variable "ecr_image_id_catalogue" {
   type    = string
-  default = "a7850f4-candidate"
+  default = "616acaf-candidate"
 }
 
 variable "catalogue_cpu" {
@@ -147,7 +147,7 @@ variable "catalogue_memory" {
 
 variable "ecr_image_id_auth" {
   type    = string
-  default = "68d70e2-candidate"
+  default = "d1d128d-candidate"
 }
 
 variable "auth_cpu" {
