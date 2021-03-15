@@ -40,6 +40,11 @@ variable "rollbar_env" {
   type = string
 }
 
+variable "default_country_id" {
+  type = string
+  default = 77
+}
+
 variable "client_cpu" {
   type    = number
   default = 2048

@@ -32,7 +32,7 @@ module "deploy" {
   environment                     = local.environment
   rollbar_env                     = local.environment
   ecr_image_id_spree              = "deploy-to-sit-latest"
-  ecr_image_id_client             = "deploy-to-sit-latest"
+  #ecr_image_id_client             = "deploy-to-sit-latest"
   client_cpu                      = 2048
   client_memory                   = 4096 #t2.large - 8GB available
   client_ec2_instance_type        = "t2.large"
