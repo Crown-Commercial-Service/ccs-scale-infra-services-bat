@@ -559,6 +559,7 @@ module "spree" {
   cnet_ftp_port                      = data.aws_ssm_parameter.cnet_ftp_port.value
   cnet_ftp_username                  = data.aws_ssm_parameter.cnet_ftp_username.value
   cnet_ftp_password                  = data.aws_ssm_parameter.cnet_ftp_password.value
+  default_country_id                 = var.default_country_id
 }
 
 ######################################
@@ -609,6 +610,7 @@ module "sidekiq" {
   cnet_ftp_port                      = data.aws_ssm_parameter.cnet_ftp_port.value
   cnet_ftp_username                  = data.aws_ssm_parameter.cnet_ftp_username.value
   cnet_ftp_password                  = data.aws_ssm_parameter.cnet_ftp_password.value
+  default_country_id                 = var.default_country_id
 }
 
 ######################################

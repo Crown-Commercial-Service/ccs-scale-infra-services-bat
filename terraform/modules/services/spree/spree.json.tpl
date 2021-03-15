@@ -139,6 +139,10 @@
       {
         "name": "CNET_FTP_PASSWORD",
         "value": "${cnet_ftp_password}"
+      },
+      {
+        "name": "DEFAULT_COUNTRY_ID",
+        "value": "${default_country_id}"
       }
     ],
     "command": [

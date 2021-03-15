@@ -138,6 +138,7 @@ data "template_file" "app_client" {
     cnet_ftp_port                  = var.cnet_ftp_port
     cnet_ftp_username              = var.cnet_ftp_username
     cnet_ftp_password              = var.cnet_ftp_password
+    default_country_id             = var.default_country_id
   }
 }
 

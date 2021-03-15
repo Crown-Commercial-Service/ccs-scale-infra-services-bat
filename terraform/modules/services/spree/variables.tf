@@ -185,3 +185,7 @@ variable "cnet_ftp_username" {
 variable "cnet_ftp_password" {
   type = string
 }
+
+variable "default_country_id" {
+  type = string
+}
