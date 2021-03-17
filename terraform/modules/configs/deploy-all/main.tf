@@ -575,6 +575,9 @@ module "sidekiq" {
   elasticsearch_limit                = var.elasticsearch_limit
   cnet_ftp_endpoint                  = var.cnet_ftp_endpoint
   cnet_ftp_port                      = var.cnet_ftp_port
+  s3_static_bucket_name              = module.s3.s3_static_bucket_name
+  new_relic_app_name                 = var.new_relic_app_name == null ? "BAT Spree ${upper(var.environment)}" : var.new_relic_app_name
+  new_relic_agent_enabled            = var.new_relic_agent_enabled
   default_country_id                 = var.default_country_id
   # Secrets
   aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn

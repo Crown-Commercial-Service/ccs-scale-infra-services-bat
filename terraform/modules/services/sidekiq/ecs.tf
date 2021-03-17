@@ -33,6 +33,9 @@ data "template_file" "app_sidekiq" {
     cnet_ftp_endpoint              = var.cnet_ftp_endpoint
     cnet_ftp_port                  = var.cnet_ftp_port
     default_country_id             = var.default_country_id
+    new_relic_app_name             = var.new_relic_app_name
+    new_relic_agent_enabled        = var.new_relic_agent_enabled
+    s3_static_bucket_name          = var.s3_static_bucket_name
 
     # Secrets
     db_username_ssm_arn           = var.db_username_ssm_arn
