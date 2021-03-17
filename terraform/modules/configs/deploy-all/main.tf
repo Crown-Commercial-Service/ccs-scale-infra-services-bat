@@ -15,7 +15,7 @@ provider "aws" {
 locals {
   aws_region            = "eu-west-2"
   spree_db_name         = "spree"
-  suppliers_sftp_bucket = "scale-${var.environment}-s3-aws-sftp"
+  suppliers_sftp_bucket = "scale-${lower(var.environment)}-s3-aws-sftp"
 }
 
 data "aws_ssm_parameter" "vpc_id" {
