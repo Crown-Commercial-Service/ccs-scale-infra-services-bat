@@ -13,10 +13,38 @@
           "awslogs-stream-prefix": "ecs"
         }
     },
-    "environmentFiles": [
+    "secrets": [
       {
-        "type": "s3",
-        "value": "${env_file}"
+        "name": "BASICAUTH_USERNAME",
+        "valueFrom": "${basicauth_username_ssm_arn}"
+      },
+      {
+        "name": "BASICAUTH_PASSWORD",
+        "valueFrom": "${basicauth_password_ssm_arn}"
+      },
+      {
+        "name": "ROLLBAR_ACCESS_TOKEN",
+        "valueFrom": "${rollbar_access_token_ssm_arn}"
+      },
+      {
+        "name": "BROWSER_ROLLBAR_ACCESS_TOKEN",
+        "valueFrom": "${browser_rollbar_access_token_ssm_arn}"
+      },
+      {
+        "name": "SESSION_COOKIE_SECRET",
+        "valueFrom": "${client_session_secret_ssm_arn}"
+      },
+      {
+        "name": "LOGIT_HOSTNAME",
+        "valueFrom": "${logit_hostname_ssm_arn}"
+      },
+      {
+        "name": "LOGIT_REMOTE_PORT",
+        "valueFrom": "${logit_remote_port_ssm_arn}"
+      },
+      {
+        "name": "LOGIT_NODE",
+        "valueFrom": "${logit_node_ssm_arn}"
       }
     ],
     "environment": [
@@ -29,28 +57,12 @@
         "value": "${app_port}"
       },
       {
-        "name": "ROLLBAR_ACCESS_TOKEN",
-        "value": "${rollbar_access_token}"
-      },
-      {
-        "name": "BASICAUTH_USERNAME",
-        "value": "${basicauth_username}"
-      },
-      {
-        "name": "BASICAUTH_PASSWORD",
-        "value": "${basicauth_password}"
-      },
-      {
         "name": "BASICAUTH_ENABLED",
         "value": "${basicauth_enabled}"
       },
       {
         "name": "SPREE_API_HOST",
         "value": "${spree_api_host}"
-      },
-      {
-        "name": "SESSION_COOKIE_SECRET",
-        "value": "${client_session_secret}"
       },
       {
         "name": "ROLLBAR_ENV",
@@ -65,24 +77,8 @@
         "value": "${spree_api_host}"
       },
       {
-        "name": "LOGIT_HOSTNAME",
-        "value": "${logit_hostname}"
-      },
-      {
-        "name": "LOGIT_REMOTE_PORT",
-        "value": "${logit_remote_port}"
-      },
-      {
         "name": "DOCUMENTS_TERMS_AND_CONDITIONS_URL",
         "value": "${documents_terms_and_conditions_url}"
-      },
-      {
-        "name": "LOGIT_NODE",
-        "value": "${logit_node}"
-      },
-      {
-        "name": "BROWSER_ROLLBAR_ACCESS_TOKEN",
-        "value": "${browser_rollbar_access_token}"
       },
       {
         "name": "ENABLE_BASKET",
@@ -95,6 +91,10 @@
       {
         "name": "LOGIT_APPLICATION",
         "value": "${logit_application}"
+      },
+      {
+        "name": "ERROR_PAGES_EXPOSE_UNKNOWN_SERVER_ERROR_ENDPOINT",
+        "value": "${error_pages_unknonwn_server_endpoint}"
       }
     ],
     "command": [

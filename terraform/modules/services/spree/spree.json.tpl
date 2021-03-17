@@ -13,10 +13,78 @@
           "awslogs-stream-prefix": "ecs"
         }
     },
-    "environmentFiles": [
+    "secrets": [
       {
-        "type": "s3",
-        "value": "${env_file}"
+        "name": "BASICAUTH_USERNAME",
+        "valueFrom": "${basicauth_username_ssm_arn}"
+      },
+      {
+        "name": "BASICAUTH_PASSWORD",
+        "valueFrom": "${basicauth_password_ssm_arn}"
+      },
+      {
+        "name": "ROLLBAR_ACCESS_TOKEN",
+        "valueFrom": "${rollbar_access_token_ssm_arn}"
+      },
+      {
+        "name": "DB_USERNAME",
+        "valueFrom": "${db_username_ssm_arn}"
+      },
+      {
+        "name": "DB_PASSWORD",
+        "valueFrom": "${db_password_ssm_arn}"
+      },
+      {
+        "name": "SENDGRID_API_KEY",
+        "valueFrom": "${sendgrid_api_key_ssm_arn}"
+      },
+      {
+        "name": "CNET_FTP_USERNAME",
+        "valueFrom": "${cnet_ftp_username_ssm_arn}"
+      },
+      {
+        "name": "CNET_FTP_PASSWORD",
+        "valueFrom": "${cnet_ftp_password_ssm_arn}"
+      },
+      {
+        "name": "SECRET_KEY_BASE",
+        "valueFrom": "${secret_key_base_ssm_arn}"
+      },
+      {
+        "name": "LOGIT_HOSTNAME",
+        "valueFrom": "${logit_hostname_ssm_arn}"
+      },
+      {
+        "name": "LOGIT_REMOTE_PORT",
+        "valueFrom": "${logit_remote_port_ssm_arn}"
+      },
+      {
+        "name": "NEW_RELIC_LICENSE_KEY",
+        "valueFrom": "${new_relic_license_key_ssm_arn}"
+      },
+      {
+        "name": "SIDEKIQ_USERNAME",
+        "valueFrom": "${sidekiq_username_ssm_arn}"
+      },
+      {
+        "name": "SIDEKIQ_PASSWORD",
+        "valueFrom": "${sidekiq_password_ssm_arn}"
+      },
+      {
+        "name": "SENDGRID_USERNAME",
+        "valueFrom": "${sendgrid_username_ssm_arn}"
+      },
+      {
+        "name": "SENDGRID_PASSWORD",
+        "valueFrom": "${sendgrid_password_ssm_arn}"
+      },
+      {
+        "name": "AWS_ACCESS_KEY_ID",
+        "valueFrom": "${aws_access_key_id_ssm_arn}"
+      },
+      {
+        "name": "AWS_SECRET_ACCESS_KEY",
+        "valueFrom": "${aws_secret_access_key_ssm_arn}"
       }
     ],
     "environment": [
@@ -29,32 +97,8 @@
         "value": "${db_host}"
       },
       {
-        "name": "DB_USERNAME",
-        "value": "${db_username}"
-      },
-      {
-        "name": "DB_PASSWORD",
-        "value": "${db_password}"
-      },
-      {
-        "name": "SECRET_KEY_BASE",
-        "value": "${secret_key_base}"
-      },
-      {
-        "name": "BASICAUTH_USERNAME",
-        "value": "${basicauth_username}"
-      },
-      {
-        "name": "BASICAUTH_PASSWORD",
-        "value": "${basicauth_password}"
-      },
-      {
         "name": "BASICAUTH_ENABLED",
         "value": "${basicauth_enabled}"
-      },
-      {
-        "name": "ROLLBAR_ACCESS_TOKEN",
-        "value": "${rollbar_spree_access_token}"
       },
       {
         "name": "REDIS_URL",
@@ -93,20 +137,8 @@
         "value": "${suppliers_sftp_bucket}"
       },
       {
-        "name": "LOGIT_HOSTNAME",
-        "value": "${logit_hostname}"
-      },
-      {
-        "name": "LOGIT_REMOTE_PORT",
-        "value": "${logit_remote_port}"
-      },
-      {
         "name": "LOGRAGE_ENABLED",
         "value": "${lograge_enabled}"
-      },
-      {
-        "name": "SENDGRID_API_KEY",
-        "value": "${sendgrid_api_key}"
       },
       {
         "name": "MAIL_FROM",
@@ -133,17 +165,25 @@
         "value": "${cnet_ftp_port}"
       },
       {
-        "name": "CNET_FTP_USERNAME",
-        "value": "${cnet_ftp_username}"
+        "name": "S3_REGION",
+        "value": "${aws_region}"
       },
       {
-        "name": "CNET_FTP_PASSWORD",
-        "value": "${cnet_ftp_password}"
+        "name": "S3_BUCKET_NAME",
+        "value": "${s3_static_bucket_name}"
+      },
+      {
+        "name": "NEW_RELIC_APP_NAME",
+        "value": "${new_relic_app_name}"
+      },
+      {
+        "name": "NEW_RELIC_AGENT_ENABLED",
+        "value": "${new_relic_agent_enabled}"
       },
       {
         "name": "DEFAULT_COUNTRY_ID",
         "value": "${default_country_id}"
-      }
+	  }
     ],
     "command": [
       "bundle", "exec", "rails","s","-b","0.0.0.0","-p", "${app_port}"

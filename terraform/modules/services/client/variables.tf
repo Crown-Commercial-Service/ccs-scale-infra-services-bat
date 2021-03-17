@@ -11,10 +11,6 @@ variable "ecs_cluster_id" {
   type = string
 }
 
-#variable "lb_public_arn" {
-#  type = string
-#}
-
 variable "lb_public_alb_arn" {
   type = string
 }
@@ -47,23 +43,7 @@ variable "spree_api_host" {
   type = string
 }
 
-variable "rollbar_access_token" {
-  type = string
-}
-
-variable "basicauth_username" {
-  type = string
-}
-
-variable "basicauth_password" {
-  type = string
-}
-
 variable "basicauth_enabled" {
-  type = string
-}
-
-variable "client_session_secret" {
   type = string
 }
 
@@ -83,23 +63,11 @@ variable "security_groups" {
   type = list(string)
 }
 
-variable "env_file" {
-  type = string
-}
-
 variable "cloudfront_id" {
   type = string
 }
 
 variable "ecr_image_id_client" {
-  type = string
-}
-
-variable "logit_hostname" {
-  type = string
-}
-
-variable "logit_remote_port" {
   type = string
 }
 
@@ -119,14 +87,6 @@ variable "deployment_minimum_healthy_percent" {
   type = number
 }
 
-variable "logit_node" {
-  type = string
-}
-
-variable "browser_rollbar_access_token" {
-  type = string
-}
-
 variable "enable_basket" {
   type = string
 }
@@ -136,5 +96,44 @@ variable "enable_quotes" {
 }
 
 variable "logit_application" {
+  type = string
+}
+
+variable "error_pages_unknonwn_server_endpoint" {
+  type = string
+}
+
+#########
+# Secrets
+#########
+variable "rollbar_access_token_ssm_arn" {
+  type = string
+}
+
+variable "basicauth_username_ssm_arn" {
+  type = string
+}
+
+variable "basicauth_password_ssm_arn" {
+  type = string
+}
+
+variable "client_session_secret_ssm_arn" {
+  type = string
+}
+
+variable "browser_rollbar_access_token_ssm_arn" {
+  type = string
+}
+
+variable "logit_hostname_ssm_arn" {
+  type = string
+}
+
+variable "logit_remote_port_ssm_arn" {
+  type = string
+}
+
+variable "logit_node_ssm_arn" {
   type = string
 }
