@@ -161,9 +161,21 @@
         "value": "${cnet_ftp_port}"
 	  },
       {
+        "name": "S3_BUCKET_NAME",
+        "value": "${s3_static_bucket_name}"
+      },
+      {
+        "name": "NEW_RELIC_APP_NAME",
+        "value": "${new_relic_app_name}"
+      },
+      {
+        "name": "NEW_RELIC_AGENT_ENABLED",
+        "value": "${new_relic_agent_enabled}"
+      },
+      {
         "name": "DEFAULT_COUNTRY_ID",
         "value": "${default_country_id}"
-      }
+	  }
     ],
     "command": [
       "bundle", "exec", "sidekiq"

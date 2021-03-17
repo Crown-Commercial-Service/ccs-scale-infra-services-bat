@@ -122,6 +122,18 @@ variable "cnet_ftp_port" {
   type = string
 }
 
+variable "s3_static_bucket_name" {
+  type = string
+}
+
+variable "new_relic_app_name" {
+  type = string
+}
+
+variable "new_relic_agent_enabled" {
+  type = string
+}
+
 #########
 # Secrets
 #########
