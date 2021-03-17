@@ -49,4 +49,5 @@ module "deploy" {
   s3_virus_scan_memory            = 4096
   s3_virus_scan_ec2_instance_type = "t2.large"
   basic_auth_enabled              = false
+  new_relic_app_name              = "Bat Spree SiT"
 }
