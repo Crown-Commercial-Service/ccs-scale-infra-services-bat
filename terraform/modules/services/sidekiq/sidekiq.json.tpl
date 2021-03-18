@@ -159,7 +159,11 @@
       {
         "name": "CNET_FTP_PORT",
         "value": "${cnet_ftp_port}"
-	  },
+	    },
+      {
+        "name": "S3_REGION",
+        "value": "${aws_region}"
+      },
       {
         "name": "S3_BUCKET_NAME",
         "value": "${s3_static_bucket_name}"
