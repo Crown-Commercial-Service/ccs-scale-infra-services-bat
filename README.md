@@ -13,11 +13,9 @@ Check the README file for details of how to create the database.
 
 ### Pre install steps
 
-1. Create IAM user called `spree-user` with policy (`app-policy`) allowing full access to S3 (TODO: scripting of this added under SINF-372)
+1. Create an key pair instance called `{env}-spree-key'`
 
-2. Create an key pair instance called `{env}-spree-key'`
-
-3. Create SSM Params
+2. Create SSM Params
 
 | System Parameter                        | Description |
 | ----------------------------------------|-------------|
@@ -32,8 +30,6 @@ Check the README file for details of how to create the database.
 | /bat/{env}-logit-remote-port            | port to send logs to logit.io |
 | /bat/{env}-suppliers-sftp-bucket        | S3 bucket which holds suppliers sftp buckets |
 | /bat/{env}-sendgrid-api-key             | api key to sendgrid |
-| /bat/{env}-aws-access-key-id            | spree-user access key id |
-| /bat/{env}-aws-secret-access-key        | spree-user secret access key |
 | /bat/{env}-logit-node                   | url to logit.io elasticsearch cluster |
 | /bat/{env}-browser-rollbar-access-token | client side rollbar token |
 | /bat/{env}-cnet-ftp-username            | username to cnet ftp site |
@@ -45,7 +41,7 @@ Check the README file for details of how to create the database.
 | /bat/{env}-new-relic-license-key        | key from new relic site |
 
 
-4. Run `terraform apply`
+3. Run `terraform apply`
  - This will provision the BaT service components
 
 ### Post install steps
