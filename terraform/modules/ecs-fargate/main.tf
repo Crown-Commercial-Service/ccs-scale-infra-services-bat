@@ -49,7 +49,7 @@ resource "aws_security_group" "allow_http" {
     protocol    = "tcp"
     cidr_blocks = [var.cidr_block_vpc]
   }
-  
+
   ingress {
     # Auth API Service
     from_port   = 9040
@@ -73,9 +73,9 @@ resource "aws_security_group" "allow_http" {
   }
 
   egress {
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = [var.cidr_block_vpc]
   }
 
