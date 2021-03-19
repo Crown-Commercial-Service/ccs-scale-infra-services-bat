@@ -120,7 +120,8 @@ resource "aws_iam_policy" "ecs_task_execution" {
         "ecr:BatchGetImage",
         "logs:CreateLogStream",
         "logs:PutLogEvents",
-        "ssm:GetParameters"
+        "ssm:GetParameters",
+        "kms:Decrypt"
       ],
       "Resource": "*"
     }
