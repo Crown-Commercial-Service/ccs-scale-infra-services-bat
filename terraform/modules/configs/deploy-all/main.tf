@@ -404,6 +404,32 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_read_ssm" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
 }
 
+data "aws_ssm_parameter" "kms_id_ssm" {
+  name = "${lower(var.environment)}-ssm-encryption-key"
+}
+
+resource "aws_iam_policy" "kms_decrypt_ssm_cmk" {
+  name_prefix = "KMS_Decrypt_SSM_CMK"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+        ]
+        Resource = "${data.aws_ssm_parameter.kms_id_ssm.value}"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_kms_decrypt_ssm_cmk" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = aws_iam_policy.kms_decrypt_ssm_cmk.arn
+}
+
 ######################################
 # Modules
 ######################################

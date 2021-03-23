@@ -34,7 +34,7 @@ variable "client_ec2_instance_type" {
 }
 
 variable "default_country_id" {
-  type = string
+  type    = string
   default = 77
 }
 
