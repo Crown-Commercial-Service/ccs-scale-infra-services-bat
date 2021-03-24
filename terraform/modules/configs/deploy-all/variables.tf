@@ -122,7 +122,7 @@ variable "elasticsearch_limit" {
 # (used to be param: /bat/{env}-mail-from)
 variable "email_from" {
   type    = string
-  default = "bt@sprks.eu"
+  default = "SupplierRef@findandbuyproducts.crowncommercial.gov.uk"
 }
 
 # (used to be param: /bat/{env}-cnet-ftp-endpoint)
