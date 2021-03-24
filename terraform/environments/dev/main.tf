@@ -45,6 +45,7 @@ module "deploy" {
   memcached_node_type                  = "cache.t3.medium"
   redis_node_type                      = "cache.t3.medium"
   error_pages_unknonwn_server_endpoint = true
+  email_from                           = "bt@sprks.eu"
 
   # default values for s3-virus-scan-service subject to change based on testing on DEV
   ecr_image_id_s3_virus_scan      = "latest"
