@@ -232,3 +232,7 @@ variable "sendgrid_api_key_ssm_arn" {
 variable "default_country_id" {
   type = string
 }
+
+variable "buyer_organizations_import_bucket" {
+  type = string
+}
