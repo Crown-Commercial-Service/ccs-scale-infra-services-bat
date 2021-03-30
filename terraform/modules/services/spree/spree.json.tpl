@@ -187,6 +187,49 @@
       {
         "name": "BUYER_ORGANIZATIONS_IMPORT_BUCKET",
         "value": "${buyer_organizations_import_bucket}"
+      },
+      { "name": "CNET_PRODUCTS_IMPORT_BUCKET",
+        "value": "${cnet_products_import_bucket}"
+      },
+      {
+        "name": "CNET_PRODUCTS_IMPORT_UPDATES_DIR",
+        "value": "${cnet_products_import_updates_dir}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY_CATALOG_REINDEX",
+        "value": "${sidekiq_concurrency_catalog_reindex}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY_CNET_IMPORT_FEED",
+        "value": "${sidekiq_concurrency_cnet_import_feed}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY_CNET_IMPORT_CATEGORIES",
+        "value": "${sidekiq_concurrency_cnet_import_categories}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY_CNET_IMPORT_DOCUMENTS",
+        "value": "${sidekiq_concurrency_cnet_import_documents}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY_CNET_IMPORT_IMAGES",
+        "value": "${sidekiq_concurrency_cnet_import_images}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY_CNET_IMPORT_PROPERTIES",
+        "value": "${sidekiq_concurrency_cnet_import_properties}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY_CNET_IMPORT_XMLS",
+        "value": "${sidekiq_concurrency_cnet_import_xmls}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY_CNET_IMPORT_MISSING_PROPERTIES",
+        "value": "${sidekiq_concurrency_cnet_import_missing_properties}"
+      },
+      {
+        "name": "SIDEKIQ_CONCURRENCY_CNET_IMPORT_MISSING_XMLS",
+        "value": "${sidekiq_concurrency_cnet_import_missing_xmls}"
       }
     ],
     "command": [
