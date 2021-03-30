@@ -543,6 +543,7 @@ module "spree" {
   new_relic_app_name                 = var.new_relic_app_name == null ? "BaT Spree ${upper(var.environment)}" : var.new_relic_app_name
   new_relic_agent_enabled            = var.new_relic_agent_enabled
   default_country_id                 = var.default_country_id
+  buyer_organizations_import_bucket  = module.s3.s3_product_import_name
   # Secrets
   aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
@@ -605,6 +606,7 @@ module "sidekiq" {
   new_relic_app_name                 = var.new_relic_app_name == null ? "BaT Spree ${upper(var.environment)}" : var.new_relic_app_name
   new_relic_agent_enabled            = var.new_relic_agent_enabled
   default_country_id                 = var.default_country_id
+  buyer_organizations_import_bucket  = module.s3.s3_product_import_name
   # Secrets
   aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn

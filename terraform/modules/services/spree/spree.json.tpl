@@ -183,7 +183,11 @@
       {
         "name": "DEFAULT_COUNTRY_ID",
         "value": "${default_country_id}"
-	  }
+	    },
+      {
+        "name": "BUYER_ORGANIZATIONS_IMPORT_BUCKET",
+        "value": "${buyer_organizations_import_bucket}"
+      }
     ],
     "command": [
       "bundle", "exec", "rails","s","-b","0.0.0.0","-p", "${app_port}"
