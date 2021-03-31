@@ -155,6 +155,11 @@ variable "new_relic_agent_enabled" {
   default = true
 }
 
+variable "cnet_products_import_updates_dir" {
+  type    = string
+  default = "test_initial_import"
+}
+
 #######################
 # SPREE SIDEKIQ
 #######################
@@ -171,6 +176,51 @@ variable "sidekiq_cpu" {
 variable "sidekiq_memory" {
   type    = number
   default = 8192
+}
+
+variable "sidekiq_concurrency_catalog_reindex" {
+  type    = number
+  default = 1
+}
+
+variable "sidekiq_concurrency_cnet_import_feed" {
+  type    = number
+  default = 1
+}
+
+variable "sidekiq_concurrency_cnet_import_categories" {
+  type    = number
+  default = 1
+}
+
+variable "sidekiq_concurrency_cnet_import_documents" {
+  type    = number
+  default = 1
+}
+
+variable "sidekiq_concurrency_cnet_import_images" {
+  type    = number
+  default = 1
+}
+
+variable "sidekiq_concurrency_cnet_import_properties" {
+  type    = number
+  default = 1
+}
+
+variable "sidekiq_concurrency_cnet_import_xmls" {
+  type    = number
+  default = 1
+}
+
+variable "sidekiq_concurrency_cnet_import_missing_properties" {
+  type    = number
+  default = 1
+}
+
+variable "sidekiq_concurrency_cnet_import_missing_xmls" {
+  type    = number
+  default = 1
 }
 
 #######################

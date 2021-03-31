@@ -154,6 +154,58 @@ variable "new_relic_agent_enabled" {
   type = string
 }
 
+variable "default_country_id" {
+  type = string
+}
+
+variable "buyer_organizations_import_bucket" {
+  type = string
+}
+
+variable "cnet_products_import_bucket" {
+  type = string
+}
+
+variable "cnet_products_import_updates_dir" {
+  type = string
+}
+
+variable "sidekiq_concurrency_catalog_reindex" {
+  type = string
+}
+
+variable "sidekiq_concurrency_cnet_import_feed" {
+  type = string
+}
+
+variable "sidekiq_concurrency_cnet_import_categories" {
+  type = string
+}
+
+variable "sidekiq_concurrency_cnet_import_documents" {
+  type = string
+}
+
+variable "sidekiq_concurrency_cnet_import_images" {
+  type = string
+}
+
+variable "sidekiq_concurrency_cnet_import_properties" {
+  type = string
+}
+
+variable "sidekiq_concurrency_cnet_import_xmls" {
+  type = string
+}
+
+variable "sidekiq_concurrency_cnet_import_missing_properties" {
+  type = string
+}
+
+variable "sidekiq_concurrency_cnet_import_missing_xmls" {
+  type = string
+}
+
 #########
 # Secrets
 #########
@@ -226,13 +278,5 @@ variable "sendgrid_password_ssm_arn" {
 }
 
 variable "sendgrid_api_key_ssm_arn" {
-  type = string
-}
-
-variable "default_country_id" {
-  type = string
-}
-
-variable "buyer_organizations_import_bucket" {
   type = string
 }
