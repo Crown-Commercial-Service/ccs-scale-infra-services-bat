@@ -157,7 +157,7 @@ variable "new_relic_agent_enabled" {
 
 variable "cnet_products_import_updates_dir" {
   type    = string
-  default = "test_initial_import"
+  default = "initial_import"
 }
 
 #######################
