@@ -40,4 +40,5 @@ module "deploy" {
   sidekiq_cpu               = 2048
   sidekiq_memory            = 7168 #8192
   sidekiq_ec2_instance_type = "t2.large"
+  dev_user_public_key       = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCaHta2G06kHC/9d0g2mE+y5K9LTb/FAwqeu/LqRk5E4Ebd6dzEpo0+arONcu/kFbfSRxTUQZ+h4HcbsfLz50r5R1LN6fnjXh74gluElUdc8Fye7Y8DvYnru0Clk9WA1w2CI9ARbsH15pymV9HeY7D/I/1AXc5P8ESFyMTbxgxnoAZ/FGDGIr9P0ahGMb/qpCyxCoTv6TliQ2dCrhEjwKLPaf5C73ptyZJrh9HXpB6utnu/fa0T/QFfN6dvhjuLdgj701epWBfMRChXgZeuWRDGyxIj6YTBw8PlRiPuHuP1xU4pJLYjcvSBY4ol3ySMuHqpVK/3F/BZ0Y6rhhnEy42Z"
 }

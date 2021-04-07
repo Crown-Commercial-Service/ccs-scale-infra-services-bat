@@ -461,6 +461,7 @@ module "ecs_client" {
   security_group_ids   = [aws_security_group.client.id]
   ec2_instance_type    = var.client_ec2_instance_type
   resource_name_suffix = "CLIENT"
+  dev_user_public_key  = var.dev_user_public_key
 }
 
 module "ecs_spree" {
@@ -470,6 +471,7 @@ module "ecs_spree" {
   security_group_ids   = [aws_security_group.spree.id]
   ec2_instance_type    = var.spree_ec2_instance_type
   resource_name_suffix = "SPREE"
+  dev_user_public_key  = var.dev_user_public_key
 }
 
 module "ecs_sidekiq" {
@@ -479,6 +481,7 @@ module "ecs_sidekiq" {
   security_group_ids   = [aws_security_group.spree.id]
   ec2_instance_type    = var.sidekiq_ec2_instance_type
   resource_name_suffix = "SIDEKIQ"
+  dev_user_public_key  = var.dev_user_public_key
 }
 
 module "ecs_s3_virus_scan" {
@@ -488,6 +491,7 @@ module "ecs_s3_virus_scan" {
   security_group_ids   = [aws_security_group.s3-virus-scan.id]
   ec2_instance_type    = var.s3_virus_scan_ec2_instance_type
   resource_name_suffix = "S3_VIRUS_SCAN"
+  dev_user_public_key  = var.dev_user_public_key
 }
 
 module "ecs_fargate" {

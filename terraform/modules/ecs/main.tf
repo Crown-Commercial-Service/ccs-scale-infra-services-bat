@@ -45,7 +45,8 @@ data "template_file" "user_data" {
   template = file("${path.module}/user_data.tpl")
 
   vars = {
-    cluster_name = local.cluster_name
+    cluster_name        = local.cluster_name
+    dev_user_public_key = var.dev_user_public_key
   }
 }
 

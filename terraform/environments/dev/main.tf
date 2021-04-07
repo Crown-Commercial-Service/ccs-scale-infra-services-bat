@@ -53,4 +53,6 @@ module "deploy" {
   s3_virus_scan_cpu               = 2048
   s3_virus_scan_memory            = 4096
   s3_virus_scan_ec2_instance_type = "t2.large"
+
+  dev_user_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoXva2Ac7GDV/55YViG/2zwxC38/89UZqnuCt+wf1ICxFohdEFi5mMMszlhVgpBk+iA4RFDx3QnRezk5Wf/TmhLw8tv9GUK1s/KyBC7P3JbLtqozNz46A/rj6yudkkCPECsOOVsb3jlRrh15t25eDoQX8Kvw8ML+ShMkjiOvGjdFekue6nHbG0lLrJO3KqgplH0mzttr34tiVVE07dmrFJYpVCedrqeYR8z9qFpN9mtKHRRwHtnzDw3XH7T4MRgWw4PwGuGmmlxk25tlfJnicNGC2hS6e1Ke+Es9uOYTP3MOppcDDgZHXkN/YYVZy5RpjRsgzCAI97osXmQj8yv5on"
 }

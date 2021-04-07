@@ -17,3 +17,7 @@ variable "ec2_instance_type" {
 variable "resource_name_suffix" {
   type = string
 }
+
+variable "dev_user_public_key" {
+  type = string
+}
