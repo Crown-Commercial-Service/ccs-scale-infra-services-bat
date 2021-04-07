@@ -49,8 +49,8 @@ module "deploy" {
   s3_virus_scan_cpu               = 2048
   s3_virus_scan_memory            = 4096
   s3_virus_scan_ec2_instance_type = "t2.large"
-  enable_quotes                   = false
-  enable_basket                   = false
+  enable_quotes                   = true
+  enable_basket                   = true
   logit_application               = "BAT-Buyer-UI-REF"
   dev_user_public_key             = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDAOJQjdGhMrXJ07icjBcdryFB0elEW5cta3hoaEKecAmJcAHazp0RdBHnj0UT40g+ZljIztqNvy0P8LG1mBdPYK+GyJrBijruS/Px+SiDVRsfI8zX6N3DLaCvJJun/sQQ1fMtrBwrRd6ZbtYHCw4VmSvhJI7rGce9VX+/uDDzMCQYBU2VRq9yjzIx5FlhLOOjrEicDSLWv5VGMf5Vt6xX42DyuFEoZOi3B4ZWMjk7fpteyXDhG/V9TaGciXUmA61BySHdPusu8dKbPlYqnD8jT5H04WniSSszimnMpJGqFHixlU+QBP254CnbbkvmdGsnsGAZoV9gKKdUMR4T0in9"
 }
