@@ -206,6 +206,10 @@ variable "sidekiq_concurrency_cnet_import_missing_xmls" {
   type = string
 }
 
+variable "rack_timeout_service_timeout" {
+  type = string
+}
+
 #########
 # Secrets
 #########

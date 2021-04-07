@@ -227,6 +227,10 @@
       {
         "name": "SIDEKIQ_CONCURRENCY_CNET_IMPORT_MISSING_XMLS",
         "value": "${sidekiq_concurrency_cnet_import_missing_xmls}"
+      },
+      {
+        "name": "RACK_TIMEOUT_SERVICE_TIMEOUT",
+        "value": "${rack_timeout_service_timeout}"
       }
     ],
     "command": [

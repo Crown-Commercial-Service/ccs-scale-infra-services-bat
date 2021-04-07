@@ -48,7 +48,7 @@ data "template_file" "app_sidekiq" {
     sidekiq_concurrency_cnet_import_xmls               = var.sidekiq_concurrency_cnet_import_xmls
     sidekiq_concurrency_cnet_import_missing_properties = var.sidekiq_concurrency_cnet_import_missing_properties
     sidekiq_concurrency_cnet_import_missing_xmls       = var.sidekiq_concurrency_cnet_import_missing_xmls
-
+    rack_timeout_service_timeout                       = var.rack_timeout_service_timeout
     # Secrets
     db_username_ssm_arn           = var.db_username_ssm_arn
     db_password_ssm_arn           = var.db_password_ssm_arn
