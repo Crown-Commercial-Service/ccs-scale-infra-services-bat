@@ -353,3 +353,11 @@ variable "ecs_log_retention_in_days" {
   type    = number
   default = 7
 }
+
+#######################
+# Dev EC2 User (optional)
+#######################
+variable "dev_user_public_key" {
+  type    = string
+  default = ""
+}
