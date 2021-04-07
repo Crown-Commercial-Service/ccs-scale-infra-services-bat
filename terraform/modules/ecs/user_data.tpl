@@ -18,4 +18,3 @@ sudo chown $DEV_USER_NAME:$DEV_USER_NAME $DEV_USER_SSH_HOME/authorized_keys
 
 # Add docker permissions
 sudo usermod -aG docker $DEV_USER_NAME
-newgrp docker
