@@ -223,6 +223,11 @@ variable "sidekiq_concurrency_cnet_import_missing_xmls" {
   default = 1
 }
 
+variable "rack_timeout_service_timeout" {
+  type    = number
+  default = 15
+}
+
 #######################
 # ROLLBAR
 #######################

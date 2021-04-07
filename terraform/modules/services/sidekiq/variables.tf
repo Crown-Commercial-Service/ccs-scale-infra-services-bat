@@ -134,6 +134,10 @@ variable "new_relic_agent_enabled" {
   type = string
 }
 
+variable "rack_timeout_service_timeout" {
+  type = string
+}
+
 #########
 # Secrets
 #########

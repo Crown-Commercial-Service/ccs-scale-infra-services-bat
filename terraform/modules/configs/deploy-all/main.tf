@@ -555,6 +555,7 @@ module "spree" {
   sidekiq_concurrency_cnet_import_xmls               = var.sidekiq_concurrency_cnet_import_xmls
   sidekiq_concurrency_cnet_import_missing_properties = var.sidekiq_concurrency_cnet_import_missing_properties
   sidekiq_concurrency_cnet_import_missing_xmls       = var.sidekiq_concurrency_cnet_import_missing_xmls
+  rack_timeout_service_timeout                       = var.rack_timeout_service_timeout
   # Secrets
   aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
@@ -629,6 +630,7 @@ module "sidekiq" {
   sidekiq_concurrency_cnet_import_xmls               = var.sidekiq_concurrency_cnet_import_xmls
   sidekiq_concurrency_cnet_import_missing_properties = var.sidekiq_concurrency_cnet_import_missing_properties
   sidekiq_concurrency_cnet_import_missing_xmls       = var.sidekiq_concurrency_cnet_import_missing_xmls
+  rack_timeout_service_timeout                       = var.rack_timeout_service_timeout
   # Secrets
   aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
