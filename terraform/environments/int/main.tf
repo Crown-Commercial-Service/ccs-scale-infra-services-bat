@@ -51,4 +51,5 @@ module "deploy" {
   basic_auth_enabled              = false
   new_relic_app_name              = "Bat Spree SiT"
   rack_timeout_service_timeout    = 60 #seconds timeout
+  dev_user_public_key             = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD8Halwg1FWTsqO30Xci6UBLvHNvaKqv2tThr6XH5phO9gDFdmqJ2475Bk4WGBbtE6lWv1967F2GzskLk1AVXzGJNK7rJotLn3UXiMMDHHmRExY2gY/zLwc9Y5RXiZ92BrOgV5K+GYhLkFQgEPKGVxKWzIRbXyo6XZ4hZ7hQjQ8urhMwnWeNaz5wugBuAFqBwCq20bADlT70oi3e/f9EvAyQ8uLFFANLvpBYFiss5Kym0oNPJ+JVnfBjVqrvSCz74f2ryEufFjuGcefaTi2/KVZ/mHhUuvSLqadVyr6zSB9tJv6Lz4A1JAyugnr0KCgriPbY5VVUZKtiFF9Tw5CW+zr"
 }
