@@ -97,6 +97,7 @@ data "template_file" "app_client" {
     enable_quotes                        = var.enable_quotes
     logit_application                    = var.logit_application
     error_pages_unknonwn_server_endpoint = var.error_pages_unknonwn_server_endpoint
+    enable_ordering                      = var.enable_ordering
 
     # Secrets
     browser_rollbar_access_token_ssm_arn = var.browser_rollbar_access_token_ssm_arn

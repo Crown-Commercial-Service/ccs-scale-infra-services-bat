@@ -103,6 +103,10 @@ variable "error_pages_unknonwn_server_endpoint" {
   type = string
 }
 
+variable "enable_ordering" {
+  type = string
+}
+
 #########
 # Secrets
 #########

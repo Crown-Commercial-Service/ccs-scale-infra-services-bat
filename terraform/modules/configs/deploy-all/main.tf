@@ -686,6 +686,7 @@ module "client" {
   deployment_minimum_healthy_percent   = var.deployment_minimum_healthy_percent
   enable_basket                        = var.enable_basket
   enable_quotes                        = var.enable_quotes
+  enable_ordering                      = var.enable_ordering
   logit_application                    = var.logit_application == null ? "BAT-Buyer-UI-${upper(var.environment)}" : var.logit_application
   error_pages_unknonwn_server_endpoint = var.error_pages_unknonwn_server_endpoint
   # Secrets

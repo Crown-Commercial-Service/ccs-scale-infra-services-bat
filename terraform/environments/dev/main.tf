@@ -47,6 +47,7 @@ module "deploy" {
   error_pages_unknonwn_server_endpoint = true
   email_from                           = "bt@sprks.eu"
   rack_timeout_service_timeout         = 60 #seconds timeout
+  enable_ordering                      = true
 
   # default values for s3-virus-scan-service subject to change based on testing on DEV
   ecr_image_id_s3_virus_scan      = "latest"
