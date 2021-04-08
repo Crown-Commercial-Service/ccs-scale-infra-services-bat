@@ -90,6 +90,11 @@ variable "error_pages_unknonwn_server_endpoint" {
   default = false
 }
 
+variable "enable_ordering" {
+  type    = bool
+  default = false
+}
+
 #######################
 # SPREE BACKEND
 #######################

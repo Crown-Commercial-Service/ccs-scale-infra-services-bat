@@ -95,6 +95,10 @@
       {
         "name": "ERROR_PAGES_EXPOSE_UNKNOWN_SERVER_ERROR_ENDPOINT",
         "value": "${error_pages_unknonwn_server_endpoint}"
+      },
+      {
+        "name": "ENABLE_ORDERING",
+        "value": "${enable_ordering}"
       }
     ],
     "command": [
