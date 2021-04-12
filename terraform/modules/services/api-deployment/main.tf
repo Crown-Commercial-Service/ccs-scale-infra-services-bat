@@ -31,7 +31,7 @@ resource "aws_api_gateway_stage" "bat" {
     aws_cloudwatch_log_group.api_gw_execution
   ]
 
-  stage_name    = lower(var.environment)
+  stage_name    = "${lower(var.environment)}"
   rest_api_id   = var.scale_rest_api_id
   deployment_id = aws_api_gateway_deployment.bat.id
 }
@@ -48,7 +48,7 @@ resource "aws_api_gateway_method_settings" "scale" {
 }
 
 resource "aws_cloudwatch_log_group" "api_gw_execution" {
-  name              = "API-Gateway-Execution-Logs_${var.scale_rest_api_id}/${lower(var.environment)}-bat"
+  name              = "API-Gateway-Execution-Logs_${var.scale_rest_api_id}/${lower(var.environment)}"
   retention_in_days = var.api_gw_log_retention_in_days
 }
 

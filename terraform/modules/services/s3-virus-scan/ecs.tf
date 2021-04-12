@@ -76,7 +76,7 @@ resource "aws_ecs_service" "s3_virus_scan" {
 
 resource "aws_cloudwatch_log_group" "ecs" {
   name              = "/ecs/service/scale/s3_virus_scan"
-  retention_in_days = 7
+  retention_in_days = var.ecs_log_retention_in_days
 }
 
 

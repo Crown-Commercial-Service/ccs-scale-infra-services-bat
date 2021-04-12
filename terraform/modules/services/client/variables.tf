@@ -107,6 +107,10 @@ variable "enable_ordering" {
   type = string
 }
 
+variable "ecs_log_retention_in_days" {
+  type    = number
+}
+
 #########
 # Secrets
 #########
