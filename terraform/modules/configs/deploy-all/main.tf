@@ -170,6 +170,8 @@ data "aws_ssm_parameter" "new_relic_license_key" {
   name = "/bat/${lower(var.environment)}-new-relic-license-key"
 }
 
+
+
 ######################################
 # CIDR ranges for whitelisting
 ######################################
@@ -560,6 +562,7 @@ module "spree" {
   sidekiq_concurrency_cnet_import_missing_properties = var.sidekiq_concurrency_cnet_import_missing_properties
   sidekiq_concurrency_cnet_import_missing_xmls       = var.sidekiq_concurrency_cnet_import_missing_xmls
   rack_timeout_service_timeout                       = var.rack_timeout_service_timeout
+  enable_admin_panel_orders                          = var.enable_admin_panel_orders
   # Secrets
   aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
@@ -635,6 +638,7 @@ module "sidekiq" {
   sidekiq_concurrency_cnet_import_missing_properties = var.sidekiq_concurrency_cnet_import_missing_properties
   sidekiq_concurrency_cnet_import_missing_xmls       = var.sidekiq_concurrency_cnet_import_missing_xmls
   rack_timeout_service_timeout                       = var.rack_timeout_service_timeout
+  enable_admin_panel_orders                          = var.enable_admin_panel_orders
   # Secrets
   aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
