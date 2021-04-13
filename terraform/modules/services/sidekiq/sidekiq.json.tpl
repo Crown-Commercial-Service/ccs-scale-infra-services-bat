@@ -231,6 +231,10 @@
       {
         "name": "RACK_TIMEOUT_SERVICE_TIMEOUT",
         "value": "${rack_timeout_service_timeout}"
+      },
+      {
+        "name": "ENABLE_ADMIN_PANEL_ORDERS",
+        "value": "${enable_admin_panel_orders}"
       }
     ],
     "command": [

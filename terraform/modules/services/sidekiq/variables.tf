@@ -138,6 +138,10 @@ variable "rack_timeout_service_timeout" {
   type = string
 }
 
+variable "enable_admin_panel_orders" {
+  type = string
+}
+
 #########
 # Secrets
 #########
