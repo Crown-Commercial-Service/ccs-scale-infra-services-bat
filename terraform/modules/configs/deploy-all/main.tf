@@ -563,6 +563,8 @@ module "spree" {
   sidekiq_concurrency_cnet_import_missing_xmls       = var.sidekiq_concurrency_cnet_import_missing_xmls
   rack_timeout_service_timeout                       = var.rack_timeout_service_timeout
   enable_admin_panel_orders                          = var.enable_admin_panel_orders
+  ecs_log_retention_in_days                          = var.ecs_log_retention_in_days
+
   # Secrets
   aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
@@ -639,6 +641,8 @@ module "sidekiq" {
   sidekiq_concurrency_cnet_import_missing_xmls       = var.sidekiq_concurrency_cnet_import_missing_xmls
   rack_timeout_service_timeout                       = var.rack_timeout_service_timeout
   enable_admin_panel_orders                          = var.enable_admin_panel_orders
+  ecs_log_retention_in_days                          = var.ecs_log_retention_in_days
+
   # Secrets
   aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
   aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
@@ -693,6 +697,7 @@ module "client" {
   enable_ordering                      = var.enable_ordering
   logit_application                    = var.logit_application == null ? "BAT-Buyer-UI-${upper(var.environment)}" : var.logit_application
   error_pages_unknonwn_server_endpoint = var.error_pages_unknonwn_server_endpoint
+  ecs_log_retention_in_days            = var.ecs_log_retention_in_days
   # Secrets
   browser_rollbar_access_token_ssm_arn = data.aws_ssm_parameter.browser_rollbar_access_token.arn
   rollbar_access_token_ssm_arn         = data.aws_ssm_parameter.rollbar_access_token.arn
@@ -729,6 +734,7 @@ module "s3_virus_scan" {
   host                               = "http://${data.aws_ssm_parameter.lb_private_dns.value}:4567"
   stage                              = var.stage
   cidr_blocks                        = [data.aws_vpc.scale.cidr_block]
+  ecs_log_retention_in_days          = var.ecs_log_retention_in_days
 }
 
 ######################################

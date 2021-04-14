@@ -73,3 +73,7 @@ variable "stage" {
 variable "cidr_blocks" {
   type = list(string)
 }
+
+variable "ecs_log_retention_in_days" {
+  type    = number
+}
