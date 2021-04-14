@@ -10,47 +10,81 @@ module "globals" {
 
 resource "aws_s3_bucket" "static" {
   bucket        = "spree-${lower(var.environment)}-${lower(var.stage)}"
-  force_destroy = true
+  force_destroy = var.s3_force_destroy
 
-  tags = merge(module.globals.project_resource_tags, { AppType = "S3" })
-}
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 
-# Deprecated (as of SINF-356) - this bucket is no longer needed.
-# Leaving for now, as these buckets contain .env files which have info that
-# may be needed for a short while after transition to system param approach.
-# To be removed as part of follow up task SINF-371
-resource "aws_s3_bucket" "system" {
-  bucket        = "system-spree-${lower(var.environment)}-${lower(var.stage)}"
-  force_destroy = true
+  versioning {
+    enabled = true
+  }
 
-  tags = merge(module.globals.project_resource_tags, { AppType = "S3" })
-}
-
-resource "aws_s3_bucket" "feed" {
-  bucket        = "feed-spree-${lower(var.environment)}-${lower(var.stage)}"
-  force_destroy = true
+  lifecycle_rule {
+    id      = "expire-noncurrent-after-${var.s3_noncurrent_retention_in_days}-days"
+    enabled = true
+    noncurrent_version_expiration {
+      days = var.s3_noncurrent_retention_in_days
+    }
+  }
 
   tags = merge(module.globals.project_resource_tags, { AppType = "S3" })
 }
 
 resource "aws_s3_bucket" "cnet" {
   bucket        = "cnet-spree-${lower(var.environment)}-${lower(var.stage)}"
-  force_destroy = true
+  force_destroy = var.s3_force_destroy
 
-  tags = merge(module.globals.project_resource_tags, { AppType = "S3" })
-}
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 
-resource "aws_s3_bucket_object" "env-spree" {
-  bucket = aws_s3_bucket.system.id
-  key    = "spree.env"
-  acl    = "private"
+  versioning {
+    enabled = true
+  }
+
+  lifecycle_rule {
+    id      = "expire-noncurrent-after-${var.s3_noncurrent_retention_in_days}-days"
+    enabled = true
+    noncurrent_version_expiration {
+      days = var.s3_noncurrent_retention_in_days
+    }
+  }
 
   tags = merge(module.globals.project_resource_tags, { AppType = "S3" })
 }
 
 resource "aws_s3_bucket" "product-import" {
   bucket        = "spree-${lower(var.environment)}-products-import"
-  force_destroy = true
+  force_destroy = var.s3_force_destroy
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle_rule {
+    id      = "expire-noncurrent-after-${var.s3_noncurrent_retention_in_days}-days"
+    enabled = true
+    noncurrent_version_expiration {
+      days = var.s3_noncurrent_retention_in_days
+    }
+  }
 
   tags = merge(module.globals.project_resource_tags, { AppType = "S3" })
 }

@@ -436,11 +436,12 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_kms_decrypt_s
 # Modules
 ######################################
 
-
 module "s3" {
-  source      = "../../s3"
-  stage       = var.stage
-  environment = var.environment
+  source                          = "../../s3"
+  stage                           = var.stage
+  environment                     = var.environment
+  s3_noncurrent_retention_in_days = var.s3_noncurrent_retention_in_days
+  s3_force_destroy                = var.s3_force_destroy
 }
 
 module "memcached" {
@@ -529,7 +530,6 @@ module "spree" {
   redis_url                                          = module.memcached.redis_url
   memcached_endpoint                                 = module.memcached.memcached_endpoint
   security_groups                                    = [aws_security_group.spree.id]
-  env_file                                           = module.s3.env_file_spree
   cloudfront_id                                      = data.aws_ssm_parameter.bat_backend_cloudfront_id.value
   ecr_image_id_spree                                 = var.ecr_image_id_spree
   elasticsearch_url                                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
@@ -608,7 +608,6 @@ module "sidekiq" {
   rollbar_env                                        = var.rollbar_env
   redis_url                                          = module.memcached.redis_url
   security_groups                                    = [aws_security_group.spree.id]
-  env_file                                           = module.s3.env_file_spree
   ecr_image_id_spree                                 = var.ecr_image_id_spree
   elasticsearch_url                                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"
   buyer_ui_url                                       = "https://${data.aws_ssm_parameter.hosted_zone_name_cdn_bat_client.value}"
