@@ -45,6 +45,9 @@ resource "aws_elasticache_replication_group" "redis" {
   security_group_ids            = var.security_group_redis_ids
   subnet_group_name             = aws_elasticache_subnet_group.ec.name
 
+  at_rest_encryption_enabled    = true
+  transit_encryption_enabled    = true
+
   # Without this it complains if you re'apply' with no changes
   lifecycle {
     ignore_changes = [engine_version]
