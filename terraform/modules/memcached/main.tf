@@ -45,6 +45,7 @@ resource "aws_elasticache_replication_group" "redis" {
   security_group_ids            = var.security_group_redis_ids
   subnet_group_name             = aws_elasticache_subnet_group.ec.name
 
+  # Requires change to Spree code to work - reapply as part of SINF-403
   #at_rest_encryption_enabled    = true
   #transit_encryption_enabled    = true
 
