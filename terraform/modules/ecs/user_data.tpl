@@ -1,6 +1,8 @@
 #!/bin/bash
 echo ECS_CLUSTER=${cluster_name} >> /etc/ecs/ecs.config
 
+sudo yum update
+
 sudo yum install -y ec2-instance-connect
 
 # create dev-user - see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managing-users.html
