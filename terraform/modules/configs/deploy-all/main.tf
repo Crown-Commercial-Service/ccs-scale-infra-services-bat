@@ -115,13 +115,6 @@ data "aws_ssm_parameter" "sendgrid_api_key" {
   name = "/bat/${lower(var.environment)}-sendgrid-api-key"
 }
 
-data "aws_ssm_parameter" "aws_access_key_id" {
-  name = "/bat/${lower(var.environment)}-aws-access-key-id"
-}
-data "aws_ssm_parameter" "aws_secret_access_key" {
-  name = "/bat/${lower(var.environment)}-aws-secret-access-key"
-}
-
 data "aws_ssm_parameter" "browser_rollbar_access_token" {
   name = "/bat/${lower(var.environment)}-browser-rollbar-access-token"
 }
@@ -444,6 +437,12 @@ module "s3" {
   s3_force_destroy                = var.s3_force_destroy
 }
 
+module "iam" {
+  source                   = "../../iam"
+  environment              = var.environment
+  spree_bucket_access_arns = [module.s3.s3_static_bucket_arn, module.s3.s3_feed_bucket_arn, module.s3.s3_cnet_bucket_arn, module.s3.s3_product_import_bucket_arn]
+}
+
 module "memcached" {
   source                       = "../../memcached"
   aws_account_id               = var.aws_account_id
@@ -566,8 +565,8 @@ module "spree" {
   ecs_log_retention_in_days                          = var.ecs_log_retention_in_days
 
   # Secrets
-  aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
-  aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
+  aws_access_key_id_ssm_arn     = module.iam.aws_access_key_id_ssm_arn
+  aws_secret_access_key_ssm_arn = module.iam.aws_secret_access_key_ssm_arn
   basicauth_username_ssm_arn    = data.aws_ssm_parameter.basic_auth_username.arn
   basicauth_password_ssm_arn    = data.aws_ssm_parameter.basic_auth_password.arn
   cnet_ftp_username_ssm_arn     = data.aws_ssm_parameter.cnet_ftp_username.arn
@@ -643,8 +642,8 @@ module "sidekiq" {
   ecs_log_retention_in_days                          = var.ecs_log_retention_in_days
 
   # Secrets
-  aws_access_key_id_ssm_arn     = data.aws_ssm_parameter.aws_access_key_id.arn
-  aws_secret_access_key_ssm_arn = data.aws_ssm_parameter.aws_secret_access_key.arn
+  aws_access_key_id_ssm_arn     = module.iam.aws_access_key_id_ssm_arn
+  aws_secret_access_key_ssm_arn = module.iam.aws_secret_access_key_ssm_arn
   basicauth_username_ssm_arn    = data.aws_ssm_parameter.basic_auth_username.arn
   basicauth_password_ssm_arn    = data.aws_ssm_parameter.basic_auth_password.arn
   cnet_ftp_username_ssm_arn     = data.aws_ssm_parameter.cnet_ftp_username.arn
@@ -728,8 +727,8 @@ module "s3_virus_scan" {
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
   security_groups                    = [aws_security_group.s3-virus-scan.id]
-  aws_access_key_id                  = data.aws_ssm_parameter.aws_access_key_id.arn
-  aws_secret_access_key              = data.aws_ssm_parameter.aws_secret_access_key.arn
+  aws_access_key_id                  = module.iam.aws_access_key_id_ssm_arn
+  aws_secret_access_key              = module.iam.aws_secret_access_key_ssm_arn
   host                               = "http://${data.aws_ssm_parameter.lb_private_dns.value}:4567"
   stage                              = var.stage
   cidr_blocks                        = [data.aws_vpc.scale.cidr_block]
