@@ -21,7 +21,3 @@ output "s3_product_import_bucket_arn" {
 output "s3_cnet_bucket_arn" {
   value = aws_s3_bucket.cnet.arn
 }
-
-output "s3_feed_bucket_arn" {
-  value = aws_s3_bucket.feed.arn
-}
