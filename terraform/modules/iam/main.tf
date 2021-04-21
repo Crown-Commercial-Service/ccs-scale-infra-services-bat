@@ -51,22 +51,12 @@ resource "aws_iam_user_policy" "spree" {
           "s3:DeleteObject"
         ]
         Effect = "Allow"
-        Resource = [
-          "${var.s3_static_bucket_arn}/*",
-          "${var.s3_feed_bucket_arn}/*",
-          "${var.s3_cnet_bucket_arn}/*",
-          "${var.s3_product_import_bucket_arn}/*"
-        ]
+        Resource = formatlist("%s/*", var.spree_bucket_access_arns)
       },
       {
         Action : ["s3:ListBucket"],
         Effect : "Allow",
-        Resource : [
-          var.s3_static_bucket_arn,
-          var.s3_feed_bucket_arn,
-          var.s3_cnet_bucket_arn,
-          var.s3_product_import_bucket_arn,
-        ]
+        Resource : var.spree_bucket_access_arns
       }
     ]
   })
