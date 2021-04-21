@@ -54,10 +54,6 @@ variable "rollbar_env" {
   type = string
 }
 
-variable "env_file" {
-  type = string
-}
-
 variable "redis_url" {
   type = string
 }

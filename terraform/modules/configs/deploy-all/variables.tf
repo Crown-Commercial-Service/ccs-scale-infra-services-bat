@@ -20,6 +20,17 @@ variable "basic_auth_enabled" {
   default = true
 }
 
+variable "s3_noncurrent_retention_in_days" {
+  type    = number
+  default = 14
+}
+
+variable "s3_force_destroy" {
+  type    = bool
+  default = true
+}
+
+
 #######################
 # SPREE CLIENT
 #######################

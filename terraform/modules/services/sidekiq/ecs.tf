@@ -19,7 +19,6 @@ data "template_file" "app_sidekiq" {
     basicauth_enabled                                  = var.basicauth_enabled
     products_import_bucket                             = var.products_import_bucket
     rollbar_env                                        = var.rollbar_env
-    env_file                                           = var.env_file
     redis_url                                          = var.redis_url
     elasticsearch_url                                  = var.elasticsearch_url
     buyer_ui_url                                       = var.buyer_ui_url
