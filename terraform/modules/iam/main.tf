@@ -48,7 +48,10 @@ resource "aws_iam_user_policy" "spree" {
           "s3:PutObjectAcl",
           "s3:GetObject",
           "s3:GetObjectAcl",
-          "s3:DeleteObject"
+          "s3:DeleteObject",
+          "s3:GetObjectTagging",
+          "s3:PutObjectTagging",
+          "s3:DeleteObjectTagging"
         ]
         Effect = "Allow"
         Resource = formatlist("%s/*", var.spree_bucket_access_arns)
