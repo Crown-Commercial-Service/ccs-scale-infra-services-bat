@@ -813,3 +813,57 @@ module "api-deployment" {
   catalogue_api_gateway_integration = module.catalogue.catalogue_api_gateway_integration
   auth_api_gateway_integration      = module.auth.auth_api_gateway_integration
 }
+
+module "cloudwatch-alarms-spree" {
+  source                  = "../../cw-alarms"
+  environment             = var.environment
+  ecs_cluster_name        = module.ecs_spree.ecs_cluster_name
+  ecs_service_name        = module.spree.ecs_service_name
+  service_name            = "bat-spree"
+  ecs_expected_task_count = length(split(",", data.aws_ssm_parameter.private_app_subnet_ids.value))
+}
+
+module "cloudwatch-alarms-sidekiq" {
+  source                  = "../../cw-alarms"
+  environment             = var.environment
+  ecs_cluster_name        = module.ecs_sidekiq.ecs_cluster_name
+  ecs_service_name        = module.sidekiq.ecs_service_name
+  service_name            = "bat-sidekiq"
+  ecs_expected_task_count = length(split(",", data.aws_ssm_parameter.private_app_subnet_ids.value))
+}
+
+module "cloudwatch-alarms-client" {
+  source                  = "../../cw-alarms"
+  environment             = var.environment
+  ecs_cluster_name        = module.ecs_client.ecs_cluster_name
+  ecs_service_name        = module.client.ecs_service_name
+  service_name            = "bat-client"
+  ecs_expected_task_count = length(split(",", data.aws_ssm_parameter.private_app_subnet_ids.value))
+}
+
+module "cloudwatch-alarms-virus-scan" {
+  source                  = "../../cw-alarms"
+  environment             = var.environment
+  ecs_cluster_name        = module.ecs_s3_virus_scan.ecs_cluster_name
+  ecs_service_name        = module.s3_virus_scan.ecs_service_name
+  service_name            = "bat-s3-virus-scan"
+  ecs_expected_task_count = length(split(",", data.aws_ssm_parameter.private_app_subnet_ids.value))
+}
+
+module "cloudwatch-alarms-catalogue" {
+  source                  = "../../cw-alarms"
+  environment             = var.environment
+  ecs_cluster_name        = module.ecs_fargate.ecs_cluster_name
+  ecs_service_name        = module.catalogue.ecs_service_name
+  service_name            = "bat-catalogue"
+  ecs_expected_task_count = length(split(",", data.aws_ssm_parameter.private_app_subnet_ids.value))
+}
+
+module "cloudwatch-alarms-auth" {
+  source                  = "../../cw-alarms"
+  environment             = var.environment
+  ecs_cluster_name        = module.ecs_fargate.ecs_cluster_name
+  ecs_service_name        = module.auth.ecs_service_name
+  service_name            = "bat-auth"
+  ecs_expected_task_count = length(split(",", data.aws_ssm_parameter.private_app_subnet_ids.value))
+}
