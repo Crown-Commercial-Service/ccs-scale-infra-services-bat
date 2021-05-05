@@ -46,7 +46,6 @@ module "deploy" {
   redis_node_type                      = "cache.t3.medium"
   error_pages_unknonwn_server_endpoint = true
   email_from                           = "bt@sprks.eu"
-  rack_timeout_service_timeout         = 60 #seconds timeout
   enable_ordering                      = true
   enable_admin_panel_orders            = true
 

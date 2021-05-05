@@ -246,7 +246,7 @@ variable "sidekiq_concurrency_cnet_import_missing_xmls" {
 
 variable "rack_timeout_service_timeout" {
   type    = number
-  default = 15
+  default = 60
 }
 
 #######################
