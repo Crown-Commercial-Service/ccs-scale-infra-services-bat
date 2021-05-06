@@ -44,6 +44,8 @@ module "deploy" {
   sidekiq_ec2_instance_type       = "t2.xlarge"
   memcached_node_type             = "cache.t3.medium"
   redis_node_type                 = "cache.t3.medium"
+  enable_ordering                 = true
+  enable_admin_panel_orders       = true
   ecr_image_id_s3_virus_scan      = "latest"
   s3_virus_scan_cpu               = 2048
   s3_virus_scan_memory            = 4096
