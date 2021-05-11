@@ -13,13 +13,13 @@ resource "aws_s3_bucket" "static" {
   force_destroy = var.s3_force_destroy
 
   # Requires change to Spree code to work - reapply as part of SINF-402
-  #server_side_encryption_configuration {
-  #  rule {
-  #    apply_server_side_encryption_by_default {
-  #      sse_algorithm = "AES256"
-  #    }
-  #  }
-  #}
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 
   versioning {
     enabled = true
@@ -41,13 +41,13 @@ resource "aws_s3_bucket" "cnet" {
   force_destroy = var.s3_force_destroy
 
   # Requires change to Spree code to work - reapply as part of SINF-402
-  #server_side_encryption_configuration {
-  #  rule {
-  #    apply_server_side_encryption_by_default {
-  #      sse_algorithm = "AES256"
-  #    }
-  #  }
-  #}
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 
   versioning {
     enabled = true
@@ -69,13 +69,13 @@ resource "aws_s3_bucket" "product-import" {
   force_destroy = var.s3_force_destroy
 
   # Requires change to Spree code to work - reapply as part of SINF-402
-  #server_side_encryption_configuration {
-  #  rule {
-  #    apply_server_side_encryption_by_default {
-  #      sse_algorithm = "AES256"
-  #    }
-  #  }
-  #}
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 
   versioning {
     enabled = true

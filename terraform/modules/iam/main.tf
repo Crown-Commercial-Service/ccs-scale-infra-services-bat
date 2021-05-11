@@ -51,7 +51,13 @@ resource "aws_iam_user_policy" "spree" {
           "s3:DeleteObject",
           "s3:GetObjectTagging",
           "s3:PutObjectTagging",
-          "s3:DeleteObjectTagging"
+          "s3:DeleteObjectTagging",
+          "kms:Decrypt",
+          "kms:Encrypt",
+          "kms:GenerateDataKey",
+          "kms:ReEncryptTo",
+          "kms:DescribeKey",
+          "kms:ReEncryptFrom"
         ]
         Effect = "Allow"
         Resource = formatlist("%s/*", var.spree_bucket_access_arns)

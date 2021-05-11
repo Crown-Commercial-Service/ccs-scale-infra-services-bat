@@ -46,8 +46,8 @@ resource "aws_elasticache_replication_group" "redis" {
   subnet_group_name             = aws_elasticache_subnet_group.ec.name
 
   # Requires change to Spree code to work - reapply as part of SINF-403
-  #at_rest_encryption_enabled    = true
-  #transit_encryption_enabled    = true
+  at_rest_encryption_enabled    = true
+  transit_encryption_enabled    = true
 
   # Without this it complains if you re'apply' with no changes
   lifecycle {
@@ -58,7 +58,7 @@ resource "aws_elasticache_replication_group" "redis" {
 }
 
 # MultiAZ is not 'enabled' by default on Redis (although docs say it should be if 'automatic_failover_enabled' is true)
-# Workaround is to run a command to set it after the resource has been creted 
+# Workaround is to run a command to set it after the resource has been creted
 # It may be this is not required in a later version of Terraform
 resource "null_resource" "nr" {
   triggers = {

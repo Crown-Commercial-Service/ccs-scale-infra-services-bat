@@ -440,7 +440,8 @@ module "s3" {
 module "iam" {
   source                   = "../../iam"
   environment              = var.environment
-  spree_bucket_access_arns = [module.s3.s3_static_bucket_arn, module.s3.s3_cnet_bucket_arn, module.s3.s3_product_import_bucket_arn, "arn:aws:s3:::${local.suppliers_sftp_bucket}"]
+
+  spree_bucket_access_arns = [module.s3.s3_static_bucket_arn, module.s3.s3_cnet_bucket_arn, module.s3.s3_product_import_bucket_arn]
 }
 
 module "memcached" {
