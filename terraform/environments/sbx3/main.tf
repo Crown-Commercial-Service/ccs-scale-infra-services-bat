@@ -40,6 +40,7 @@ module "deploy" {
   sidekiq_cpu               = 2048
   sidekiq_memory            = 7168 #8192
   sidekiq_ec2_instance_type = "t2.large"
+  ecr_image_id_spree        = "sbx3-latest"
 
   # Made these small for SBX environments (what should default be?)
   s3_virus_scan_cpu               = 1024
