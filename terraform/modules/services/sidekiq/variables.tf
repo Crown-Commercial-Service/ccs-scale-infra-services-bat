@@ -221,9 +221,14 @@ variable "default_country_id" {
   type = string
 }
 
+variable "ordnance_survey_api_token_ssm_arn" {
+  type = string
+}
+
 variable "buyer_organizations_import_bucket" {
   type = string
 }
+
 variable "cnet_products_import_bucket" {
   type = string
 }

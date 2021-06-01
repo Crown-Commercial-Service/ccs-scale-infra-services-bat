@@ -288,3 +288,7 @@ variable "sendgrid_password_ssm_arn" {
 variable "sendgrid_api_key_ssm_arn" {
   type = string
 }
+
+variable "ordnance_survey_api_token_ssm_arn" {
+  type = string
+}

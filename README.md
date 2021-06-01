@@ -39,6 +39,7 @@ Check the README file for details of how to create the database.
 | /bat/{env}-sendgrid-username            | username for sendgrid site |
 | /bat/{env}-sendgrid-password            | password for sendgrid site |
 | /bat/{env}-new-relic-license-key        | key from new relic site |
+| /bat/{env}-ordnance-survey-api-token    | token to send request to the ordnance survey api |
 
 
 3. Run `terraform apply`

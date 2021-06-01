@@ -85,6 +85,10 @@
       {
         "name": "AWS_SECRET_ACCESS_KEY",
         "valueFrom": "${aws_secret_access_key_ssm_arn}"
+      },
+      {
+        "name": "ORDNANCE_SURVEY_API_TOKEN",
+        "valueFrom": "${ordnance_survey_api_token_ssm_arn}"
       }
     ],
     "environment": [
