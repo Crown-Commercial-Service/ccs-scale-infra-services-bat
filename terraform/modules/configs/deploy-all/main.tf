@@ -163,6 +163,9 @@ data "aws_ssm_parameter" "new_relic_license_key" {
   name = "/bat/${lower(var.environment)}-new-relic-license-key"
 }
 
+data "aws_ssm_parameter" "ordnance_survey_api_token" {
+  name = "/bat/${lower(var.environment)}-ordnance-survey-api-token"
+}
 
 
 ######################################
@@ -566,24 +569,25 @@ module "spree" {
   ecs_log_retention_in_days                          = var.ecs_log_retention_in_days
 
   # Secrets
-  aws_access_key_id_ssm_arn     = module.iam.aws_access_key_id_ssm_arn
-  aws_secret_access_key_ssm_arn = module.iam.aws_secret_access_key_ssm_arn
-  basicauth_username_ssm_arn    = data.aws_ssm_parameter.basic_auth_username.arn
-  basicauth_password_ssm_arn    = data.aws_ssm_parameter.basic_auth_password.arn
-  cnet_ftp_username_ssm_arn     = data.aws_ssm_parameter.cnet_ftp_username.arn
-  cnet_ftp_password_ssm_arn     = data.aws_ssm_parameter.cnet_ftp_password.arn
-  db_username_ssm_arn           = data.aws_ssm_parameter.spree_db_username.arn
-  db_password_ssm_arn           = data.aws_ssm_parameter.spree_db_password.arn
-  logit_hostname_ssm_arn        = data.aws_ssm_parameter.logit_hostname.arn
-  logit_remote_port_ssm_arn     = data.aws_ssm_parameter.logit_remote_port.arn
-  new_relic_license_key_ssm_arn = data.aws_ssm_parameter.new_relic_license_key.arn
-  rollbar_access_token_ssm_arn  = data.aws_ssm_parameter.rollbar_access_token.arn
-  secret_key_base_ssm_arn       = data.aws_ssm_parameter.secret_key_base.arn
-  sendgrid_username_ssm_arn     = data.aws_ssm_parameter.sendgrid_username.arn
-  sendgrid_password_ssm_arn     = data.aws_ssm_parameter.sendgrid_password.arn
-  sendgrid_api_key_ssm_arn      = data.aws_ssm_parameter.sendgrid_api_key.arn
-  sidekiq_username_ssm_arn      = data.aws_ssm_parameter.sidekiq_username.arn
-  sidekiq_password_ssm_arn      = data.aws_ssm_parameter.sidekiq_password.arn
+  aws_access_key_id_ssm_arn         = module.iam.aws_access_key_id_ssm_arn
+  aws_secret_access_key_ssm_arn     = module.iam.aws_secret_access_key_ssm_arn
+  basicauth_username_ssm_arn        = data.aws_ssm_parameter.basic_auth_username.arn
+  basicauth_password_ssm_arn        = data.aws_ssm_parameter.basic_auth_password.arn
+  cnet_ftp_username_ssm_arn         = data.aws_ssm_parameter.cnet_ftp_username.arn
+  cnet_ftp_password_ssm_arn         = data.aws_ssm_parameter.cnet_ftp_password.arn
+  db_username_ssm_arn               = data.aws_ssm_parameter.spree_db_username.arn
+  db_password_ssm_arn               = data.aws_ssm_parameter.spree_db_password.arn
+  logit_hostname_ssm_arn            = data.aws_ssm_parameter.logit_hostname.arn
+  logit_remote_port_ssm_arn         = data.aws_ssm_parameter.logit_remote_port.arn
+  new_relic_license_key_ssm_arn     = data.aws_ssm_parameter.new_relic_license_key.arn
+  rollbar_access_token_ssm_arn      = data.aws_ssm_parameter.rollbar_access_token.arn
+  secret_key_base_ssm_arn           = data.aws_ssm_parameter.secret_key_base.arn
+  sendgrid_username_ssm_arn         = data.aws_ssm_parameter.sendgrid_username.arn
+  sendgrid_password_ssm_arn         = data.aws_ssm_parameter.sendgrid_password.arn
+  sendgrid_api_key_ssm_arn          = data.aws_ssm_parameter.sendgrid_api_key.arn
+  sidekiq_username_ssm_arn          = data.aws_ssm_parameter.sidekiq_username.arn
+  sidekiq_password_ssm_arn          = data.aws_ssm_parameter.sidekiq_password.arn
+  ordnance_survey_api_token_ssm_arn = data.aws_ssm_parameter.ordnance_survey_api_token.arn
 }
 
 ######################################
@@ -643,24 +647,25 @@ module "sidekiq" {
   ecs_log_retention_in_days                          = var.ecs_log_retention_in_days
 
   # Secrets
-  aws_access_key_id_ssm_arn     = module.iam.aws_access_key_id_ssm_arn
-  aws_secret_access_key_ssm_arn = module.iam.aws_secret_access_key_ssm_arn
-  basicauth_username_ssm_arn    = data.aws_ssm_parameter.basic_auth_username.arn
-  basicauth_password_ssm_arn    = data.aws_ssm_parameter.basic_auth_password.arn
-  cnet_ftp_username_ssm_arn     = data.aws_ssm_parameter.cnet_ftp_username.arn
-  cnet_ftp_password_ssm_arn     = data.aws_ssm_parameter.cnet_ftp_password.arn
-  db_username_ssm_arn           = data.aws_ssm_parameter.spree_db_username.arn
-  db_password_ssm_arn           = data.aws_ssm_parameter.spree_db_password.arn
-  logit_hostname_ssm_arn        = data.aws_ssm_parameter.logit_hostname.arn
-  logit_remote_port_ssm_arn     = data.aws_ssm_parameter.logit_remote_port.arn
-  new_relic_license_key_ssm_arn = data.aws_ssm_parameter.new_relic_license_key.arn
-  rollbar_access_token_ssm_arn  = data.aws_ssm_parameter.rollbar_access_token.arn
-  secret_key_base_ssm_arn       = data.aws_ssm_parameter.secret_key_base.arn
-  sendgrid_username_ssm_arn     = data.aws_ssm_parameter.sendgrid_username.arn
-  sendgrid_password_ssm_arn     = data.aws_ssm_parameter.sendgrid_password.arn
-  sendgrid_api_key_ssm_arn      = data.aws_ssm_parameter.sendgrid_api_key.arn
-  sidekiq_username_ssm_arn      = data.aws_ssm_parameter.sidekiq_username.arn
-  sidekiq_password_ssm_arn      = data.aws_ssm_parameter.sidekiq_password.arn
+  aws_access_key_id_ssm_arn         = module.iam.aws_access_key_id_ssm_arn
+  aws_secret_access_key_ssm_arn     = module.iam.aws_secret_access_key_ssm_arn
+  basicauth_username_ssm_arn        = data.aws_ssm_parameter.basic_auth_username.arn
+  basicauth_password_ssm_arn        = data.aws_ssm_parameter.basic_auth_password.arn
+  cnet_ftp_username_ssm_arn         = data.aws_ssm_parameter.cnet_ftp_username.arn
+  cnet_ftp_password_ssm_arn         = data.aws_ssm_parameter.cnet_ftp_password.arn
+  db_username_ssm_arn               = data.aws_ssm_parameter.spree_db_username.arn
+  db_password_ssm_arn               = data.aws_ssm_parameter.spree_db_password.arn
+  logit_hostname_ssm_arn            = data.aws_ssm_parameter.logit_hostname.arn
+  logit_remote_port_ssm_arn         = data.aws_ssm_parameter.logit_remote_port.arn
+  new_relic_license_key_ssm_arn     = data.aws_ssm_parameter.new_relic_license_key.arn
+  rollbar_access_token_ssm_arn      = data.aws_ssm_parameter.rollbar_access_token.arn
+  secret_key_base_ssm_arn           = data.aws_ssm_parameter.secret_key_base.arn
+  sendgrid_username_ssm_arn         = data.aws_ssm_parameter.sendgrid_username.arn
+  sendgrid_password_ssm_arn         = data.aws_ssm_parameter.sendgrid_password.arn
+  sendgrid_api_key_ssm_arn          = data.aws_ssm_parameter.sendgrid_api_key.arn
+  sidekiq_username_ssm_arn          = data.aws_ssm_parameter.sidekiq_username.arn
+  sidekiq_password_ssm_arn          = data.aws_ssm_parameter.sidekiq_password.arn
+  ordnance_survey_api_token_ssm_arn = data.aws_ssm_parameter.ordnance_survey_api_token.arn
 }
 
 ######################################

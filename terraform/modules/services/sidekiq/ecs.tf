@@ -50,24 +50,25 @@ data "template_file" "app_sidekiq" {
     rack_timeout_service_timeout                       = var.rack_timeout_service_timeout
     enable_admin_panel_orders                          = var.enable_admin_panel_orders
     # Secrets
-    db_username_ssm_arn           = var.db_username_ssm_arn
-    db_password_ssm_arn           = var.db_password_ssm_arn
-    secret_key_base_ssm_arn       = var.secret_key_base_ssm_arn
-    basicauth_username_ssm_arn    = var.basicauth_username_ssm_arn
-    basicauth_password_ssm_arn    = var.basicauth_password_ssm_arn
-    rollbar_access_token_ssm_arn  = var.rollbar_access_token_ssm_arn
-    cnet_ftp_username_ssm_arn     = var.cnet_ftp_username_ssm_arn
-    cnet_ftp_password_ssm_arn     = var.cnet_ftp_password_ssm_arn
-    sidekiq_username_ssm_arn      = var.sidekiq_username_ssm_arn
-    sidekiq_password_ssm_arn      = var.sidekiq_password_ssm_arn
-    sendgrid_username_ssm_arn     = var.sendgrid_username_ssm_arn
-    sendgrid_password_ssm_arn     = var.sendgrid_password_ssm_arn
-    sendgrid_api_key_ssm_arn      = var.sendgrid_api_key_ssm_arn
-    aws_access_key_id_ssm_arn     = var.aws_access_key_id_ssm_arn
-    aws_secret_access_key_ssm_arn = var.aws_secret_access_key_ssm_arn
-    new_relic_license_key_ssm_arn = var.new_relic_license_key_ssm_arn
-    logit_hostname_ssm_arn        = var.logit_hostname_ssm_arn
-    logit_remote_port_ssm_arn     = var.logit_remote_port_ssm_arn
+    db_username_ssm_arn               = var.db_username_ssm_arn
+    db_password_ssm_arn               = var.db_password_ssm_arn
+    secret_key_base_ssm_arn           = var.secret_key_base_ssm_arn
+    basicauth_username_ssm_arn        = var.basicauth_username_ssm_arn
+    basicauth_password_ssm_arn        = var.basicauth_password_ssm_arn
+    rollbar_access_token_ssm_arn      = var.rollbar_access_token_ssm_arn
+    cnet_ftp_username_ssm_arn         = var.cnet_ftp_username_ssm_arn
+    cnet_ftp_password_ssm_arn         = var.cnet_ftp_password_ssm_arn
+    sidekiq_username_ssm_arn          = var.sidekiq_username_ssm_arn
+    sidekiq_password_ssm_arn          = var.sidekiq_password_ssm_arn
+    sendgrid_username_ssm_arn         = var.sendgrid_username_ssm_arn
+    sendgrid_password_ssm_arn         = var.sendgrid_password_ssm_arn
+    sendgrid_api_key_ssm_arn          = var.sendgrid_api_key_ssm_arn
+    aws_access_key_id_ssm_arn         = var.aws_access_key_id_ssm_arn
+    aws_secret_access_key_ssm_arn     = var.aws_secret_access_key_ssm_arn
+    new_relic_license_key_ssm_arn     = var.new_relic_license_key_ssm_arn
+    logit_hostname_ssm_arn            = var.logit_hostname_ssm_arn
+    logit_remote_port_ssm_arn         = var.logit_remote_port_ssm_arn
+    ordnance_survey_api_token_ssm_arn = var.ordnance_survey_api_token_ssm_arn
   }
 }
 
