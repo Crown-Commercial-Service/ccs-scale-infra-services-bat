@@ -611,6 +611,7 @@ module "sidekiq" {
   products_import_bucket                             = module.s3.s3_product_import_name
   rollbar_env                                        = var.rollbar_env
   redis_url                                          = module.memcached.redis_url
+  memcached_endpoint                                 = module.memcached.memcached_endpoint
   security_groups                                    = [aws_security_group.spree.id]
   ecr_image_id_spree                                 = var.ecr_image_id_spree
   elasticsearch_url                                  = "https://${data.aws_ssm_parameter.elasticsearch_url.value}:443"

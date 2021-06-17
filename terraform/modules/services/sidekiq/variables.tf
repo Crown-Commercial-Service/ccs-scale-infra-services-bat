@@ -58,6 +58,10 @@ variable "redis_url" {
   type = string
 }
 
+variable "memcached_endpoint" {
+  type = string
+}
+
 variable "security_groups" {
   type = list(string)
 }

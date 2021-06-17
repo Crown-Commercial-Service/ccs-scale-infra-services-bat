@@ -20,6 +20,7 @@ data "template_file" "app_sidekiq" {
     products_import_bucket                             = var.products_import_bucket
     rollbar_env                                        = var.rollbar_env
     redis_url                                          = var.redis_url
+    memcached_endpoint                                 = var.memcached_endpoint
     elasticsearch_url                                  = var.elasticsearch_url
     buyer_ui_url                                       = var.buyer_ui_url
     app_domain                                         = var.app_domain
