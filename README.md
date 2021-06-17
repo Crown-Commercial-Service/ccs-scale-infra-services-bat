@@ -131,10 +131,22 @@ Manufacturers - all
 ::Cnet::Import::Manufacturers.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/metamap/Distivoc.txt')
 ```
 
+Check that the command has completed using the following sql
+
+```
+select count(*) from scale_manufacturers;
+```
+
 Categories - all
 
 ```
 ::Cnet::Import::Categories.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/categorization/Cct_Categories.txt')
+```
+
+Check that the command has completed using the following sql
+
+```
+select count(*) from spree_taxons;
 ```
 
 Products - 50k
@@ -146,6 +158,12 @@ Products - 50k
 ::Cnet::Import::Products.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/catalog/prod-xac.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/stdnee-xac.txt')
 
 ```
+
+Check that the command has completed using the following sql:
+```
+select count(*) from spree_products;
+```
+
 Product Documents - 50k
 ```
 ::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xaa.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xaa.txt')
@@ -155,6 +173,13 @@ Product Documents - 50k
 ::Cnet::Import::ProductDocuments.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xac.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xac.txt')
 ```
 
+Check that the command has completed using the following sql:
+```
+select count(*) from spree_assets where type ='Scale::Document';
+
+select count(*) from active_storage_blobs where content_type in ('application/pdf' )
+```
+
 Product Xmls - 50k
 ```
 ::Cnet::Import::ProductXmls.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xaa.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xaa.txt')
@@ -162,6 +187,11 @@ Product Xmls - 50k
 ::Cnet::Import::ProductXmls.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xab.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xab.txt')
 
 ::Cnet::Import::ProductXmls.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Links-xac.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content-xac.txt')
+
+Check that the command has completed using the following sql:
+```
+select description, key_selling_points from spree_products
+```
 
 ```
 Products Categories - 50k
@@ -173,6 +203,11 @@ Products Categories - 50k
 ::Cnet::Import::ProductCategories.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/categorization/Cct_Products-xac.txt')
 ```
 
+Check that the command has completed using the following sql:
+```
+select count(*) from spree_products_taxons;
+```
+
 Product Properties - 50k
 ```
 ::Cnet::Import::ProductProperties.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/especee-xaa.txt', names_path_name: 'https://cnet-spree-s{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/evocee.txt')
@@ -180,6 +215,12 @@ Product Properties - 50k
 ::Cnet::Import::ProductProperties.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/especee-xab.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/evocee.txt')
 
 ::Cnet::Import::ProductProperties.call(path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/especee-xac.txt', names_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/components/evocee.txt')
+```
+
+Check that the command has completed using the following sql:
+```
+select count(*) from spree_product_option_types;
+select count(*) from spree_product_properties;
 ```
 
 Products Images - 50k - (Images is still being worked on, though. It works, we just limiting number of duplicated images or image placeholders)
@@ -202,7 +243,11 @@ Products Images - 50k - (Images is still being worked on, though. It works, we j
   attributes_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta-xab.txt',
   attributes_dictionary_path_name: 'https://cnet-spree-{env}-staging.s3.eu-west-2.amazonaws.com/initial_import/digitalcontent/Digital_Content_Meta_Value_Voc-xab.txt')
 ```
+Check that the command has completed using the following sql:
 
+```
+select count(*) from active_storage_blobs where content_type in ('image/png', 'image/jpeg')
+```
 After importing CNET data you will need to reindex Elastic search again
 
 ```
