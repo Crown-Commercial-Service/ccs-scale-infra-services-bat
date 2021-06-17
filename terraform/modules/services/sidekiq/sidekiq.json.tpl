@@ -109,6 +109,10 @@
         "value": "${redis_url}"
       },
       {
+        "name": "MEMCACHED_ENDPOINT",
+        "value": "${memcached_endpoint}:11211"
+      },
+      {
         "name": "PRODUCTS_IMPORT_BUCKET",
         "value": "${products_import_bucket}"
       },
