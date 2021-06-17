@@ -567,6 +567,7 @@ module "spree" {
   rack_timeout_service_timeout                       = var.rack_timeout_service_timeout
   enable_admin_panel_orders                          = var.enable_admin_panel_orders
   ecs_log_retention_in_days                          = var.ecs_log_retention_in_days
+  log_level                                          = var.log_level
 
   # Secrets
   aws_access_key_id_ssm_arn         = module.iam.aws_access_key_id_ssm_arn
@@ -646,6 +647,7 @@ module "sidekiq" {
   rack_timeout_service_timeout                       = var.rack_timeout_service_timeout
   enable_admin_panel_orders                          = var.enable_admin_panel_orders
   ecs_log_retention_in_days                          = var.ecs_log_retention_in_days
+  log_level                                          = var.log_level
 
   # Secrets
   aws_access_key_id_ssm_arn         = module.iam.aws_access_key_id_ssm_arn
