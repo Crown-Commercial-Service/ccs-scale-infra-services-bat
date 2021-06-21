@@ -181,6 +181,12 @@ variable "cnet_products_import_updates_dir" {
   default = "initial_import"
 }
 
+variable "log_level" {
+  type    = string
+  default = "info"
+}
+
+
 #######################
 # SPREE SIDEKIQ
 #######################
