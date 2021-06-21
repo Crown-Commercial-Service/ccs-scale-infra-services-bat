@@ -52,5 +52,4 @@ module "deploy" {
   dev_user_public_key             = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDJgtBY5vWuL/S7zVpxibQfIS57Uxa86TVX3f7aCYV1j8XIYZjCpwGpmDTHsRonCY1uyZ03jDvNFYXJjwwvwkztDtofvUWsrJ+L5UXSs+jii4+tpV5g5y+Tqp3KzdJxcD8Y4PQqqi6iYfNYs27FRgYxffocnQJLzG/naoQiMPBZ+ckqABfQCTLJg5175HvkCAzZ3oBQ9NEo31Qhc9SNb4PnjaI8FjRuCRN9tFtijp2ZRnExI41abWfVw6/bfQmTeQcgj4HMvJeQ4MOJ3jd4Vy6PhpSxXvOkY6kcI/5b/FeFDbGxJ7Ds1UvInIqEKi+x/i8ajkls0FEgLt1FCrnV8wbR"
   api_gw_log_retention_in_days    = 30
   ecs_log_retention_in_days       = 30
-  log_level                       = "debug"
 }
