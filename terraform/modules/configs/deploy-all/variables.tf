@@ -109,7 +109,7 @@ variable "enable_ordering" {
 
 variable "enable_admin_panel_orders" {
   type    = bool
-  default = false
+  default = true
 }
 #######################
 # SPREE BACKEND
