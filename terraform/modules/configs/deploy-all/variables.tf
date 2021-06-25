@@ -103,7 +103,7 @@ variable "error_pages_unknonwn_server_endpoint" {
 
 variable "enable_ordering" {
   type    = bool
-  default = false
+  default = true
 }
 
 
