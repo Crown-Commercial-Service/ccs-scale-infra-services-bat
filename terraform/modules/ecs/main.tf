@@ -40,6 +40,7 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
     create_before_destroy = true
   }
 
+  # Enforce use of Instance Metadata Service v2
   metadata_options {
     http_endpoint = "enabled"
     http_tokens   = "required"
