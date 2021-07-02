@@ -32,7 +32,7 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   iam_instance_profile        = aws_iam_instance_profile.ecs_agent.name
   user_data                   = data.template_file.user_data.rendered
   instance_type               = var.ec2_instance_type
-  associate_public_ip_address = true
+  associate_public_ip_address = false
   key_name                    = "${lower(var.environment)}-spree-key"
   security_groups             = var.security_group_ids
 
