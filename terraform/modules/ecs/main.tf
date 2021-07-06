@@ -45,6 +45,10 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
     http_endpoint = "enabled"
     http_tokens   = "required"
   }
+
+  root_block_device {
+    encrypted = true
+  }
 }
 
 data "template_file" "user_data" {
