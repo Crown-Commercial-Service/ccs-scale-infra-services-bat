@@ -39,6 +39,16 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   lifecycle {
     create_before_destroy = true
   }
+
+  # Enforce use of Instance Metadata Service v2
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+
+  root_block_device {
+    encrypted = true
+  }
 }
 
 data "template_file" "user_data" {
