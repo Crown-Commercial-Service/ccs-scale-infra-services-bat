@@ -89,6 +89,10 @@
       {
         "name": "ORDNANCE_SURVEY_API_TOKEN",
         "valueFrom": "${ordnance_survey_api_token_ssm_arn}"
+      },
+      {
+        "name": "DB_URL",
+        "valueFrom": "${db_url_ssm_arn}"
       }
     ],
     "environment": [

@@ -95,6 +95,11 @@ data "aws_ssm_parameter" "spree_db_password" {
   with_decryption = true
 }
 
+data "aws_ssm_parameter" "spree_db_url" {
+  name            = "/bat/${lower(var.environment)}-spree-db-url"
+  with_decryption = true
+}
+
 data "aws_ssm_parameter" "hosted_zone_name_alb_bat_client" {
   name = "/bat/${lower(var.environment)}-hosted-zone-name-alb-bat-client"
 }
@@ -589,6 +594,7 @@ module "spree" {
   sidekiq_username_ssm_arn          = data.aws_ssm_parameter.sidekiq_username.arn
   sidekiq_password_ssm_arn          = data.aws_ssm_parameter.sidekiq_password.arn
   ordnance_survey_api_token_ssm_arn = data.aws_ssm_parameter.ordnance_survey_api_token.arn
+  db_url_ssm_arn                    = data.aws_ssm_parameter.spree_db_url.arn
 }
 
 ######################################
@@ -669,6 +675,7 @@ module "sidekiq" {
   sidekiq_username_ssm_arn          = data.aws_ssm_parameter.sidekiq_username.arn
   sidekiq_password_ssm_arn          = data.aws_ssm_parameter.sidekiq_password.arn
   ordnance_survey_api_token_ssm_arn = data.aws_ssm_parameter.ordnance_survey_api_token.arn
+  db_url_ssm_arn                    = data.aws_ssm_parameter.spree_db_url.arn
 }
 
 ######################################

@@ -71,6 +71,7 @@ data "template_file" "app_sidekiq" {
     logit_hostname_ssm_arn            = var.logit_hostname_ssm_arn
     logit_remote_port_ssm_arn         = var.logit_remote_port_ssm_arn
     ordnance_survey_api_token_ssm_arn = var.ordnance_survey_api_token_ssm_arn
+    db_url_ssm_arn                    = var.db_url_ssm_arn
   }
 }
 

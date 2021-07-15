@@ -249,6 +249,10 @@ variable "db_password_ssm_arn" {
   type = string
 }
 
+variable "db_url_ssm_arn" {
+  type = string
+}
+
 variable "logit_hostname_ssm_arn" {
   type = string
 }
