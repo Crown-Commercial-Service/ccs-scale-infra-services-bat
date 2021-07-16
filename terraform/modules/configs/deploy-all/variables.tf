@@ -173,7 +173,7 @@ variable "new_relic_app_name" {
 # (used to be env var: NEW_RELIC_AGENT_ENABLED from spree.env)
 variable "new_relic_agent_enabled" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "cnet_products_import_updates_dir" {
